@@ -49,32 +49,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.scrollAreaWidgetContents_3)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.OCEL_list_frame = QtWidgets.QFrame(self.scrollAreaWidgetContents_3)
-        self.OCEL_list_frame.setMinimumSize(QtCore.QSize(0, 1000))
+
+        self.OCEL_list_frame.setMinimumSize(QtCore.QSize(0, 150 * len(self.ocel_model.ocels)))
+
         self.OCEL_list_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.OCEL_list_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.OCEL_list_frame.setObjectName("OCEL_list_frame")
-        self.OcelNameFrame_1 = QtWidgets.QFrame(self.OCEL_list_frame)
-        self.OcelNameFrame_1.setGeometry(QtCore.QRect(40, 60, 281, 91))
-        self.OcelNameFrame_1.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.OcelNameFrame_1.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.OcelNameFrame_1.setObjectName("OcelNameFrame_1")
-        self.sidebarOCELTitle = QtWidgets.QLabel(self.OcelNameFrame_1)
-        self.sidebarOCELTitle.setGeometry(QtCore.QRect(60, 10, 181, 21))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.sidebarOCELTitle.setFont(font)
-        self.sidebarOCELTitle.setObjectName("sidebarTitlelabel")
-        self.sidebarPushButtonView = QtWidgets.QPushButton(self.OcelNameFrame_1)
-        self.sidebarPushButtonView.setGeometry(QtCore.QRect(10, 50, 81, 25))
-        self.sidebarPushButtonView.setObjectName("sidebarPushButtonView")
-        self.sidebarPushButtonExport = QtWidgets.QPushButton(self.OcelNameFrame_1)
-        self.sidebarPushButtonExport.setGeometry(QtCore.QRect(100, 50, 81, 25))
-        self.sidebarPushButtonExport.setObjectName("sidebarPushButtonExport")
-        self.sidebarPushButtonDelete = QtWidgets.QPushButton(self.OcelNameFrame_1)
-        self.sidebarPushButtonDelete.setGeometry(QtCore.QRect(190, 50, 81, 25))
-        self.sidebarPushButtonDelete.setObjectName("sidebarPushButtonDelete")
+
         self.sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
         self.sidebarTitlelabel.setGeometry(QtCore.QRect(30, 10, 321, 31))
         font = QtGui.QFont()
@@ -83,8 +64,7 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.sidebarTitlelabel.setFont(font)
         self.sidebarTitlelabel.setObjectName("sidebarTitlelabel")
-
-
+        
         self.horizontalLayout_4.addWidget(self.OCEL_list_frame)
         self.OCEL_list_scrollArea.setWidget(self.scrollAreaWidgetContents_3)
         # end of code for side scroll area
@@ -195,11 +175,39 @@ class Ui_MainWindow(object):
 
 
         # start for side scroll area
-        self.sidebarPushButtonView.setText(_translate("MainWindow", "View"))
-        self.sidebarPushButtonExport.setText(_translate("MainWindow", "Export"))
-        self.sidebarPushButtonDelete.setText(_translate("MainWindow", "Delete"))
+        self.ocelSideBarFrames = []
+        for i in range(len(self.ocel_model.ocels.keys())):
+            self.ocelSideBarFrames.append(QtWidgets.QFrame(self.OCEL_list_frame))
+            height = i*120+60
+            self.ocelSideBarFrames[i].setGeometry(QtCore.QRect(40, height, 280, 100))
+            self.ocelSideBarFrames[i].setFrameShape(QtWidgets.QFrame.StyledPanel)
+            self.ocelSideBarFrames[i].setFrameShadow(QtWidgets.QFrame.Raised)
+            self.ocelSideBarFrames[i].setObjectName("OcelNameFrame_" + str(i))
+
+            sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[i])
+            sidebarOCELTitle.setGeometry(QtCore.QRect(60, 10, 181, 21))
+            font = QtGui.QFont()
+            font.setPointSize(14)
+            font.setBold(True)
+            font.setWeight(75)
+            sidebarOCELTitle.setFont(font)
+            sidebarOCELTitle.setObjectName("sidebarTitlelabel")
+            sidebarPushButtonView = QtWidgets.QPushButton(self.ocelSideBarFrames[i])
+            sidebarPushButtonView.setGeometry(QtCore.QRect(10, 50, 81, 25))
+            sidebarPushButtonView.setObjectName("sidebarPushButtonView")
+            sidebarPushButtonExport = QtWidgets.QPushButton(self.ocelSideBarFrames[i])
+            sidebarPushButtonExport.setGeometry(QtCore.QRect(100, 50, 81, 25))
+            sidebarPushButtonExport.setObjectName("sidebarPushButtonExport")
+            sidebarPushButtonDelete = QtWidgets.QPushButton(self.ocelSideBarFrames[i])
+            sidebarPushButtonDelete.setGeometry(QtCore.QRect(190, 50, 81, 25))
+            sidebarPushButtonDelete.setObjectName("sidebarPushButtonDelete")
+
+            sidebarPushButtonView.setText(_translate("MainWindow", "View"))
+            sidebarPushButtonExport.setText(_translate("MainWindow", "Export"))
+            sidebarPushButtonDelete.setText(_translate("MainWindow", "Delete"))
+            sidebarOCELTitle.setText(_translate("MainWindow", list(self.ocel_model.ocels.keys())[i]))
+        
         self.sidebarTitlelabel.setText(_translate("MainWindow", "Object-centric event logs"))
-        self.sidebarOCELTitle.setText(_translate("MainWindow", "OcelNameFrame"))
 
         # end for side scroll area
 
@@ -211,9 +219,10 @@ class Ui_MainWindow(object):
         attr1 = self.attrSelectcomboBox1.currentText()
         attr2 = self.attrSelectcomboBox2.currentText()
         newLog = matchMiner(log1, log2, self.ocel_model.obj_relation, attr1, attr2)
-        self.ocel_model.addOCEL("MATCH_MINER (" + name1 + ", " + name2 + ")" + " on " + "(" + attr1 + ", " + attr2 + ")", newLog)
+        name = "MATCH_MINER (" + name1 + ", " + name2 + ")" + " on " + "(" + attr1 + ", " + attr2 + ")"
+        self.ocel_model.addOCEL(name, newLog)
 
-        self.refreshSelection()
+        self.refreshSelection(name)
 
     def initAttributes1(self):
         _translate = QtCore.QCoreApplication.translate
@@ -231,7 +240,7 @@ class Ui_MainWindow(object):
             self.attrSelectcomboBox2.addItem("")
             self.attrSelectcomboBox2.setItemText(i, _translate("MainWindow", attributes[i]))
 
-    def refreshSelection(self):
+    def refreshSelection(self, name=""):
         _translate = QtCore.QCoreApplication.translate
 
         self.logSelectcomboBox1.clear()
@@ -245,6 +254,50 @@ class Ui_MainWindow(object):
 
         self.initAttributes1()
         self.initAttributes2()
+        
+        # only add new log to sidebar if we just applied some operator
+        if name == "":
+            return
+
+        # start for side scroll area
+        i = len(self.ocel_model.ocels) - 1
+        self.ocelSideBarFrames.append(QtWidgets.QFrame(self.OCEL_list_frame))
+        height = i*120+60
+        self.ocelSideBarFrames[i].setGeometry(QtCore.QRect(40, height, 280, 100))
+        self.ocelSideBarFrames[i].setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.ocelSideBarFrames[i].setFrameShadow(QtWidgets.QFrame.Raised)
+        self.ocelSideBarFrames[i].setObjectName("OcelNameFrame_" + str(i))
+
+        sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[i])
+        sidebarOCELTitle.setGeometry(QtCore.QRect(60, 10, 181, 21))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        sidebarOCELTitle.setFont(font)
+        sidebarOCELTitle.setObjectName("sidebarTitlelabel")
+        sidebarPushButtonView = QtWidgets.QPushButton(self.ocelSideBarFrames[i])
+        sidebarPushButtonView.setGeometry(QtCore.QRect(10, 50, 81, 25))
+        sidebarPushButtonView.setObjectName("sidebarPushButtonView")
+        sidebarPushButtonExport = QtWidgets.QPushButton(self.ocelSideBarFrames[i])
+        sidebarPushButtonExport.setGeometry(QtCore.QRect(100, 50, 81, 25))
+        sidebarPushButtonExport.setObjectName("sidebarPushButtonExport")
+        sidebarPushButtonDelete = QtWidgets.QPushButton(self.ocelSideBarFrames[i])
+        sidebarPushButtonDelete.setGeometry(QtCore.QRect(190, 50, 81, 25))
+        sidebarPushButtonDelete.setObjectName("sidebarPushButtonDelete")
+
+        sidebarPushButtonView.setText(_translate("MainWindow", "View"))
+        sidebarPushButtonExport.setText(_translate("MainWindow", "Export"))
+        sidebarPushButtonDelete.setText(_translate("MainWindow", "Delete"))
+        sidebarOCELTitle.setText(_translate("MainWindow", name))
+        
+        self.ocelSideBarFrames[i].show()
+
+        # update height of scroll area
+        self.OCEL_list_frame.setMinimumSize(QtCore.QSize(0, 150 * len(self.ocel_model.ocels)))
+
+        # end for side scroll area
+
 
 
 
