@@ -22,7 +22,7 @@ def matchMiner(log1, log2, object_relation, attribute1, attribute2=""):
     # adjust events
     for i in range(len(newLog['ocel:events'])):
         for j in range(len(log2['ocel:events'])):
-            if attribute1 in log1['ocel:events'][str(i)]['ocel:vmap'].keys() and attribute2 in log2['ocel:events'][str(i)]['ocel:vmap'].keys():
+            if attribute1 in log1['ocel:events'][str(i)]['ocel:vmap'].keys() and attribute2 in log2['ocel:events'][str(j)]['ocel:vmap'].keys():
                 if log1['ocel:events'][str(i)]['ocel:vmap'][attribute1] == log2['ocel:events'][str(j)]['ocel:vmap'][attribute2]:
                     for obj1 in newLog['ocel:events'][str(i)]['ocel:omap']:
                         for obj2 in log2['ocel:events'][str(j)]['ocel:omap']:

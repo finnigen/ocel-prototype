@@ -16,6 +16,10 @@ class OCEL_Model:
     def addOCEL(self, name, ocel):
         self.ocels[name] = ocel
 
+    def removeOCEL(self, name):
+        del self.ocels[name]
+
+
 
 
 def convertToOcelModel(url, api_token, data_pool, data_model):

@@ -15,6 +15,8 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(875, 685)
+        
+        
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
@@ -85,6 +87,8 @@ class Ui_MainWindow(object):
         self.pushButton_6.setObjectName("pushButton_6")
         self.horizontalLayout_4.addWidget(self.OCEL_list_frame)
         self.OCEL_list_scrollArea.setWidget(self.scrollAreaWidgetContents_3)
+        
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 875, 22))
