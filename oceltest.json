@@ -11,10 +11,10 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "ATT_order_attr1",
-      "EVID_general",
       "EVID_order",
-      "ATT_EVENT_attr1"
+      "ATT_EVENT_attr1",
+      "EVID_general",
+      "ATT_order_attr1"
     ],
     "ocel:object-types": [
       "CASE_order"

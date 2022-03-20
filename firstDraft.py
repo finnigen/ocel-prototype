@@ -38,8 +38,42 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
 
 
+
+
+
+        # most outer layout (grid layouts for left and right side)
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName("gridLayout")
+        self.rightFrame = QtWidgets.QFrame(self.centralwidget)
+        self.rightFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.rightFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.rightFrame.setObjectName("rightFrame")
+        self.rightGridLayout = QtWidgets.QGridLayout(self.rightFrame)
+        self.rightGridLayout.setObjectName("rightGridLayout")
+        self.gridLayout.addWidget(self.rightFrame, 0, 1, 1, 2)
+        self.leftFrame = QtWidgets.QFrame(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.leftFrame.sizePolicy().hasHeightForWidth())
+        self.leftFrame.setSizePolicy(sizePolicy)
+        self.leftFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.leftFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.leftFrame.setObjectName("leftFrame")
+        self.leftGridLayout = QtWidgets.QGridLayout(self.leftFrame)
+        self.leftGridLayout.setObjectName("leftGridLayout")
+        self.gridLayout.addWidget(self.leftFrame, 0, 0, 1, 1)
+
+
+
+
+
+
+
         # start of code for side scroll area
-        self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
+        self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.leftFrame)
+    #    self.leftGridLayout.addWidget(self.OCEL_list_scrollArea)
+
         self.OCEL_list_scrollArea.setGeometry(QtCore.QRect(30, 20, 391, 581))
         self.OCEL_list_scrollArea.setWidgetResizable(True)
         self.OCEL_list_scrollArea.setObjectName("OCEL_list_scrollArea")
@@ -71,8 +105,10 @@ class Ui_MainWindow(object):
 
 
 
-        self.operatorFrame = QtWidgets.QFrame(self.centralwidget)
-        self.operatorFrame.setGeometry(QtCore.QRect(450, 50, 751, 511))
+        self.operatorFrame = QtWidgets.QFrame(self.rightFrame)
+        self.rightGridLayout.addWidget(self.operatorFrame, 0, 0, 1, 2)
+
+    #    self.operatorFrame.setGeometry(QtCore.QRect(20, 20, 751, 511))
         self.operatorFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.operatorFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.operatorFrame.setObjectName("operatorFrame")
