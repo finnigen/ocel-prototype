@@ -38,10 +38,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
 
 
-
-
-
-        # most outer layout (grid layouts for left and right side)
+        # most outer layout (grid layouts for left side)
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
         self.rightFrame = QtWidgets.QFrame(self.centralwidget)
@@ -51,45 +48,36 @@ class Ui_MainWindow(object):
         self.rightGridLayout = QtWidgets.QGridLayout(self.rightFrame)
         self.rightGridLayout.setObjectName("rightGridLayout")
         self.gridLayout.addWidget(self.rightFrame, 0, 1, 1, 2)
-        self.leftFrame = QtWidgets.QFrame(self.centralwidget)
+        
+
+        # start of code for side scroll area
+        self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
+        self.leftGridLayout = QtWidgets.QGridLayout(self.OCEL_list_scrollArea)
+        self.leftGridLayout.setObjectName("leftGridLayout")
+        self.gridLayout.addWidget(self.OCEL_list_scrollArea, 0, 0, 1, 1)
+    #    self.OCEL_list_scrollArea.setGeometry(QtCore.QRect(30, 20, 391, 581))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.leftFrame.sizePolicy().hasHeightForWidth())
-        self.leftFrame.setSizePolicy(sizePolicy)
-        self.leftFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.leftFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.leftFrame.setObjectName("leftFrame")
-        self.leftGridLayout = QtWidgets.QGridLayout(self.leftFrame)
-        self.leftGridLayout.setObjectName("leftGridLayout")
-        self.gridLayout.addWidget(self.leftFrame, 0, 0, 1, 1)
-
-
-
-
-
-
-
-        # start of code for side scroll area
-        self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.leftFrame)
-    #    self.leftGridLayout.addWidget(self.OCEL_list_scrollArea)
-
-        self.OCEL_list_scrollArea.setGeometry(QtCore.QRect(30, 20, 391, 581))
+        sizePolicy.setHeightForWidth(self.OCEL_list_scrollArea.sizePolicy().hasHeightForWidth())
+        self.OCEL_list_scrollArea.setSizePolicy(sizePolicy)
         self.OCEL_list_scrollArea.setWidgetResizable(True)
         self.OCEL_list_scrollArea.setObjectName("OCEL_list_scrollArea")
-        self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 375, 1018))
-        self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.scrollAreaWidgetContents_3)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.OCEL_list_frame = QtWidgets.QFrame(self.scrollAreaWidgetContents_3)
 
+
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+    #    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 375, 1018))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout.setObjectName("verticalLayout")
+
+
+        self.OCEL_list_frame = QtWidgets.QFrame(self.scrollAreaWidgetContents)
+        # set height of scroll frame to multiple of length of OCELs collection
         self.OCEL_list_frame.setMinimumSize(QtCore.QSize(0, 150 * len(self.ocel_model.ocels)))
-
         self.OCEL_list_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.OCEL_list_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.OCEL_list_frame.setObjectName("OCEL_list_frame")
-
         self.sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
         self.sidebarTitlelabel.setGeometry(QtCore.QRect(30, 10, 321, 31))
         font = QtGui.QFont()
@@ -98,13 +86,21 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.sidebarTitlelabel.setFont(font)
         self.sidebarTitlelabel.setObjectName("sidebarTitlelabel")
-        
-        self.horizontalLayout_4.addWidget(self.OCEL_list_frame)
-        self.OCEL_list_scrollArea.setWidget(self.scrollAreaWidgetContents_3)
+
+        self.verticalLayout.addWidget(self.OCEL_list_frame)
+
+
+        self.OCEL_list_scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+        # set inner layout of left sidebar
+        self.innerVerticalLayout = QtWidgets.QVBoxLayout(self.OCEL_list_frame)
+        self.innerVerticalLayout.setObjectName("innerVerticalLayout")
+        self.innerVerticalLayout.addWidget(self.sidebarTitlelabel, 0)
         # end of code for side scroll area
 
 
 
+        # code for right area
         self.operatorFrame = QtWidgets.QFrame(self.rightFrame)
         self.rightGridLayout.addWidget(self.operatorFrame, 0, 0, 1, 2)
 
@@ -112,14 +108,21 @@ class Ui_MainWindow(object):
         self.operatorFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.operatorFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.operatorFrame.setObjectName("operatorFrame")
+
+
+        # set inner layout of right area
+        self.innerRightLayout = QtWidgets.QGridLayout(self.operatorFrame)
+        self.innerRightLayout.setObjectName("innerRightLayout")
+
         self.operatorTitleLabel = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorTitleLabel.setGeometry(QtCore.QRect(280, 20, 231, 41))
+    #    self.operatorTitleLabel.setGeometry(QtCore.QRect(280, 20, 231, 41))
         font = QtGui.QFont()
         font.setPointSize(25)
         font.setBold(True)
         font.setWeight(75)
         self.operatorTitleLabel.setFont(font)
         self.operatorTitleLabel.setObjectName("operatorTitleLabel")
+
 
         self.operatorDescriptionLabel = QtWidgets.QLabel(self.operatorFrame)
         self.operatorDescriptionLabel.setEnabled(True)
@@ -183,6 +186,20 @@ class Ui_MainWindow(object):
         self.operatorSelectorLabel_2.setFont(font)
         self.operatorSelectorLabel_2.setObjectName("operatorSelectorLabel_2")
 
+
+        self.innerRightLayout.addWidget(self.operatorTitleLabel, 0, 0)
+        self.innerRightLayout.addWidget(self.operatorDescriptionLabel, 1, 0)
+        self.innerRightLayout.addWidget(self.operatorSelectorLabel_1, 2, 0)
+        self.innerRightLayout.addWidget(self.logSelectcomboBox1, 2, 1)
+        self.innerRightLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
+        self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
+        self.innerRightLayout.addWidget(self.operatorSelectorLabel_3, 4, 0)
+        self.innerRightLayout.addWidget(self.attrSelectcomboBox1, 4, 1)
+        self.innerRightLayout.addWidget(self.attrSelectcomboBox2, 5, 1)
+        self.innerRightLayout.addWidget(self.operatorAddButton, 6, 0)
+        self.innerRightLayout.addWidget(self.operatorExportButton, 6, 1)
+
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -222,14 +239,16 @@ class Ui_MainWindow(object):
         for i in range(len(self.ocel_model.ocels.keys())):
             currName = list(self.ocel_model.ocels.keys())[i]
             self.ocelSideBarFrames[currName] = QtWidgets.QFrame(self.OCEL_list_frame)
-            height = i*120+60
-            self.ocelSideBarFrames[currName].setGeometry(QtCore.QRect(40, height, 280, 100))
+            self.innerVerticalLayout.addWidget(self.ocelSideBarFrames[currName])
+        
+        #    height = i*120+60
+        #    self.ocelSideBarFrames[currName].setGeometry(QtCore.QRect(40, height, 280, 100))
             self.ocelSideBarFrames[currName].setFrameShape(QtWidgets.QFrame.StyledPanel)
             self.ocelSideBarFrames[currName].setFrameShadow(QtWidgets.QFrame.Raised)
             self.ocelSideBarFrames[currName].setObjectName("OcelNameFrame_" + str(currName))
 
             sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[currName])
-            sidebarOCELTitle.setGeometry(QtCore.QRect(60, 10, 181, 21))
+        #    sidebarOCELTitle.setGeometry(QtCore.QRect(60, 10, 181, 21))
             font = QtGui.QFont()
             font.setPointSize(14)
             font.setBold(True)
@@ -237,13 +256,13 @@ class Ui_MainWindow(object):
             sidebarOCELTitle.setFont(font)
             sidebarOCELTitle.setObjectName("sidebarTitlelabel")
             self.ocelSideBarViewButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-            self.ocelSideBarViewButtons[currName].setGeometry(QtCore.QRect(10, 50, 81, 25))
+        #    self.ocelSideBarViewButtons[currName].setGeometry(QtCore.QRect(10, 50, 81, 25))
             self.ocelSideBarViewButtons[currName].setObjectName("sidebarPushButtonView")
             self.ocelSideBarExportButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-            self.ocelSideBarExportButtons[currName].setGeometry(QtCore.QRect(100, 50, 81, 25))
+        #    self.ocelSideBarExportButtons[currName].setGeometry(QtCore.QRect(100, 50, 81, 25))
             self.ocelSideBarExportButtons[currName].setObjectName("sidebarPushButtonExport")
             self.ocelSideBarDeleteButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-            self.ocelSideBarDeleteButtons[currName].setGeometry(QtCore.QRect(190, 50, 81, 25))
+        #    self.ocelSideBarDeleteButtons[currName].setGeometry(QtCore.QRect(190, 50, 81, 25))
             self.ocelSideBarDeleteButtons[currName].setObjectName("sidebarPushButtonDelete")
 
             self.ocelSideBarDeleteButtons[currName].clicked.connect(lambda checked, x=currName: self.removeFromLogs(x))
@@ -255,6 +274,14 @@ class Ui_MainWindow(object):
             self.ocelSideBarExportButtons[currName].setText(_translate("MainWindow", "Export"))
             self.ocelSideBarDeleteButtons[currName].setText(_translate("MainWindow", "Delete"))
             sidebarOCELTitle.setText(_translate("MainWindow", currName))
+
+            innerLayout = QtWidgets.QGridLayout(self.ocelSideBarFrames[currName])
+            innerLayout.setObjectName("innerLayout")
+            innerLayout.addWidget(sidebarOCELTitle)
+            innerLayout.addWidget(self.ocelSideBarViewButtons[currName])
+            innerLayout.addWidget(self.ocelSideBarExportButtons[currName])
+            innerLayout.addWidget(self.ocelSideBarDeleteButtons[currName])
+
         
         self.sidebarTitlelabel.setText(_translate("MainWindow", "Object-centric event logs"))
 
@@ -325,14 +352,16 @@ class Ui_MainWindow(object):
         # start for side scroll area
         i = len(self.ocel_model.ocels) - 1
         self.ocelSideBarFrames[name] = QtWidgets.QFrame(self.OCEL_list_frame)
-        height = i*120+60
-        self.ocelSideBarFrames[name].setGeometry(QtCore.QRect(40, height, 280, 100))
+        self.innerVerticalLayout.addWidget(self.ocelSideBarFrames[name])
+
+    #    height = i*120+60
+    #    self.ocelSideBarFrames[name].setGeometry(QtCore.QRect(40, height, 280, 100))
         self.ocelSideBarFrames[name].setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.ocelSideBarFrames[name].setFrameShadow(QtWidgets.QFrame.Raised)
         self.ocelSideBarFrames[name].setObjectName("OcelNameFrame_" + str(name))
 
         sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[name])
-        sidebarOCELTitle.setGeometry(QtCore.QRect(60, 10, 181, 21))
+    #    sidebarOCELTitle.setGeometry(QtCore.QRect(60, 10, 181, 21))
         font = QtGui.QFont()
         font.setPointSize(14)
         font.setBold(True)
@@ -340,13 +369,13 @@ class Ui_MainWindow(object):
         sidebarOCELTitle.setFont(font)
         sidebarOCELTitle.setObjectName("sidebarTitlelabel")
         self.ocelSideBarViewButtons[name] = QtWidgets.QPushButton(self.ocelSideBarFrames[name])
-        self.ocelSideBarViewButtons[name].setGeometry(QtCore.QRect(10, 50, 81, 25))
+    #    self.ocelSideBarViewButtons[name].setGeometry(QtCore.QRect(10, 50, 81, 25))
         self.ocelSideBarViewButtons[name].setObjectName("sidebarPushButtonView")
         self.ocelSideBarExportButtons[name] = QtWidgets.QPushButton(self.ocelSideBarFrames[name])
-        self.ocelSideBarExportButtons[name].setGeometry(QtCore.QRect(100, 50, 81, 25))
+    #    self.ocelSideBarExportButtons[name].setGeometry(QtCore.QRect(100, 50, 81, 25))
         self.ocelSideBarExportButtons[name].setObjectName("sidebarPushButtonExport")
         self.ocelSideBarDeleteButtons[name] = QtWidgets.QPushButton(self.ocelSideBarFrames[name])
-        self.ocelSideBarDeleteButtons[name].setGeometry(QtCore.QRect(190, 50, 81, 25))
+    #    self.ocelSideBarDeleteButtons[name].setGeometry(QtCore.QRect(190, 50, 81, 25))
         self.ocelSideBarDeleteButtons[name].setObjectName("sidebarPushButtonDelete")
 
         self.ocelSideBarDeleteButtons[name].clicked.connect(lambda: self.removeFromLogs(name))
@@ -359,6 +388,13 @@ class Ui_MainWindow(object):
         self.ocelSideBarDeleteButtons[name].setText(_translate("MainWindow", "Delete"))
         sidebarOCELTitle.setText(_translate("MainWindow", name))
         
+        innerLayout = QtWidgets.QGridLayout(self.ocelSideBarFrames[name])
+        innerLayout.setObjectName("innerLayout")
+        innerLayout.addWidget(sidebarOCELTitle)
+        innerLayout.addWidget(self.ocelSideBarViewButtons[name])
+        innerLayout.addWidget(self.ocelSideBarExportButtons[name])
+        innerLayout.addWidget(self.ocelSideBarDeleteButtons[name])
+
         self.ocelSideBarFrames[name].show()
 
         # update height of scroll area
