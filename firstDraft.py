@@ -372,7 +372,7 @@ class Ui_MainWindow(object):
 
         self.ocelSideBarDeleteButtons[name].clicked.connect(lambda: self.removeFromLogs(name))
         self.ocelSideBarExportButtons[name].clicked.connect(lambda checked, x=name: self.export(x))
-        self.ocelSideBarViewButtons[name].clicked.connect(lambda checked, x=currName: self.show_table_window(x))
+        self.ocelSideBarViewButtons[name].clicked.connect(lambda checked, x=name: self.show_table_window(x))
 
 
         self.ocelSideBarViewButtons[name].setText(_translate("MainWindow", "View"))

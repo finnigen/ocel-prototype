@@ -11,9 +11,9 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "EVID_general",
-      "ATT_order_attr1",
       "EVID_order",
+      "ATT_order_attr1",
+      "EVID_general",
       "ATT_EVENT_attr1"
     ],
     "ocel:object-types": [
@@ -27,7 +27,9 @@
       "ocel:activity": "place order",
       "ocel:timestamp": "2020-07-09 08:20:00",
       "ocel:omap": [
-        "order1"
+        "item2",
+        "order1",
+        "item1"
       ],
       "ocel:vmap": {
         "ATT_EVENT_attr1": "attValue",
@@ -83,6 +85,18 @@
       "ocel:type": "CASE_order",
       "ocel:ovmap": {
         "ATT_order_attr1": "attValue"
+      }
+    },
+    "item2": {
+      "ocel:type": "CASE_item",
+      "ocel:ovmap": {
+        "ATT_item_attr1": "attValue"
+      }
+    },
+    "item1": {
+      "ocel:type": "CASE_item",
+      "ocel:ovmap": {
+        "ATT_item_attr1": "attValue"
       }
     }
   }
