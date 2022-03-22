@@ -11,6 +11,8 @@ from ast import Name
 from ocel_converter import convertToOcelModel, OCEL_Model
 from operators import manualMiner, matchMiner
 import pickle
+from tableWindow import TableWindow
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -36,19 +38,18 @@ class Ui_MainWindow(object):
         MainWindow.resize(1300, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-
-
-        # most outer layout (grid layouts for left side)
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
+
+        # most outer layout (grid layouts for left side)
         self.rightFrame = QtWidgets.QFrame(self.centralwidget)
         self.rightFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.rightFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.rightFrame.setObjectName("rightFrame")
+
         self.rightGridLayout = QtWidgets.QGridLayout(self.rightFrame)
         self.rightGridLayout.setObjectName("rightGridLayout")
         self.gridLayout.addWidget(self.rightFrame, 0, 1, 1, 2)
-        
 
         # start of code for side scroll area
         self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
@@ -64,13 +65,11 @@ class Ui_MainWindow(object):
         self.OCEL_list_scrollArea.setWidgetResizable(True)
         self.OCEL_list_scrollArea.setObjectName("OCEL_list_scrollArea")
 
-
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
     #    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 375, 1018))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName("verticalLayout")
-
 
         self.OCEL_list_frame = QtWidgets.QFrame(self.scrollAreaWidgetContents)
         # set height of scroll frame to multiple of length of OCELs collection
@@ -79,7 +78,7 @@ class Ui_MainWindow(object):
         self.OCEL_list_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.OCEL_list_frame.setObjectName("OCEL_list_frame")
         self.sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
-        self.sidebarTitlelabel.setGeometry(QtCore.QRect(30, 10, 321, 31))
+    #    self.sidebarTitlelabel.setGeometry(QtCore.QRect(30, 10, 321, 31))
         font = QtGui.QFont()
         font.setPointSize(18)
         font.setBold(True)
@@ -89,7 +88,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.OCEL_list_frame)
 
-
         self.OCEL_list_scrollArea.setWidget(self.scrollAreaWidgetContents)
 
         # set inner layout of left sidebar
@@ -97,8 +95,6 @@ class Ui_MainWindow(object):
         self.innerVerticalLayout.setObjectName("innerVerticalLayout")
         self.innerVerticalLayout.addWidget(self.sidebarTitlelabel, 0)
         # end of code for side scroll area
-
-
 
         # code for right area
         self.operatorFrame = QtWidgets.QFrame(self.rightFrame)
@@ -108,7 +104,6 @@ class Ui_MainWindow(object):
         self.operatorFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.operatorFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.operatorFrame.setObjectName("operatorFrame")
-
 
         # set inner layout of right area
         self.innerRightLayout = QtWidgets.QGridLayout(self.operatorFrame)
@@ -123,70 +118,67 @@ class Ui_MainWindow(object):
         self.operatorTitleLabel.setFont(font)
         self.operatorTitleLabel.setObjectName("operatorTitleLabel")
 
-
         self.operatorDescriptionLabel = QtWidgets.QLabel(self.operatorFrame)
         self.operatorDescriptionLabel.setEnabled(True)
-        self.operatorDescriptionLabel.setGeometry(QtCore.QRect(60, 70, 611, 31))
+    #    self.operatorDescriptionLabel.setGeometry(QtCore.QRect(60, 70, 611, 31))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.operatorDescriptionLabel.setFont(font)
         self.operatorDescriptionLabel.setObjectName("operatorDescriptionLabel")
         self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.operatorFrame)
         self.operatorSelectorLabel_1.setEnabled(True)
-        self.operatorSelectorLabel_1.setGeometry(QtCore.QRect(60, 160, 271, 31))
+    #    self.operatorSelectorLabel_1.setGeometry(QtCore.QRect(60, 160, 271, 31))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.operatorSelectorLabel_1.setFont(font)
         self.operatorSelectorLabel_1.setObjectName("operatorSelectorLabel_1")
         self.operatorSelectorLabel_3 = QtWidgets.QLabel(self.operatorFrame)
         self.operatorSelectorLabel_3.setEnabled(True)
-        self.operatorSelectorLabel_3.setGeometry(QtCore.QRect(60, 280, 311, 31))
+    #    self.operatorSelectorLabel_3.setGeometry(QtCore.QRect(60, 280, 311, 31))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.operatorSelectorLabel_3.setFont(font)
         self.operatorSelectorLabel_3.setObjectName("operatorSelectorLabel_3")
         
         self.logSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
-        self.logSelectcomboBox1.setGeometry(QtCore.QRect(420, 160, 221, 31))
+    #    self.logSelectcomboBox1.setGeometry(QtCore.QRect(420, 160, 221, 31))
         self.logSelectcomboBox1.setObjectName("logSelectcomboBox1")
 
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
-        self.logSelectcomboBox2.setGeometry(QtCore.QRect(420, 210, 221, 31))
+    #    self.logSelectcomboBox2.setGeometry(QtCore.QRect(420, 210, 221, 31))
         self.logSelectcomboBox2.setObjectName("logSelectcomboBox2")
-
 
         self.logSelectcomboBox1.activated.connect(self.initAttributes1)
         self.logSelectcomboBox2.activated.connect(self.initAttributes2)
 
-
         self.attrSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
-        self.attrSelectcomboBox1.setGeometry(QtCore.QRect(420, 280, 221, 31))
+    #    self.attrSelectcomboBox1.setGeometry(QtCore.QRect(420, 280, 221, 31))
         self.attrSelectcomboBox1.setObjectName("attrSelectcomboBox1")
 
         self.attrSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
-        self.attrSelectcomboBox2.setGeometry(QtCore.QRect(420, 320, 221, 31))
+    #    self.attrSelectcomboBox2.setGeometry(QtCore.QRect(420, 320, 221, 31))
         self.attrSelectcomboBox2.setObjectName("attrSelectcomboBox2")
 
         self.operatorAddButton = QtWidgets.QPushButton(self.operatorFrame)
-        self.operatorAddButton.setGeometry(QtCore.QRect(80, 430, 231, 41))
+    #    self.operatorAddButton.setGeometry(QtCore.QRect(80, 430, 231, 41))
         self.operatorAddButton.setObjectName("operatorAddButton")
         self.operatorAddButton.clicked.connect(self.addToLogs)
 
         self.operatorExportButton = QtWidgets.QPushButton(self.operatorFrame)
-        self.operatorExportButton.setGeometry(QtCore.QRect(410, 430, 231, 41))
+    #    self.operatorExportButton.setGeometry(QtCore.QRect(410, 430, 231, 41))
         self.operatorExportButton.setObjectName("operatorExportButton")
         self.operatorExportButton.clicked.connect(lambda checked, x="PlaceHolder": self.export(x))
 
         
         self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.operatorFrame)
         self.operatorSelectorLabel_2.setEnabled(True)
-        self.operatorSelectorLabel_2.setGeometry(QtCore.QRect(60, 210, 271, 31))
+    #    self.operatorSelectorLabel_2.setGeometry(QtCore.QRect(60, 210, 271, 31))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.operatorSelectorLabel_2.setFont(font)
         self.operatorSelectorLabel_2.setObjectName("operatorSelectorLabel_2")
 
-
+        # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.operatorTitleLabel, 0, 0)
         self.innerRightLayout.addWidget(self.operatorDescriptionLabel, 1, 0)
         self.innerRightLayout.addWidget(self.operatorSelectorLabel_1, 2, 0)
@@ -266,8 +258,8 @@ class Ui_MainWindow(object):
             self.ocelSideBarDeleteButtons[currName].setObjectName("sidebarPushButtonDelete")
 
             self.ocelSideBarDeleteButtons[currName].clicked.connect(lambda checked, x=currName: self.removeFromLogs(x))
-            self.ocelSideBarViewButtons[currName].clicked.connect(lambda checked, x=currName: self.view(x))
             self.ocelSideBarExportButtons[currName].clicked.connect(lambda checked, x=currName: self.export(x))
+            self.ocelSideBarViewButtons[currName].clicked.connect(lambda checked, x=currName: self.show_table_window(x))
 
 
             self.ocelSideBarViewButtons[currName].setText(_translate("MainWindow", "View"))
@@ -284,8 +276,8 @@ class Ui_MainWindow(object):
 
         
         self.sidebarTitlelabel.setText(_translate("MainWindow", "Object-centric event logs"))
-
         # end for side scroll area
+        
 
     def addToLogs(self):
         name1 = self.logSelectcomboBox1.currentText()
@@ -379,8 +371,8 @@ class Ui_MainWindow(object):
         self.ocelSideBarDeleteButtons[name].setObjectName("sidebarPushButtonDelete")
 
         self.ocelSideBarDeleteButtons[name].clicked.connect(lambda: self.removeFromLogs(name))
-        self.ocelSideBarViewButtons[name].clicked.connect(lambda checked, x=name: self.view(x))
         self.ocelSideBarExportButtons[name].clicked.connect(lambda checked, x=name: self.export(x))
+        self.ocelSideBarViewButtons[name].clicked.connect(lambda checked, x=currName: self.show_table_window(x))
 
 
         self.ocelSideBarViewButtons[name].setText(_translate("MainWindow", "View"))
@@ -402,7 +394,11 @@ class Ui_MainWindow(object):
 
         # end for side scroll area
 
-
+    def show_table_window(self, name):
+        self.newWindow = QtWidgets.QMainWindow()
+        ui = TableWindow(self.ocel_model.ocels[name])
+        ui.setupUi(self.newWindow)
+        self.newWindow.show()
 
 
 if __name__ == "__main__":
