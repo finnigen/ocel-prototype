@@ -12,7 +12,7 @@ from ocel_converter import convertToOcelModel, OCEL_Model
 from operators import manualMiner, matchMiner
 import pickle
 from tableWindow import TableWindow
-
+from objRelationWindow import ObjectWindow
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -49,7 +49,7 @@ class Ui_MainWindow(object):
 
         self.rightGridLayout = QtWidgets.QGridLayout(self.rightFrame)
         self.rightGridLayout.setObjectName("rightGridLayout")
-        self.gridLayout.addWidget(self.rightFrame, 0, 1, 1, 2)
+        self.gridLayout.addWidget(self.rightFrame, 0, 1, 2, 2)
 
         # start of code for side scroll area
         self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
@@ -191,6 +191,10 @@ class Ui_MainWindow(object):
         self.innerRightLayout.addWidget(self.operatorAddButton, 6, 0)
         self.innerRightLayout.addWidget(self.operatorExportButton, 6, 1)
 
+        # button for viewing object relationships
+        self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
+        self.viewObjectRelationsButton.setObjectName("viewObjectRelationsButton")
+        self.gridLayout.addWidget(self.viewObjectRelationsButton, 1, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -201,13 +205,13 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
 
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Transformation Center"))
         self.operatorTitleLabel.setText(_translate("MainWindow", "Match Miner"))
 
         self.refreshSelection()
@@ -277,7 +281,11 @@ class Ui_MainWindow(object):
         
         self.sidebarTitlelabel.setText(_translate("MainWindow", "Object-centric event logs"))
         # end for side scroll area
-        
+
+        # button for viewing object relationships
+        self.viewObjectRelationsButton.setText(_translate("MainWindow", "View Object Relationships"))
+        self.viewObjectRelationsButton.clicked.connect(self.viewObjectRelations)
+
 
     def addToLogs(self):
         name1 = self.logSelectcomboBox1.currentText()
@@ -299,12 +307,7 @@ class Ui_MainWindow(object):
         self.ocelSideBarFrames[name].setParent(None)
         del self.ocelSideBarFrames[name]
         self.refreshSelection()
-    
-    def view(self, name):
-        print("view " + name)
-    
-    def export(self, name):
-        print("export " + name)
+
 
     def initAttributes1(self):
         _translate = QtCore.QCoreApplication.translate
@@ -399,6 +402,18 @@ class Ui_MainWindow(object):
         ui = TableWindow(self.ocel_model.ocels[name])
         ui.setupUi(self.newWindow)
         self.newWindow.show()
+
+
+    def viewObjectRelations(self):
+        self.newWindow = QtWidgets.QMainWindow()
+        ui = ObjectWindow(self.ocel_model.obj_relation)
+        ui.setupUi(self.newWindow)
+        self.newWindow.show()
+
+
+    def export(self, name):
+        print("export " + name)
+
 
 
 if __name__ == "__main__":

@@ -110,7 +110,7 @@ class TableWindow(QtWidgets.QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Data Viewer"))
         
         # objects table
         self.objectsLabel.setText(_translate("MainWindow", "Objects"))
