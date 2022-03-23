@@ -5,9 +5,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class TableWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, ocel):
+    def __init__(self, ocel, name):
         super().__init__()
         self.ocel = ocel
+        self.name = name
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -110,7 +111,7 @@ class TableWindow(QtWidgets.QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Data Viewer"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Data Viewer: " + self.name))
         
         # objects table
         self.objectsLabel.setText(_translate("MainWindow", "Objects"))
@@ -186,7 +187,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ocel = {'ocel:global-event': {'ocel:activity': ['place order', 'send package']}, 'ocel:global-object': {'ocel:type': '__INVALID__'}, 'ocel:global-log': {'ocel:attribute-names': ['ATT_package_attr1', 'EVID_general', 'EVID_package', 'ATT_EVENT_attr1'], 'ocel:object-types': ['CASE_package'], 'ocel:version': '1.0', 'ocel:ordering': 'timestamp'}, 'ocel:events': {'0': {'ocel:activity': 'place order', 'ocel:timestamp': '2020-07-09 08:20:00', 'ocel:omap': ['package1'], 'ocel:vmap': {'ATT_EVENT_attr1': 'attValue', 'EVID_general': '1.0', 'EVID_package': '1.0:package1'}}, '1': {'ocel:activity': 'send package', 'ocel:timestamp': '2020-07-09 08:31:00', 'ocel:omap': ['package1'], 'ocel:vmap': {'ATT_EVENT_attr1': 'attValue', 'EVID_general': '7.0', 'EVID_package': '7.0:package1'}}}, 'ocel:objects': {'package1': {'ocel:type': 'CASE_package', 'ocel:ovmap': {'ATT_package_attr1': 'attValue'}}}}
-    ui = TableWindow(ocel)
+    ui = TableWindow(ocel, "package_EVENTS")
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
