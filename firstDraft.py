@@ -98,9 +98,40 @@ class Ui_MainWindow(object):
         self.innerVerticalLayout.addWidget(self.sidebarTitlelabel, 0, QtCore.Qt.AlignHCenter)
         # end of code for side scroll area
 
+
+
+        # stacked widget for multiple different views
+        self.stackedWidget = QtWidgets.QStackedWidget(self.rightFrame)
+        self.stackedWidget.setObjectName("stackedWidget")
+        self.rightGridLayout.addWidget(self.stackedWidget, 0, 0, 1, 2)
+
+        self.operatorSelectorPage = QtWidgets.QWidget()
+        self.operatorSelectorPage.setObjectName("operatorSelectorPage")
+
+        innerStackedLayout = QtWidgets.QGridLayout(self.operatorSelectorPage)
+        innerStackedLayout.setObjectName("innerStackedLayout")
+
+        self.stackedWidget.addWidget(self.operatorSelectorPage)
+
+        self.matchMinerButton = QtWidgets.QPushButton(self.operatorSelectorPage)
+        self.matchMinerButton.setObjectName("matchMinerButton")
+        self.matchMinerButton.clicked.connect(lambda : self.stackedWidget.setCurrentIndex(1))
+        self.matchMinerButton.setText("Match Miner")
+
+        innerStackedLayout.addWidget(self.matchMinerButton)
+
+
+
+        self.matchMinerPage = QtWidgets.QWidget()
+        self.matchMinerPage.setObjectName("matchMinerPage")
+        innerStackedLayout = QtWidgets.QGridLayout(self.matchMinerPage)
+        innerStackedLayout.setObjectName("innerStackedLayout")
+        self.stackedWidget.addWidget(self.matchMinerPage)
+
+
         # code for right area
-        self.operatorFrame = QtWidgets.QFrame(self.rightFrame)
-        self.rightGridLayout.addWidget(self.operatorFrame, 0, 0, 1, 2)
+        self.operatorFrame = QtWidgets.QFrame(self.matchMinerPage)
+    #    self.rightGridLayout.addWidget(self.operatorFrame, 0, 0, 1, 2)
 
     #    self.operatorFrame.setGeometry(QtCore.QRect(20, 20, 751, 511))
         self.operatorFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -193,6 +224,10 @@ class Ui_MainWindow(object):
         self.innerRightLayout.addWidget(self.operatorAddButton, 6, 0)
         self.innerRightLayout.addWidget(self.operatorExportButton, 6, 1)
 
+
+        innerStackedLayout.addWidget(self.operatorFrame)
+
+
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
         self.viewObjectRelationsButton.setObjectName("viewObjectRelationsButton")
@@ -208,12 +243,18 @@ class Ui_MainWindow(object):
         MainWindow.setMenuBar(self.menubar)
 
         self.retranslateUi(MainWindow)
+
+        # set current page for stacked widget
+        self.stackedWidget.setCurrentIndex(0)
+
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Transformation Center"))
+
+        # right hand side operator view
         self.operatorTitleLabel.setText(_translate("MainWindow", "Match Miner"))
 
         self.refreshSelection()
@@ -284,7 +325,6 @@ class Ui_MainWindow(object):
             innerLayout.addWidget(self.ocelSideBarDeleteButtons[currName])
 
         self.innerVerticalLayout.setSpacing(20)
-
 
         self.sidebarTitlelabel.setText(_translate("MainWindow", "Object-centric event logs"))
         self.sidebarTitlelabel.setAlignment(QtCore.Qt.AlignTop)
@@ -435,6 +475,5 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
 
 
