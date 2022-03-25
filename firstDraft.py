@@ -11,6 +11,8 @@ from ast import Name
 from ctypes import alignment
 from re import S
 from ocel_converter import convertToOcelModel, OCEL_Model
+from operatorFrame import OperatorFrame
+from matchMinerFrame import MatchMinerFrame
 from operators import manualMiner, matchMiner
 import pickle
 from tableWindow import TableWindow
@@ -68,19 +70,15 @@ class Ui_MainWindow(object):
         self.OCEL_list_scrollArea.setObjectName("OCEL_list_scrollArea")
 
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-    #    self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 375, 1018))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName("verticalLayout")
 
         self.OCEL_list_frame = QtWidgets.QFrame(self.scrollAreaWidgetContents)
-        # set height of scroll frame to multiple of length of OCELs collection
-    #    self.OCEL_list_frame.setMinimumSize(QtCore.QSize(0, 150 * len(self.ocel_model.ocels)))
         self.OCEL_list_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.OCEL_list_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.OCEL_list_frame.setObjectName("OCEL_list_frame")
         self.sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
-    #    self.sidebarTitlelabel.setGeometry(QtCore.QRect(30, 10, 321, 31))
         font = QtGui.QFont()
         font.setPointSize(18)
         font.setBold(True)
@@ -113,13 +111,25 @@ class Ui_MainWindow(object):
 
         self.stackedWidget.addWidget(self.operatorSelectorPage)
 
+        self.operatorSelectorTitle = QtWidgets.QLabel(self.operatorSelectorPage)
+        font = QtGui.QFont()
+        font.setPointSize(25)
+        font.setBold(True)
+        font.setWeight(75)
+        self.operatorSelectorTitle.setFont(font)
+        self.operatorSelectorTitle.setObjectName("operatorSelectorTitle")
+        self.operatorSelectorTitle.setText("Select an Operator")
+
         self.matchMinerButton = QtWidgets.QPushButton(self.operatorSelectorPage)
         self.matchMinerButton.setObjectName("matchMinerButton")
         self.matchMinerButton.clicked.connect(lambda : self.stackedWidget.setCurrentIndex(1))
         self.matchMinerButton.setText("Match Miner")
 
-        innerStackedLayout.addWidget(self.matchMinerButton)
+        self.test = MatchMinerFrame(self.operatorSelectorPage, self.ocel_model, "Match Miner", "Description", matchMiner)
+        innerStackedLayout.addWidget(self.test)
 
+        innerStackedLayout.addWidget(self.operatorSelectorTitle)
+        innerStackedLayout.addWidget(self.matchMinerButton)
 
 
         self.matchMinerPage = QtWidgets.QWidget()
@@ -127,6 +137,7 @@ class Ui_MainWindow(object):
         innerStackedLayout = QtWidgets.QGridLayout(self.matchMinerPage)
         innerStackedLayout.setObjectName("innerStackedLayout")
         self.stackedWidget.addWidget(self.matchMinerPage)
+
 
 
         # code for right area
@@ -375,6 +386,9 @@ class Ui_MainWindow(object):
 
     def refreshSelection(self, name=""):
         _translate = QtCore.QCoreApplication.translate
+
+        # go back to operator overview page
+        self.stackedWidget.setCurrentIndex(0)
 
         self.logSelectcomboBox1.clear()
         self.logSelectcomboBox2.clear()
