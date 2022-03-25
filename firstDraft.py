@@ -9,6 +9,7 @@
 
 from ast import Name
 from ctypes import alignment
+from os import supports_bytes_environ
 from re import S
 from ocel_converter import convertToOcelModel, OCEL_Model
 from operatorFrame import OperatorFrame
@@ -96,8 +97,6 @@ class Ui_MainWindow(object):
         self.innerVerticalLayout.addWidget(self.sidebarTitlelabel, 0, QtCore.Qt.AlignHCenter)
         # end of code for side scroll area
 
-
-
         # stacked widget for multiple different views
         self.stackedWidget = QtWidgets.QStackedWidget(self.rightFrame)
         self.stackedWidget.setObjectName("stackedWidget")
@@ -106,8 +105,8 @@ class Ui_MainWindow(object):
         self.operatorSelectorPage = QtWidgets.QWidget()
         self.operatorSelectorPage.setObjectName("operatorSelectorPage")
 
-        innerStackedLayout = QtWidgets.QGridLayout(self.operatorSelectorPage)
-        innerStackedLayout.setObjectName("innerStackedLayout")
+        self.operatorOverviewStackedLayout = QtWidgets.QGridLayout(self.operatorSelectorPage)
+        self.operatorOverviewStackedLayout.setObjectName("operatorOverviewStackedLayout")
 
         self.stackedWidget.addWidget(self.operatorSelectorPage)
 
@@ -119,124 +118,12 @@ class Ui_MainWindow(object):
         self.operatorSelectorTitle.setFont(font)
         self.operatorSelectorTitle.setObjectName("operatorSelectorTitle")
         self.operatorSelectorTitle.setText("Select an Operator")
-
-        self.matchMinerButton = QtWidgets.QPushButton(self.operatorSelectorPage)
-        self.matchMinerButton.setObjectName("matchMinerButton")
-        self.matchMinerButton.clicked.connect(lambda : self.stackedWidget.setCurrentIndex(1))
-        self.matchMinerButton.setText("Match Miner")
-
-        self.test = MatchMinerFrame(self.operatorSelectorPage, self.ocel_model, "Match Miner", "Description", matchMiner)
-        innerStackedLayout.addWidget(self.test)
-
-        innerStackedLayout.addWidget(self.operatorSelectorTitle)
-        innerStackedLayout.addWidget(self.matchMinerButton)
+        self.operatorOverviewStackedLayout.addWidget(self.operatorSelectorTitle)
 
 
-        self.matchMinerPage = QtWidgets.QWidget()
-        self.matchMinerPage.setObjectName("matchMinerPage")
-        innerStackedLayout = QtWidgets.QGridLayout(self.matchMinerPage)
-        innerStackedLayout.setObjectName("innerStackedLayout")
-        self.stackedWidget.addWidget(self.matchMinerPage)
-
-
-
-        # code for right area
-        self.operatorFrame = QtWidgets.QFrame(self.matchMinerPage)
-    #    self.rightGridLayout.addWidget(self.operatorFrame, 0, 0, 1, 2)
-
-    #    self.operatorFrame.setGeometry(QtCore.QRect(20, 20, 751, 511))
-        self.operatorFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.operatorFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.operatorFrame.setObjectName("operatorFrame")
-
-        # set inner layout of right area
-        self.innerRightLayout = QtWidgets.QGridLayout(self.operatorFrame)
-        self.innerRightLayout.setObjectName("innerRightLayout")
-
-        self.operatorTitleLabel = QtWidgets.QLabel(self.operatorFrame)
-    #    self.operatorTitleLabel.setGeometry(QtCore.QRect(280, 20, 231, 41))
-        font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
-        self.operatorTitleLabel.setFont(font)
-        self.operatorTitleLabel.setObjectName("operatorTitleLabel")
-
-        self.operatorDescriptionLabel = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorDescriptionLabel.setEnabled(True)
-    #    self.operatorDescriptionLabel.setGeometry(QtCore.QRect(60, 70, 611, 31))
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.operatorDescriptionLabel.setFont(font)
-        self.operatorDescriptionLabel.setObjectName("operatorDescriptionLabel")
-        self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_1.setEnabled(True)
-    #    self.operatorSelectorLabel_1.setGeometry(QtCore.QRect(60, 160, 271, 31))
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.operatorSelectorLabel_1.setFont(font)
-        self.operatorSelectorLabel_1.setObjectName("operatorSelectorLabel_1")
-        self.operatorSelectorLabel_3 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_3.setEnabled(True)
-    #    self.operatorSelectorLabel_3.setGeometry(QtCore.QRect(60, 280, 311, 31))
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.operatorSelectorLabel_3.setFont(font)
-        self.operatorSelectorLabel_3.setObjectName("operatorSelectorLabel_3")
-        
-        self.logSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
-    #    self.logSelectcomboBox1.setGeometry(QtCore.QRect(420, 160, 221, 31))
-        self.logSelectcomboBox1.setObjectName("logSelectcomboBox1")
-
-        self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
-    #    self.logSelectcomboBox2.setGeometry(QtCore.QRect(420, 210, 221, 31))
-        self.logSelectcomboBox2.setObjectName("logSelectcomboBox2")
-
-        self.logSelectcomboBox1.activated.connect(self.initAttributes1)
-        self.logSelectcomboBox2.activated.connect(self.initAttributes2)
-
-        self.attrSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
-    #    self.attrSelectcomboBox1.setGeometry(QtCore.QRect(420, 280, 221, 31))
-        self.attrSelectcomboBox1.setObjectName("attrSelectcomboBox1")
-
-        self.attrSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
-    #    self.attrSelectcomboBox2.setGeometry(QtCore.QRect(420, 320, 221, 31))
-        self.attrSelectcomboBox2.setObjectName("attrSelectcomboBox2")
-
-        self.operatorAddButton = QtWidgets.QPushButton(self.operatorFrame)
-    #    self.operatorAddButton.setGeometry(QtCore.QRect(80, 430, 231, 41))
-        self.operatorAddButton.setObjectName("operatorAddButton")
-        self.operatorAddButton.clicked.connect(self.addToLogs)
-
-        self.operatorExportButton = QtWidgets.QPushButton(self.operatorFrame)
-    #    self.operatorExportButton.setGeometry(QtCore.QRect(410, 430, 231, 41))
-        self.operatorExportButton.setObjectName("operatorExportButton")
-        self.operatorExportButton.clicked.connect(lambda checked, x="PlaceHolder": self.export(x))
-
-        
-        self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_2.setEnabled(True)
-    #    self.operatorSelectorLabel_2.setGeometry(QtCore.QRect(60, 210, 271, 31))
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.operatorSelectorLabel_2.setFont(font)
-        self.operatorSelectorLabel_2.setObjectName("operatorSelectorLabel_2")
-
-        # add all labels, buttons etc to right layout
-        self.innerRightLayout.addWidget(self.operatorTitleLabel, 0, 0, QtCore.Qt.AlignHCenter)
-        self.innerRightLayout.addWidget(self.operatorDescriptionLabel, 1, 0)
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_1, 2, 0)
-        self.innerRightLayout.addWidget(self.logSelectcomboBox1, 2, 1)
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
-        self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_3, 4, 0)
-        self.innerRightLayout.addWidget(self.attrSelectcomboBox1, 4, 1)
-        self.innerRightLayout.addWidget(self.attrSelectcomboBox2, 5, 1)
-        self.innerRightLayout.addWidget(self.operatorAddButton, 6, 0)
-        self.innerRightLayout.addWidget(self.operatorExportButton, 6, 1)
-
-
-        innerStackedLayout.addWidget(self.operatorFrame)
+        self.operatorFrames = []
+        # we need to initialize a page for every supported operator
+        self.initOperatorPage("Match Miner", "Merge events across logs based on matching attribute(s).", MatchMinerFrame, matchMiner)
 
 
         # button for viewing object relationships
@@ -244,6 +131,7 @@ class Ui_MainWindow(object):
         self.viewObjectRelationsButton.setObjectName("viewObjectRelationsButton")
         self.gridLayout.addWidget(self.viewObjectRelationsButton, 1, 0, 1, 1)
 
+        # general properties
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -262,22 +150,11 @@ class Ui_MainWindow(object):
 
 
     def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Transformation Center"))
+        MainWindow.setWindowTitle("Transformation Center")
 
         # right hand side operator view
-        self.operatorTitleLabel.setText(_translate("MainWindow", "Match Miner"))
 
         self.refreshSelection()
-
-        self.operatorDescriptionLabel.setText(_translate("MainWindow", "Merge events across logs based on matching attribute(s)."))
-        self.operatorSelectorLabel_1.setText(_translate("MainWindow", "Select first event log:"))
-        self.operatorSelectorLabel_3.setText(_translate("MainWindow", "Select attribute(s) to match on:"))
-
-        self.operatorAddButton.setText(_translate("MainWindow", "Add to event logs"))
-        self.operatorExportButton.setText(_translate("MainWindow", "Export"))
-        self.operatorSelectorLabel_2.setText(_translate("MainWindow", "Select second event log:"))
-
 
         # start for side scroll area
         self.ocelSideBarFrames = {}
@@ -321,10 +198,10 @@ class Ui_MainWindow(object):
             self.ocelSideBarViewButtons[currName].clicked.connect(lambda checked, x=currName: self.show_table_window(x))
 
 
-            self.ocelSideBarViewButtons[currName].setText(_translate("MainWindow", "View"))
-            self.ocelSideBarExportButtons[currName].setText(_translate("MainWindow", "Export"))
-            self.ocelSideBarDeleteButtons[currName].setText(_translate("MainWindow", "Delete"))
-            sidebarOCELTitle.setText(_translate("MainWindow", currName))
+            self.ocelSideBarViewButtons[currName].setText("View")
+            self.ocelSideBarExportButtons[currName].setText("Export")
+            self.ocelSideBarDeleteButtons[currName].setText("Delete")
+            sidebarOCELTitle.setText(currName)
             sidebarOCELTitle.setMaximumWidth(350)
             sidebarOCELTitle.setWordWrap(True)
 
@@ -337,26 +214,21 @@ class Ui_MainWindow(object):
 
         self.innerVerticalLayout.setSpacing(20)
 
-        self.sidebarTitlelabel.setText(_translate("MainWindow", "Object-centric event logs"))
+        self.sidebarTitlelabel.setText("Object-centric event logs")
         self.sidebarTitlelabel.setAlignment(QtCore.Qt.AlignTop)
         # end for side scroll area
 
         # button for viewing object relationships
-        self.viewObjectRelationsButton.setText(_translate("MainWindow", "View Object Relationships"))
+        self.viewObjectRelationsButton.setText("View Object Relationships")
         self.viewObjectRelationsButton.clicked.connect(self.viewObjectRelations)
 
 
-    def addToLogs(self):
-        name1 = self.logSelectcomboBox1.currentText()
-        name2 = self.logSelectcomboBox2.currentText()
-        log1 = self.ocel_model.ocels[name1]
-        log2 = self.ocel_model.ocels[name2]
-        attr1 = self.attrSelectcomboBox1.currentText()
-        attr2 = self.attrSelectcomboBox2.currentText()
-        name = "MATCH_MINER (" + name1 + ", " + name2 + ")" + " on " + "(" + attr1 + ", " + attr2 + ")"
-        if name in self.ocel_model.ocels:
+    def addToLogs(self, pageNum):
+        name_newLog = self.operatorFrames[pageNum].getNewLog()
+        if not name_newLog:
             return
-        newLog = matchMiner(log1, log2, self.ocel_model.obj_relation, attr1, attr2)
+        name = name_newLog[0]
+        newLog = name_newLog[1]
         self.ocel_model.addOCEL(name, newLog)
 
         self.refreshSelection(name)
@@ -368,40 +240,11 @@ class Ui_MainWindow(object):
         self.refreshSelection()
 
 
-    def initAttributes1(self):
-        _translate = QtCore.QCoreApplication.translate
-        attributes = self.ocel_model.ocels[self.logSelectcomboBox1.currentText()]["ocel:global-log"]["ocel:attribute-names"]
-        self.attrSelectcomboBox1.clear()
-        for i in range(len(attributes)):
-            self.attrSelectcomboBox1.addItem("")
-            self.attrSelectcomboBox1.setItemText(i, _translate("MainWindow", attributes[i]))
-
-    def initAttributes2(self):
-        _translate = QtCore.QCoreApplication.translate
-        attributes = self.ocel_model.ocels[self.logSelectcomboBox2.currentText()]["ocel:global-log"]["ocel:attribute-names"]
-        self.attrSelectcomboBox2.clear()
-        for i in range(len(attributes)):
-            self.attrSelectcomboBox2.addItem("")
-            self.attrSelectcomboBox2.setItemText(i, _translate("MainWindow", attributes[i]))
-
     def refreshSelection(self, name=""):
-        _translate = QtCore.QCoreApplication.translate
 
         # go back to operator overview page
         self.stackedWidget.setCurrentIndex(0)
 
-        self.logSelectcomboBox1.clear()
-        self.logSelectcomboBox2.clear()
-
-        for i in range(len(self.ocel_model.ocels.keys())):
-            self.logSelectcomboBox1.addItem("")
-            self.logSelectcomboBox2.addItem("")
-            self.logSelectcomboBox1.setItemText(i, _translate("MainWindow", list(self.ocel_model.ocels.keys())[i]))
-            self.logSelectcomboBox2.setItemText(i, _translate("MainWindow", list(self.ocel_model.ocels.keys())[i]))
-
-        self.initAttributes1()
-        self.initAttributes2()
-        
         # only add new log to sidebar if we just applied some operator
         if name == "":
             return
@@ -441,10 +284,10 @@ class Ui_MainWindow(object):
         self.ocelSideBarViewButtons[name].clicked.connect(lambda checked, x=name: self.show_table_window(x))
 
 
-        self.ocelSideBarViewButtons[name].setText(_translate("MainWindow", "View"))
-        self.ocelSideBarExportButtons[name].setText(_translate("MainWindow", "Export"))
-        self.ocelSideBarDeleteButtons[name].setText(_translate("MainWindow", "Delete"))
-        sidebarOCELTitle.setText(_translate("MainWindow", name))
+        self.ocelSideBarViewButtons[name].setText("View")
+        self.ocelSideBarExportButtons[name].setText("Export")
+        self.ocelSideBarDeleteButtons[name].setText("Delete")
+        sidebarOCELTitle.setText(name)
         sidebarOCELTitle.setMaximumWidth(350)
         sidebarOCELTitle.setWordWrap(True)
 
@@ -478,6 +321,48 @@ class Ui_MainWindow(object):
 
     def export(self, name):
         print("export " + name)
+
+
+    def switchPage(self, pageNum):
+        self.stackedWidget.setCurrentIndex(pageNum+1) # +1 since the 0th page is the operator overview page
+        self.operatorFrames[pageNum].refresh()
+
+
+    def initOperatorPage(self, minerTitle, minerDescription, minerFrameClass, minerFunction):
+        operatorPage = QtWidgets.QWidget()
+        operatorPage.setObjectName("operatorPage")
+        innerStackedLayout = QtWidgets.QGridLayout(operatorPage)
+        innerStackedLayout.setObjectName("innerStackedLayout")
+
+        operatorFrame = minerFrameClass(operatorPage, self.ocel_model, minerTitle, minerDescription, minerFunction)
+        innerStackedLayout.addWidget(operatorFrame)
+        innerStackedLayout.addWidget(operatorFrame)
+
+        # page number of stacked widget
+        pageNum = len(self.operatorFrames)
+
+        # create button on overview page for every miner as well
+        minerButton = QtWidgets.QPushButton(self.operatorSelectorPage)
+        minerButton.clicked.connect(lambda checked, x=pageNum: self.switchPage(x))
+        minerButton.setText(minerTitle)
+        self.operatorOverviewStackedLayout.addWidget(minerButton)
+
+        # export and add-to-logs buttons on operator page
+        operatorAddButton = QtWidgets.QPushButton(operatorPage)
+        operatorAddButton.setObjectName("operatorAddButton")
+        operatorAddButton.clicked.connect(lambda checked, x=pageNum: self.addToLogs(x))
+
+        operatorExportButton = QtWidgets.QPushButton(operatorPage)
+        operatorExportButton.setObjectName("operatorExportButton")
+        operatorExportButton.clicked.connect(lambda checked, x=pageNum: self.export("Placeholder_" + str(x) ))
+        innerStackedLayout.addWidget(operatorAddButton, 6, 0)
+        innerStackedLayout.addWidget(operatorExportButton, 6, 1)
+
+        operatorAddButton.setText("Add to event logs")
+        operatorExportButton.setText("Export")
+
+        self.stackedWidget.addWidget(operatorPage)
+        self.operatorFrames.append(operatorFrame)
 
 
 

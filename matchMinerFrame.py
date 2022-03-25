@@ -75,7 +75,7 @@ class MatchMinerFrame(OperatorFrame):
  
 
     def getNewLog(self):
-        # returns new log that is created by applying given operator with selected parameters
+        # returns new log that is created by applying given operator with selected parameters + name
         # this is used for the "add to logs" and "export" button in the main window
         
         name1 = self.logSelectcomboBox1.currentText()
@@ -88,8 +88,8 @@ class MatchMinerFrame(OperatorFrame):
         if name in self.ocel_model.ocels:
             return
         newLog = self.miner(log1, log2, self.ocel_model.obj_relation, attr1, attr2)
-
-        return newLog
+        print(newLog)
+        return (name, newLog)
 
     def refresh(self):
         # used to refresh comboboxes for selection of operator parameters
