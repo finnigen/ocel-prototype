@@ -2,10 +2,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from ocel_converter import convertToOcelModel, OCEL_Model
 from operatorFrame import OperatorFrame
+from operators import matchMiner
 
 class MatchMinerFrame(OperatorFrame):
  
-    def __init__(self, parent, ocel, title, description, miner):
+    def __init__(self, parent, ocel, title):
+        description = "Merge events across logs based on matching attribute(s)."
+        miner = matchMiner
         super().__init__(parent, ocel, title, description, miner)
 
 
@@ -88,7 +91,7 @@ class MatchMinerFrame(OperatorFrame):
         if name in self.ocel_model.ocels:
             return
         newLog = self.miner(log1, log2, self.ocel_model.obj_relation, attr1, attr2)
-        print(newLog)
+
         return (name, newLog)
 
     def refresh(self):

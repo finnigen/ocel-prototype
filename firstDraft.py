@@ -123,7 +123,7 @@ class Ui_MainWindow(object):
 
         self.operatorFrames = []
         # we need to initialize a page for every supported operator
-        self.initOperatorPage("Match Miner", "Merge events across logs based on matching attribute(s).", MatchMinerFrame, matchMiner)
+        self.initOperatorPage("Match Miner", MatchMinerFrame)
 
 
         # button for viewing object relationships
@@ -237,13 +237,17 @@ class Ui_MainWindow(object):
         self.ocel_model.removeOCEL(name)
         self.ocelSideBarFrames[name].setParent(None)
         del self.ocelSideBarFrames[name]
-        self.refreshSelection()
+        self.refreshSelection(returnToOperatorOverviewPage=False)
 
 
-    def refreshSelection(self, name=""):
+    def refreshSelection(self, name="", returnToOperatorOverviewPage=True):
 
+        for i in self.operatorFrames:
+            i.refresh()
+        
         # go back to operator overview page
-        self.stackedWidget.setCurrentIndex(0)
+        if returnToOperatorOverviewPage:
+            self.stackedWidget.setCurrentIndex(0)
 
         # only add new log to sidebar if we just applied some operator
         if name == "":
@@ -328,13 +332,13 @@ class Ui_MainWindow(object):
         self.operatorFrames[pageNum].refresh()
 
 
-    def initOperatorPage(self, minerTitle, minerDescription, minerFrameClass, minerFunction):
+    def initOperatorPage(self, minerTitle, minerFrameClass):
         operatorPage = QtWidgets.QWidget()
         operatorPage.setObjectName("operatorPage")
         innerStackedLayout = QtWidgets.QGridLayout(operatorPage)
         innerStackedLayout.setObjectName("innerStackedLayout")
 
-        operatorFrame = minerFrameClass(operatorPage, self.ocel_model, minerTitle, minerDescription, minerFunction)
+        operatorFrame = minerFrameClass(operatorPage, self.ocel_model, minerTitle)
         innerStackedLayout.addWidget(operatorFrame)
         innerStackedLayout.addWidget(operatorFrame)
 
