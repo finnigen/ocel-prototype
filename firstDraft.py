@@ -18,6 +18,7 @@ from operators import manualMiner, matchMiner
 import pickle
 from tableWindow import TableWindow
 from objRelationWindow import ObjectWindow
+from manualMinerFrame import ManualMinerFrame
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -124,7 +125,7 @@ class Ui_MainWindow(object):
         self.operatorFrames = []
         # we need to initialize a page for every supported operator
         self.initOperatorPage("Match Miner", MatchMinerFrame)
-
+        self.initOperatorPage("Manual Miner", ManualMinerFrame)
 
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
@@ -327,7 +328,10 @@ class Ui_MainWindow(object):
         print("export " + name)
 
 
-    def switchPage(self, pageNum):
+    def switchPage(self, pageNum, toOverview=False):
+        if toOverview:
+            self.stackedWidget.setCurrentIndex(0)
+            return
         self.stackedWidget.setCurrentIndex(pageNum+1) # +1 since the 0th page is the operator overview page
         self.operatorFrames[pageNum].refresh()
 
@@ -337,6 +341,13 @@ class Ui_MainWindow(object):
         operatorPage.setObjectName("operatorPage")
         innerStackedLayout = QtWidgets.QGridLayout(operatorPage)
         innerStackedLayout.setObjectName("innerStackedLayout")
+
+        # button to go back t overview page
+        goBackButton = QtWidgets.QPushButton(operatorPage)
+        goBackButton.setObjectName("goBackButton")
+        goBackButton.clicked.connect(lambda: self.switchPage(0, toOverview=True ))
+        innerStackedLayout.addWidget(goBackButton)
+        goBackButton.setText("Go back to overview of operators")
 
         operatorFrame = minerFrameClass(operatorPage, self.ocel_model, minerTitle)
         innerStackedLayout.addWidget(operatorFrame)
@@ -359,8 +370,8 @@ class Ui_MainWindow(object):
         operatorExportButton = QtWidgets.QPushButton(operatorPage)
         operatorExportButton.setObjectName("operatorExportButton")
         operatorExportButton.clicked.connect(lambda checked, x=pageNum: self.export("Placeholder_" + str(x) ))
-        innerStackedLayout.addWidget(operatorAddButton, 6, 0)
-        innerStackedLayout.addWidget(operatorExportButton, 6, 1)
+        innerStackedLayout.addWidget(operatorAddButton)
+        innerStackedLayout.addWidget(operatorExportButton)
 
         operatorAddButton.setText("Add to event logs")
         operatorExportButton.setText("Export")
