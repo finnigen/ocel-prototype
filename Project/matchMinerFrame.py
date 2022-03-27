@@ -60,20 +60,18 @@ class MatchMinerFrame(OperatorFrame):
 
 
     def initAttributes1(self):
-        _translate = QtCore.QCoreApplication.translate
         attributes = self.ocel_model.ocels[self.logSelectcomboBox1.currentText()]["ocel:global-log"]["ocel:attribute-names"]
         self.attrSelectcomboBox1.clear()
         for i in range(len(attributes)):
             self.attrSelectcomboBox1.addItem("")
-            self.attrSelectcomboBox1.setItemText(i, _translate("MainWindow", attributes[i]))
+            self.attrSelectcomboBox1.setItemText(i, attributes[i])
 
     def initAttributes2(self):
-        _translate = QtCore.QCoreApplication.translate
         attributes = self.ocel_model.ocels[self.logSelectcomboBox2.currentText()]["ocel:global-log"]["ocel:attribute-names"]
         self.attrSelectcomboBox2.clear()
         for i in range(len(attributes)):
             self.attrSelectcomboBox2.addItem("")
-            self.attrSelectcomboBox2.setItemText(i, _translate("MainWindow", attributes[i]))
+            self.attrSelectcomboBox2.setItemText(i, attributes[i])
  
 
     def getNewLog(self):

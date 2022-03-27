@@ -22,19 +22,23 @@ class OCEL_Model:
 
 
 
-def convertToOcelModel(url, api_token, data_pool, data_model):
+def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=False):
     # establish connection
     # download data
     # create ocels
     # create object relationships
     # convert to OCEL_Model class
 
-    print("Establishing connection to Celonis...")
+    if skipConnection: # in this case, we already get passed a full Celonis data model
+        data_model = data_model
+    else: # in this case, we first have to setup connection
+        print("Establishing connection to Celonis...")
 
-    celonis = get_celonis(url, api_token)
+        celonis = get_celonis(url, api_token)
 
-    data_pool = celonis.pools.find(data_pool)
-    data_model = data_pool.datamodels.find(data_model)
+        data_pool = celonis.pools.find(data_pool)
+        data_model = data_pool.datamodels.find(data_model)
+
 
     tables = {}
     all_data = {}

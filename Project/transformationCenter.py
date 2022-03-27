@@ -22,7 +22,12 @@ from manualMinerFrame import ManualMinerFrame
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_MainWindow(object):
+class TransformationCenter(object):
+
+    def __init__(self, ocel_model):
+        super().__init__()
+        self.ocel_model = ocel_model
+
     def setupUi(self, MainWindow):
 
 
@@ -35,9 +40,9 @@ class Ui_MainWindow(object):
         # self.ocel_model = convertToOcelModel(url, api, data_pool, data_model)
 
         # for development purposes
-        with open('file.pkl', 'rb') as file:
-            # Call load method to deserialze
-            self.ocel_model = pickle.load(file)
+#        with open('file.pkl', 'rb') as file:
+#            # Call load method to deserialze
+#            self.ocel_model = pickle.load(file)
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1300, 700)
@@ -414,9 +419,13 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+
+    with open('file.pkl', 'rb') as file:
+        # Call load method to deserialze
+        ocel_model = pickle.load(file)
+
+    ui = TransformationCenter(ocel_model)
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
 
