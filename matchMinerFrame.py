@@ -6,8 +6,7 @@ from operators import matchMiner
 
 class MatchMinerFrame(OperatorFrame):
  
-    def __init__(self, parent, ocel, title):
-        description = "Merge events across logs based on matching attribute(s)."
+    def __init__(self, parent, ocel, title, description):
         miner = matchMiner
         super().__init__(parent, ocel, title, description, miner)
 

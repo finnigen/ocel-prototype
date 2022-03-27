@@ -6,8 +6,7 @@ from operators import manualMiner
 
 class ManualMinerFrame(OperatorFrame):
  
-    def __init__(self, parent, ocel, title):
-        description = "Merge events across logs based on manual matching of activities of logs."
+    def __init__(self, parent, ocel, title, description):
         miner = manualMiner
         super().__init__(parent, ocel, title, description, miner)
 
@@ -69,6 +68,7 @@ class ManualMinerFrame(OperatorFrame):
     def initCounter(self):
         self.numOfActComboBox.clear()
 
+
         # get set of all activities in both logs
         activities1 = set()
         for k, v in self.ocel_model.ocels[self.logSelectcomboBox1.currentText()]["ocel:events"].items():
@@ -81,6 +81,8 @@ class ManualMinerFrame(OperatorFrame):
         for i in range(len(activities1) * len(activities2)):
             self.numOfActComboBox.addItem("")
             self.numOfActComboBox.setItemText(i, str(i+1))
+
+        self.initActivitySelectors()
 
 
     def initActivitySelectors(self):

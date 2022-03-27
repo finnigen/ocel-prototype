@@ -39,7 +39,6 @@ class Ui_MainWindow(object):
             # Call load method to deserialze
             self.ocel_model = pickle.load(file)
 
-
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1300, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -47,7 +46,7 @@ class Ui_MainWindow(object):
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
 
-        # most outer layout (grid layouts for left side)
+        # most outer layout
         self.rightFrame = QtWidgets.QFrame(self.centralwidget)
         self.rightFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.rightFrame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -62,7 +61,6 @@ class Ui_MainWindow(object):
         self.leftGridLayout = QtWidgets.QGridLayout(self.OCEL_list_scrollArea)
         self.leftGridLayout.setObjectName("leftGridLayout")
         self.gridLayout.addWidget(self.OCEL_list_scrollArea, 0, 0, 1, 1)
-    #    self.OCEL_list_scrollArea.setGeometry(QtCore.QRect(30, 20, 391, 581))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -95,8 +93,9 @@ class Ui_MainWindow(object):
         # set inner layout of left sidebar
         self.innerVerticalLayout = QtWidgets.QVBoxLayout(self.OCEL_list_frame)
         self.innerVerticalLayout.setObjectName("innerVerticalLayout")
-        self.innerVerticalLayout.addWidget(self.sidebarTitlelabel, 0, QtCore.Qt.AlignHCenter)
+        self.innerVerticalLayout.addWidget(self.sidebarTitlelabel)
         # end of code for side scroll area
+        self.innerVerticalLayout.setAlignment(QtCore.Qt.AlignVCenter)
 
         # stacked widget for multiple different views
         self.stackedWidget = QtWidgets.QStackedWidget(self.rightFrame)
@@ -120,12 +119,15 @@ class Ui_MainWindow(object):
         self.operatorSelectorTitle.setObjectName("operatorSelectorTitle")
         self.operatorSelectorTitle.setText("Select an Operator")
         self.operatorOverviewStackedLayout.addWidget(self.operatorSelectorTitle)
+        self.operatorOverviewStackedLayout.setAlignment(QtCore.Qt.AlignHCenter)
 
 
         self.operatorFrames = []
         # we need to initialize a page for every supported operator
-        self.initOperatorPage("Match Miner", MatchMinerFrame)
-        self.initOperatorPage("Manual Miner", ManualMinerFrame)
+        description = "Merge events across logs based on matching attribute(s)."
+        self.initOperatorPage("Match Miner", description, MatchMinerFrame)
+        description = "Merge events across logs based on manual matching of activities of logs."
+        self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
 
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
@@ -216,7 +218,7 @@ class Ui_MainWindow(object):
         self.innerVerticalLayout.setSpacing(20)
 
         self.sidebarTitlelabel.setText("Object-centric event logs")
-        self.sidebarTitlelabel.setAlignment(QtCore.Qt.AlignTop)
+    #    self.sidebarTitlelabel.setAlignment(QtCore.Qt.AlignTop)
         # end for side scroll area
 
         # button for viewing object relationships
@@ -235,6 +237,9 @@ class Ui_MainWindow(object):
         self.refreshSelection(name)
 
     def removeFromLogs(self, name):
+        if len(self.ocel_model.ocels) == 1:
+            print("Can't delete last log")
+            return
         self.ocel_model.removeOCEL(name)
         self.ocelSideBarFrames[name].setParent(None)
         del self.ocelSideBarFrames[name]
@@ -319,7 +324,7 @@ class Ui_MainWindow(object):
 
     def viewObjectRelations(self):
         self.newWindow = QtWidgets.QMainWindow()
-        ui = ObjectWindow(self.ocel_model.obj_relation)
+        ui = ObjectWindow(self.ocel_model)
         ui.setupUi(self.newWindow)
         self.newWindow.show()
 
@@ -336,7 +341,7 @@ class Ui_MainWindow(object):
         self.operatorFrames[pageNum].refresh()
 
 
-    def initOperatorPage(self, minerTitle, minerFrameClass):
+    def initOperatorPage(self, minerTitle, minerDescription, minerFrameClass):
         operatorPage = QtWidgets.QWidget()
         operatorPage.setObjectName("operatorPage")
         innerStackedLayout = QtWidgets.QGridLayout(operatorPage)
@@ -349,18 +354,42 @@ class Ui_MainWindow(object):
         innerStackedLayout.addWidget(goBackButton)
         goBackButton.setText("Go back to overview of operators")
 
-        operatorFrame = minerFrameClass(operatorPage, self.ocel_model, minerTitle)
+        operatorFrame = minerFrameClass(operatorPage, self.ocel_model, minerTitle, minerDescription)
         innerStackedLayout.addWidget(operatorFrame)
         innerStackedLayout.addWidget(operatorFrame)
 
         # page number of stacked widget
         pageNum = len(self.operatorFrames)
 
-        # create button on overview page for every miner as well
-        minerButton = QtWidgets.QPushButton(self.operatorSelectorPage)
+        # create frame on overview page for miner as well
+        # frame on over view page
+        minerFrame = QtWidgets.QFrame(self.operatorSelectorPage)
+        minerFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        minerFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        minerFrameLayout = QtWidgets.QGridLayout(minerFrame)
+        # miner title on overview page
+        minerTitleLabel = QtWidgets.QLabel(minerFrame)
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        font.setWeight(75)
+        minerTitleLabel.setFont(font)
+        minerTitleLabel.setText(minerTitle)
+        # miner description on overview page
+        minerDescriptionLabel = QtWidgets.QLabel(minerFrame)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        minerDescriptionLabel.setFont(font)
+        minerDescriptionLabel.setText(minerDescription)
+        # miner button on overview page
+        minerButton = QtWidgets.QPushButton(minerFrame)
         minerButton.clicked.connect(lambda checked, x=pageNum: self.switchPage(x))
-        minerButton.setText(minerTitle)
-        self.operatorOverviewStackedLayout.addWidget(minerButton)
+        minerButton.setText("Apply Operator")
+        # layout
+        minerFrameLayout.addWidget(minerTitleLabel)
+        minerFrameLayout.addWidget(minerDescriptionLabel)
+        minerFrameLayout.addWidget(minerButton)
+        self.operatorOverviewStackedLayout.addWidget(minerFrame)
 
         # export and add-to-logs buttons on operator page
         operatorAddButton = QtWidgets.QPushButton(operatorPage)

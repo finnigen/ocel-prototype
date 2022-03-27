@@ -1,13 +1,20 @@
 from asyncio import events
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import pickle
+from ocel_converter import OCEL_Model
 
 
 class ObjectWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, obj_relations):
+    def __init__(self, ocel_model):
         super().__init__()
-        self.obj_relations = obj_relations
+        self.ocel_model = ocel_model
+        self.obj_relations = ocel_model.obj_relation
+        all_objects = set()
+        for key, ocel in self.ocel_model.ocels.items():
+            for obj in ocel["ocel:objects"].keys():
+                all_objects.add(obj)
+        self.all_objects = list(all_objects)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -23,9 +30,10 @@ class ObjectWindow(QtWidgets.QMainWindow):
         self.objectTable.setObjectName("objectTable")
 
         # one row for every object
-        all_objects = set([a for (a,b) in self.obj_relations])
+    #    all_objects = set([a for (a,b) in self.obj_relations])
 
-        numRows = len(all_objects) 
+    #    numRows = len(all_objects) 
+        numRows = len(self.all_objects) 
         numColumns = 2
 
         self.objectTable.setColumnCount(numColumns)
@@ -58,27 +66,28 @@ class ObjectWindow(QtWidgets.QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Object Relations"))
-        
+        MainWindow.setWindowTitle("Object Relations")        
 
         # set column headers
         item = self.objectTable.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Object"))
+        item.setText("Object")
         item = self.objectTable.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Objects"))
+        item.setText("Objects")
 
         # reformat object relation
-        all_objects = set([a for (a,b) in self.obj_relations])
+    #    all_objects = set([a for (a,b) in self.obj_relations])
         rows = {}
-        for obj in all_objects:
+        for obj in self.all_objects:
             rows[obj] = set([b for (a,b) in self.obj_relations if a == obj])
 
         for row in range(len(rows)):
                 item = self.objectTable.item(row, 0)
-                item.setText(_translate("MainWindow", list(rows.keys())[row]))
+                item.setText(list(rows.keys())[row])
                 item = self.objectTable.item(row, 1)
-                item.setText(_translate("MainWindow", str(rows[list(rows.keys())[row]])))
+                data = rows[list(rows.keys())[row]]
+                if data == set():
+                    data = {}
+                item.setText(str(data))
 
 
         self.objectTable.setSortingEnabled(True)
@@ -91,7 +100,10 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     obj_relations = {('package1', 'order1'), ('item2', 'order1'), ('item1', 'package1'), ('order1', 'item2'), ('package1', 'item1'), ('item1', 'order1'), ('order1', 'item1'), ('item2', 'package1'), ('order1', 'package1'), ('package1', 'item2')}
-    ui = ObjectWindow(obj_relations)
+    with open('file.pkl', 'rb') as file:
+        # Call load method to deserialze
+        ocel_model = pickle.load(file)
+    ui = ObjectWindow(ocel_model)
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
