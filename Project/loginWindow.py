@@ -11,7 +11,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pycelonis import get_celonis
 from transformationCenter import TransformationCenter
-from ocel_converter import convertToOcelModel
+from ocel_converter import OCEL_Model, convertToOcelModel
+
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
 class Ui_LoginWindow(object):
     def setupUi(self, LoginWindow):
@@ -121,6 +123,13 @@ class Ui_LoginWindow(object):
         self.waitLabel.setObjectName("waitLabel")
         self.formLayout.setWidget(27, QtWidgets.QFormLayout.FieldRole, self.waitLabel)  
 
+        # loading symbol for conversion
+        self.spinnerLabel = QtWidgets.QLabel(self.centralwidget)
+        self.spinnerLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.formLayout.setWidget(28, QtWidgets.QFormLayout.FieldRole, self.spinnerLabel)  
+        self.spinner = QtGui.QMovie("loading2.gif")
+        self.spinnerLabel.setMovie(self.spinner)
+
         self.retranslateUi(LoginWindow)
         QtCore.QMetaObject.connectSlotsByName(LoginWindow)
 
@@ -171,13 +180,15 @@ class Ui_LoginWindow(object):
             self.dataModelComboBox.addItem("")
             self.dataModelComboBox.setItemText(i, pool.datamodels[i].name) 
 
-        self.waitLabel.show()  
 
     def startConversion(self):
         print("Opening Transformation Center...")
   
         self.waitLabel.show()
         self.conversionButton.setEnabled(False)
+        self.dataPoolComboBox.setEnabled(False)
+        self.dataModelComboBox.setEnabled(False)
+        self.loginButton.setEnabled(False)
 
         # find data model
         pool_name = self.dataPoolComboBox.currentText()
@@ -185,8 +196,17 @@ class Ui_LoginWindow(object):
         model_name = self.dataModelComboBox.currentText()
         data_model = pool.datamodels.find(model_name)
 
-        ocel_model = convertToOcelModel("", "", "", data_model, skipConnection=True)
+        self.spinner.start()
+        self.spinnerLabel.show()
 
+        # create thread so that GUI stays responsive
+        self.worker = WorkerThread(data_model)
+        self.worker.updateOCEL.connect(self.conversionComplete)
+        self.worker.finished.connect(self.worker.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker.start()
+
+    def conversionComplete(self, ocel_model):
         # open new window
         self.newWindow = QtWidgets.QMainWindow()
         ui = TransformationCenter(ocel_model)
@@ -194,7 +214,23 @@ class Ui_LoginWindow(object):
         self.newWindow.show()
 
         self.conversionButton.setEnabled(True)
+        self.dataPoolComboBox.setEnabled(True)
+        self.dataModelComboBox.setEnabled(True)
+        self.loginButton.setEnabled(True)
+        self.waitLabel.hide()
+        self.spinnerLabel.hide()
+        self.spinner.stop()
 
+
+class WorkerThread(QThread):
+    updateOCEL = pyqtSignal(OCEL_Model)
+    def __init__(self, data_model):
+        super().__init__()
+        self.data_model = data_model
+
+    def run(self):
+        ocel_model = convertToOcelModel("", "", "", self.data_model, skipConnection=True)
+        self.updateOCEL.emit(ocel_model)
 
 
 if __name__ == "__main__":
@@ -205,4 +241,3 @@ if __name__ == "__main__":
     ui.setupUi(LoginWindow)
     LoginWindow.show()
     sys.exit(app.exec_())
-
