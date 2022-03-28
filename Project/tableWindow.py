@@ -169,7 +169,7 @@ class TableWindow(QtWidgets.QMainWindow):
                 data = ""
                 if column == 0:
                     data = rowKeys[row]
-                elif column >= 3: # for attributes, we need to access vmap
+                elif column > 3: # for attributes, we need to access vmap
                     attributes = self.ocel["ocel:events"][rowKeys[row]]["ocel:vmap"]
                     if columns[column] in attributes.keys():
                         data = attributes[columns[column]]

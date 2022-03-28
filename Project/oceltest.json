@@ -2,8 +2,7 @@
   "ocel:global-event": {
     "ocel:activity": [
       "place order",
-      "check availability",
-      "confirm availability"
+      "send package"
     ]
   },
   "ocel:global-object": {
@@ -12,12 +11,12 @@
   "ocel:global-log": {
     "ocel:attribute-names": [
       "EVID_general",
-      "ATT_item_attr1",
       "ATT_EVENT_attr1",
-      "EVID_item"
+      "ATT_package_attr1",
+      "EVID_package"
     ],
     "ocel:object-types": [
-      "CASE_item"
+      "CASE_package"
     ],
     "ocel:version": "1.0",
     "ocel:ordering": "timestamp"
@@ -27,62 +26,32 @@
       "ocel:activity": "place order",
       "ocel:timestamp": "2020-07-09 08:20:00",
       "ocel:omap": [
-        "item1"
+        "package1"
       ],
       "ocel:vmap": {
         "ATT_EVENT_attr1": "attValue",
         "EVID_general": "1.0",
-        "EVID_item": "1.0:item1"
+        "EVID_package": "1.0:package1"
       }
     },
     "1": {
-      "ocel:activity": "check availability",
-      "ocel:timestamp": "2020-07-09 08:21:00",
+      "ocel:activity": "send package",
+      "ocel:timestamp": "2020-07-09 08:31:00",
       "ocel:omap": [
-        "item1"
+        "package1"
       ],
       "ocel:vmap": {
         "ATT_EVENT_attr1": "attValue",
-        "EVID_general": "2.0",
-        "EVID_item": "2.0:item1"
-      }
-    },
-    "2": {
-      "ocel:activity": "confirm availability",
-      "ocel:timestamp": "2020-07-09 08:23:00",
-      "ocel:omap": [
-        "item1"
-      ],
-      "ocel:vmap": {
-        "ATT_EVENT_attr1": "attValue",
-        "EVID_general": "3.0",
-        "EVID_item": "3.0:item1"
-      }
-    },
-    "3": {
-      "ocel:activity": "place order",
-      "ocel:timestamp": "2020-07-09 08:20:00",
-      "ocel:omap": [
-        "item2"
-      ],
-      "ocel:vmap": {
-        "ATT_EVENT_attr1": "attValue",
-        "EVID_general": "1.0",
-        "EVID_item": "1.0:item2"
+        "EVID_general": "7.0",
+        "EVID_package": "7.0:package1"
       }
     }
   },
   "ocel:objects": {
-    "item1": {
-      "ocel:type": "CASE_item",
+    "package1": {
+      "ocel:type": "CASE_package",
       "ocel:ovmap": {
-        "ATT_item_attr1": "attValue"
-      }
-    },
-    "item2": {
-      "ocel:type": "CASE_item",
-      "ocel:ovmap": {
-        "ATT_item_attr1": "attValue"
+        "ATT_package_attr1": "attValue"
       }
     }
   }
