@@ -153,6 +153,8 @@ class TransformationCenter(object):
 
         # set current page for stacked widget
         self.stackedWidget.setCurrentIndex(0)
+        # keep track of windows to view tables, and object relationships
+        self.windows = {}
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -248,6 +250,8 @@ class TransformationCenter(object):
         self.ocel_model.removeOCEL(name)
         self.ocelSideBarFrames[name].setParent(None)
         del self.ocelSideBarFrames[name]
+        if name in self.windows:
+            del self.windows[name]
         self.refreshSelection(returnToOperatorOverviewPage=False)
 
 
@@ -321,17 +325,21 @@ class TransformationCenter(object):
         # end for side scroll area
 
     def show_table_window(self, name):
-        self.newWindow = QtWidgets.QMainWindow()
-        ui = TableWindow(self.ocel_model.ocels[name], name)
-        ui.setupUi(self.newWindow)
-        self.newWindow.show()
+        if name not in self.windows:
+            newWindow = QtWidgets.QMainWindow()
+            ui = TableWindow(self.ocel_model.ocels[name], name)
+            ui.setupUi(newWindow)
+            self.windows[name] = newWindow
+        self.windows[name].show()
 
 
     def viewObjectRelations(self):
-        self.newWindow = QtWidgets.QMainWindow()
-        ui = ObjectWindow(self.ocel_model)
-        ui.setupUi(self.newWindow)
-        self.newWindow.show()
+        if "objRelationshipWindow" not in self.windows:
+            newWindow = QtWidgets.QMainWindow()
+            ui = ObjectWindow(self.ocel_model)
+            ui.setupUi(newWindow)
+            self.windows["objRelationshipWindow"] = newWindow
+        self.windows["objRelationshipWindow"].show()
 
 
     def export(self, name):

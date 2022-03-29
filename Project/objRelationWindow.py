@@ -11,9 +11,8 @@ class ObjectWindow(QtWidgets.QMainWindow):
         self.ocel_model = ocel_model
         self.obj_relations = ocel_model.obj_relation
         all_objects = set()
-        for key, ocel in self.ocel_model.ocels.items():
-            for obj in ocel["ocel:objects"].keys():
-                all_objects.add(obj)
+        for ocel in self.ocel_model.ocels.values():
+            all_objects = all_objects.union(ocel["ocel:objects"].keys())
         self.all_objects = list(all_objects)
 
     def setupUi(self, MainWindow):
@@ -25,14 +24,10 @@ class ObjectWindow(QtWidgets.QMainWindow):
         self.outerLayout.setObjectName("outerLayout")
 
         # objects table
-
         self.objectTable = QtWidgets.QTableWidget(self.centralwidget)
         self.objectTable.setObjectName("objectTable")
 
         # one row for every object
-    #    all_objects = set([a for (a,b) in self.obj_relations])
-
-    #    numRows = len(all_objects) 
         numRows = len(self.all_objects) 
         numColumns = 2
 
@@ -75,21 +70,20 @@ class ObjectWindow(QtWidgets.QMainWindow):
         item.setText("Objects")
 
         # reformat object relation
-    #    all_objects = set([a for (a,b) in self.obj_relations])
         rows = {}
         for obj in self.all_objects:
             rows[obj] = set([b for (a,b) in self.obj_relations if a == obj])
 
         for row in range(len(rows)):
-                item = self.objectTable.item(row, 0)
-                item.setText(list(rows.keys())[row])
-                item = self.objectTable.item(row, 1)
-                data = rows[list(rows.keys())[row]]
-                if data == set():
-                    data = {}
-                item.setText(str(data))
+            item = self.objectTable.item(row, 0)
+            item.setText(list(rows.keys())[row])
+            item = self.objectTable.item(row, 1)
+            data = rows[list(rows.keys())[row]]
+            if data == set():
+                data = {}
+            item.setText(str(data))
 
-
+        # sort objects ascending
         self.objectTable.setSortingEnabled(True)
         self.objectTable.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)
 
