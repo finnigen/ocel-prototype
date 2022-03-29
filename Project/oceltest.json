@@ -2,9 +2,9 @@
   "ocel:global-event": {
     "ocel:activity": [
       "send package",
-      "create package",
       "failed delivery",
-      "package delivered"
+      "package delivered",
+      "create package"
     ]
   },
   "ocel:global-object": {
@@ -13,10 +13,10 @@
   "ocel:global-log": {
     "ocel:attribute-names": [
       "SORT_TIME_packages",
-      "ATT_EVENT_price",
-      "ATT_EVENT_weight",
       "EVID_packages",
-      "EVID_general"
+      "ATT_EVENT_price",
+      "EVID_general",
+      "ATT_EVENT_weight"
     ],
     "ocel:object-types": [
       "CASE_packages"

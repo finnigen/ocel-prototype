@@ -6,14 +6,9 @@ from ocel_converter import OCEL_Model
 
 class ObjectWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, ocel_model):
+    def __init__(self, formattedRows):
         super().__init__()
-        self.ocel_model = ocel_model
-        self.obj_relations = ocel_model.obj_relation
-        all_objects = set()
-        for ocel in self.ocel_model.ocels.values():
-            all_objects = all_objects.union(ocel["ocel:objects"].keys())
-        self.all_objects = list(all_objects)
+        self.formattedRows = formattedRows
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -28,7 +23,7 @@ class ObjectWindow(QtWidgets.QMainWindow):
         self.objectTable.setObjectName("objectTable")
 
         # one row for every object
-        numRows = len(self.all_objects) 
+        numRows = len(self.formattedRows) 
         numColumns = 2
 
         self.objectTable.setColumnCount(numColumns)
@@ -61,7 +56,7 @@ class ObjectWindow(QtWidgets.QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle("Object Relations")        
+        MainWindow.setWindowTitle("Object Relations")
 
         # set column headers
         item = self.objectTable.horizontalHeaderItem(0)
@@ -70,9 +65,7 @@ class ObjectWindow(QtWidgets.QMainWindow):
         item.setText("Objects")
 
         # reformat object relation
-        rows = {}
-        for obj in self.all_objects:
-            rows[obj] = set([b for (a,b) in self.obj_relations if a == obj])
+        rows = self.formattedRows
 
         for row in range(len(rows)):
             item = self.objectTable.item(row, 0)
@@ -93,11 +86,12 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    obj_relations = {('package1', 'order1'), ('item2', 'order1'), ('item1', 'package1'), ('order1', 'item2'), ('package1', 'item1'), ('item1', 'order1'), ('order1', 'item1'), ('item2', 'package1'), ('order1', 'package1'), ('package1', 'item2')}
-    with open('file.pkl', 'rb') as file:
+#    obj_relations = {('package1', 'order1'), ('item2', 'order1'), ('item1', 'package1'), ('order1', 'item2'), ('package1', 'item1'), ('item1', 'order1'), ('order1', 'item1'), ('item2', 'package1'), ('order1', 'package1'), ('package1', 'item2')}
+#    with open('file.pkl', 'rb') as file:
         # Call load method to deserialze
-        ocel_model = pickle.load(file)
-    ui = ObjectWindow(ocel_model)
+#        ocel_model = pickle.load(file)
+    formattedRows = {'order2': set(), 'package1': {'item1', 'order1', 'item2'}, 'item2': {'order1', 'package1'}, 'order1': {'item1', 'item2', 'package1'}, 'item1': {'order1', 'package1'}}
+    ui = ObjectWindow(formattedRows)
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
