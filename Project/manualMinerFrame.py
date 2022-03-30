@@ -68,7 +68,6 @@ class ManualMinerFrame(OperatorFrame):
     def initCounter(self):
         self.numOfActComboBox.clear()
 
-
         # get set of all activities in both logs
         activities1 = set()
         for k, v in self.ocel_model.ocels[self.logSelectcomboBox1.currentText()]["ocel:events"].items():
@@ -78,7 +77,9 @@ class ManualMinerFrame(OperatorFrame):
         for k, v in self.ocel_model.ocels[self.logSelectcomboBox2.currentText()]["ocel:events"].items():
             activities2.add(v["ocel:activity"])
 
-        for i in range(len(activities1) * len(activities2)):
+        # TEMPORARY SOLUTION: NUMBER LIMITED TO 15
+        length = min(15, len(activities1) * len(activities2))
+        for i in range(length):
             self.numOfActComboBox.addItem("")
             self.numOfActComboBox.setItemText(i, str(i+1))
 

@@ -25,20 +25,6 @@ class TransformationCenter(object):
 
     def setupUi(self, MainWindow):
 
-
-        # url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
-        # api = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
-
-        # data_pool = "OCEL_Pool1"
-        # data_model = "OCEL_Model1"
-
-        # self.ocel_model = convertToOcelModel(url, api, data_pool, data_model)
-
-        # for development purposes
-#        with open('file.pkl', 'rb') as file:
-#            # Call load method to deserialze
-#            self.ocel_model = pickle.load(file)
-
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1300, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -58,6 +44,7 @@ class TransformationCenter(object):
 
         # start of code for side scroll area
         self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
+        self.OCEL_list_scrollArea.setMinimumWidth(360)
         self.leftGridLayout = QtWidgets.QGridLayout(self.OCEL_list_scrollArea)
         self.leftGridLayout.setObjectName("leftGridLayout")
         self.gridLayout.addWidget(self.OCEL_list_scrollArea, 0, 0, 1, 1)
@@ -358,8 +345,8 @@ class TransformationCenter(object):
         if toOverview:
             self.stackedWidget.setCurrentIndex(0)
             return
+        self.operatorFrames[pageNum].refresh()  
         self.stackedWidget.setCurrentIndex(pageNum+1) # +1 since the 0th page is the operator overview page
-        self.operatorFrames[pageNum].refresh()
 
 
     def initOperatorPage(self, minerTitle, minerDescription, minerFrameClass):
@@ -460,7 +447,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
 
-    with open('file.pkl', 'rb') as file:
+    with open('fileBig.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

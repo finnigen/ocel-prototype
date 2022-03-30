@@ -237,18 +237,25 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
 
 
 
+#url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
+#api = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
+
+#data_pool = "OCEL_Pool1"
+#data_model = "OCEL_Model1"
+
+
 url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
 api = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
 
-data_pool = "OCEL_Pool1"
-data_model = "OCEL_Model1"
+data_pool = "OcelBigReduccedPool"
+data_model = "OcelBigReducedModel"
 
 # ocel_model = convertToOcelModel(url, api, data_pool, data_model)
 
 # for development purposes
-def saveToPickle():
+def saveToPickle(url, api, data_pool, data_model):
     ocel_model = convertToOcelModel(url, api, data_pool, data_model)
-    with open('file.pkl', 'wb') as file:
+    with open('fileBig.pkl', 'wb') as file:
         pickle.dump(ocel_model, file)
 
-# saveToPickle()
+# saveToPickle(url, api, data_pool, data_model)
