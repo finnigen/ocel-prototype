@@ -17,7 +17,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
 
-class TransformationCenter(object):
+class TransformationCenter(QtWidgets.QWidget):
 
     def __init__(self, ocel_model):
         super().__init__()
@@ -229,13 +229,28 @@ class TransformationCenter(object):
 
 
     def addToLogs(self, pageNum):
+        # get name for new log as input from user
+        text = ""
+        duplicate = False
+        while (text == ""):
+            if not duplicate:
+                text, ok = QtWidgets.QInputDialog.getText(self, 'Applying Operator', 'Enter name for new log:')
+            else:
+                text, ok = QtWidgets.QInputDialog.getText(self, 'Applying Operator', 'Enter name for new log (name already exists):')
+            if not ok:
+                return
+            # avoid duplicate names
+            duplicate = False
+            if text in self.ocel_model.ocels.keys():
+                text = ""
+                duplicate = True
+
         name_newLog = self.operatorFrames[pageNum].getNewLog()
         if not name_newLog:
             return
-        name = name_newLog[0]
+        name = text # name_newLog[0]
         newLog = name_newLog[1]
         self.ocel_model.addOCEL(name, newLog)
-
         self.refreshSelection(name)
 
     def removeFromLogs(self, name):
