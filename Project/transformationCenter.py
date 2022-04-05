@@ -12,6 +12,8 @@ import pickle
 from tableWindow import TableWindow
 from objRelationWindow import ObjectWindow
 from manualMinerFrame import ManualMinerFrame
+import json
+import ocel as ocel_lib
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
@@ -83,6 +85,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.innerVerticalLayout.addWidget(self.sidebarTitlelabel)
         # end of code for side scroll area
         self.innerVerticalLayout.setAlignment(QtCore.Qt.AlignVCenter)
+        self.sidebarTitlelabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # stacked widget for multiple different views
         self.stackedWidget = QtWidgets.QStackedWidget(self.rightFrame)
@@ -353,7 +356,9 @@ class TransformationCenter(QtWidgets.QWidget):
 
 
     def export(self, name):
-        print("export " + name)
+        print("exporting " + name)
+        fileName = 'ocel_' + name + '.json'
+        ocel_lib.export_log(self.ocel_model.ocels[name], "exportedOCELs/" + fileName)
 
 
     def switchPage(self, pageNum, toOverview=False):
@@ -418,15 +423,14 @@ class TransformationCenter(QtWidgets.QWidget):
         operatorAddButton = QtWidgets.QPushButton(operatorPage)
         operatorAddButton.setObjectName("operatorAddButton")
         operatorAddButton.clicked.connect(lambda checked, x=pageNum: self.addToLogs(x))
-
-        operatorExportButton = QtWidgets.QPushButton(operatorPage)
-        operatorExportButton.setObjectName("operatorExportButton")
-        operatorExportButton.clicked.connect(lambda checked, x=pageNum: self.export("Placeholder_" + str(x) ))
         innerStackedLayout.addWidget(operatorAddButton)
-        innerStackedLayout.addWidget(operatorExportButton)
-
         operatorAddButton.setText("Add to event logs")
-        operatorExportButton.setText("Export")
+
+    #    operatorExportButton = QtWidgets.QPushButton(operatorPage)
+    #    operatorExportButton.setObjectName("operatorExportButton")
+    #    operatorExportButton.clicked.connect(lambda checked, x=pageNum: self.export("Placeholder_" + str(x) ))
+    #    innerStackedLayout.addWidget(operatorExportButton)
+    #    operatorExportButton.setText("Export")
 
         self.stackedWidget.addWidget(operatorPage)
         self.operatorFrames.append(operatorFrame)
