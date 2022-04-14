@@ -30,7 +30,6 @@ class OperatorFrame(QtWidgets.QFrame):
         self.innerRightLayout.setObjectName("innerRightLayout")
 
         self.operatorTitleLabel = QtWidgets.QLabel(self.operatorFrame)
-    #    self.operatorTitleLabel.setGeometry(QtCore.QRect(280, 20, 231, 41))
         font = QtGui.QFont()
         font.setPointSize(25)
         font.setBold(True)
@@ -48,8 +47,10 @@ class OperatorFrame(QtWidgets.QFrame):
  
 
         # add all labels, buttons etc to right layout
-        self.innerRightLayout.addWidget(self.operatorTitleLabel, 0, 0, QtCore.Qt.AlignHCenter)
-        self.innerRightLayout.addWidget(self.operatorDescriptionLabel, 1, 0)
+        self.innerRightLayout.addWidget(self.operatorTitleLabel, 0, 0, 1, 0, QtCore.Qt.AlignCenter)
+        self.innerRightLayout.addWidget(self.operatorDescriptionLabel)#, 1, 0)
+        self.innerRightLayout.setAlignment(QtCore.Qt.AlignCenter)
+        self.innerRightLayout.setSpacing(30)
 
         self.layout.addWidget(self.operatorFrame)
 

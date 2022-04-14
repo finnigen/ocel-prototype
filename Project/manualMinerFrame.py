@@ -63,6 +63,13 @@ class ManualMinerFrame(OperatorFrame):
         self.operatorSelectorLabel_3.setText("Select number of activities to match:")
         self.selectActivitiesLabel.setText("Match activities:")
 
+        # scroll area for activity matching
+        self.scrollArea = QtWidgets.QScrollArea(self.operatorFrame)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+        self.innerRightLayout.addWidget(self.scrollArea, 6, 0, 1, 2)
+    
         self.refresh()
 
     def initCounter(self):
@@ -77,8 +84,7 @@ class ManualMinerFrame(OperatorFrame):
         for k, v in self.ocel_model.ocels[self.logSelectcomboBox2.currentText()]["ocel:events"].items():
             activities2.add(v["ocel:activity"])
 
-        # TEMPORARY SOLUTION: NUMBER LIMITED TO 15
-        length = min(15, len(activities1) * len(activities2))
+        length = len(activities1) * len(activities2)
         for i in range(length):
             self.numOfActComboBox.addItem("")
             self.numOfActComboBox.setItemText(i, str(i+1))
@@ -95,10 +101,10 @@ class ManualMinerFrame(OperatorFrame):
 
         self.activityComboBoxes = []
         for i in range(int(self.numOfActComboBox.currentText())):
-            leftActivityComboBox = QtWidgets.QComboBox(self.operatorFrame)
-            self.innerRightLayout.addWidget(leftActivityComboBox, i+6, 0)
-            rightActivityComboBox = QtWidgets.QComboBox(self.operatorFrame)
-            self.innerRightLayout.addWidget(rightActivityComboBox, i+6, 1)
+            leftActivityComboBox = QtWidgets.QComboBox(self.scrollAreaWidgetContents)
+            self.scrollGridLayout.addWidget(leftActivityComboBox, i+6, 0)
+            rightActivityComboBox = QtWidgets.QComboBox(self.scrollAreaWidgetContents)
+            self.scrollGridLayout.addWidget(rightActivityComboBox, i+6, 1)
             self.activityComboBoxes.append((leftActivityComboBox, rightActivityComboBox))
         
         # get set of all activities in both logs
@@ -118,6 +124,9 @@ class ManualMinerFrame(OperatorFrame):
             for i in range(len(activities2)):
                 tup[1].addItem("")
                 tup[1].setItemText(i, list(activities2)[i])
+
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
 
 
     def getNewLog(self):

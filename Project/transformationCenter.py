@@ -4,6 +4,8 @@ from ast import Name
 from ctypes import alignment
 from os import supports_bytes_environ
 from re import S
+
+from numpy import inner
 from ocel_converter import convertToOcelModel, OCEL_Model
 from operatorFrame import OperatorFrame
 from matchMinerFrame import MatchMinerFrame
@@ -112,9 +114,9 @@ class TransformationCenter(QtWidgets.QWidget):
         self.operatorSelectorTitle.setFont(font)
         self.operatorSelectorTitle.setObjectName("operatorSelectorTitle")
         self.operatorSelectorTitle.setText("Select an Operator")
-        self.operatorOverviewStackedLayout.addWidget(self.operatorSelectorTitle)
-        self.operatorOverviewStackedLayout.setAlignment(QtCore.Qt.AlignHCenter)
-
+        self.operatorOverviewStackedLayout.addWidget(self.operatorSelectorTitle, 0, 0, 1, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
+        self.operatorOverviewStackedLayout.setAlignment(QtCore.Qt.AlignCenter)
+        self.operatorOverviewStackedLayout.setSpacing(40)
 
         self.operatorFrames = []
         # we need to initialize a page for every supported operator
@@ -412,7 +414,6 @@ class TransformationCenter(QtWidgets.QWidget):
 
         operatorFrame = minerFrameClass(operatorPage, self.ocel_model, minerTitle, minerDescription)
         innerStackedLayout.addWidget(operatorFrame)
-        innerStackedLayout.addWidget(operatorFrame)
 
         # page number of stacked widget
         pageNum = len(self.operatorFrames)
@@ -423,6 +424,7 @@ class TransformationCenter(QtWidgets.QWidget):
         minerFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         minerFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         minerFrameLayout = QtWidgets.QGridLayout(minerFrame)
+        minerFrameLayout.setSpacing(20)
         # miner title on overview page
         minerTitleLabel = QtWidgets.QLabel(minerFrame)
         font = QtGui.QFont()
