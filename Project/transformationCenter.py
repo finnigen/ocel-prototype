@@ -14,6 +14,8 @@ from objRelationWindow import ObjectWindow
 from manualMinerFrame import ManualMinerFrame
 import json
 import ocel as ocel_lib
+from exportDialogBox import ExportDialog
+from toCelonis import cli
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
@@ -21,9 +23,11 @@ from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
 class TransformationCenter(QtWidgets.QWidget):
 
-    def __init__(self, ocel_model):
+    def __init__(self, ocel_model, url, api):
         super().__init__()
         self.ocel_model = ocel_model
+        self.url = url
+        self.api = api
 
     def setupUi(self, MainWindow):
 
@@ -358,7 +362,28 @@ class TransformationCenter(QtWidgets.QWidget):
     def export(self, name):
         print("exporting " + name)
         fileName = 'ocel_' + name + '.json'
-        ocel_lib.export_log(self.ocel_model.ocels[name], "exportedOCELs/" + fileName)
+        filePath = "exportedOCELs/" + fileName
+        ocel_lib.export_log(self.ocel_model.ocels[name], filePath)
+        dialog = ExportDialog(filePath, self.url, self.api)
+        if dialog.exec():
+            parameters = dialog.getInputs()
+            self.ocelSideBarExportButtons[name].setEnabled(False)
+            self.ocelSideBarExportButtons[name].setText("Exporting...")
+
+            # create thread so that GUI stays responsive while exporting
+            self.worker = ExportWorkerThread(name, filePath, self.url, self.api, parameters[0], parameters[1], parameters[2], parameters[3])
+            self.worker.exportDone.connect(self.exportDone)
+            self.worker.finished.connect(self.worker.quit)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.worker.start()
+
+    def exportDone(self, name, success):
+        if not success:
+            QtWidgets.QMessageBox.question(self, 'Export Failed', 'Export of ' + name + ' failed', QtWidgets.QMessageBox.Ok)
+        else:
+            QtWidgets.QMessageBox.question(self, 'Export Complete', 'Export of ' + name + ' completed', QtWidgets.QMessageBox.Ok)
+        self.ocelSideBarExportButtons[name].setEnabled(True)
+        self.ocelSideBarExportButtons[name].setText("Export")
 
 
     def switchPage(self, pageNum, toOverview=False):
@@ -459,6 +484,32 @@ class WorkerThread(QThread):
         self.reformatObjRelation.emit(rows)
 
 
+class ExportWorkerThread(QThread):
+    exportDone = pyqtSignal(str, bool)
+    def __init__(self, name, filePath, url, api, dataPool, dataModel, objects, transitions):
+        super().__init__()
+        self.name = name
+        self.filePath = filePath
+        self.url = url
+        self.api = api
+        self.dataPool = dataPool
+        self.dataModel = dataModel
+        self.objects = objects
+        self.transitions = transitions
+
+    def run(self):
+        try:
+            print(self.filePath)
+            print(self.url)
+            print(self.api)
+            print(self.dataPool)
+            print(self.dataModel)
+            print(self.objects)
+            print(self.transitions)
+            cli(self.filePath, self.url, self.api, self.dataPool, self.dataModel, self.objects, self.transitions)
+            self.exportDone.emit(self.name, True)
+        except:
+            self.exportDone.emit(self.name, False)
 
 
 if __name__ == "__main__":
@@ -466,11 +517,14 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
 
-    with open('fileBig.pkl', 'rb') as file:
+    with open('fileBig1.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 
-    ui = TransformationCenter(ocel_model)
+    url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
+    token = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
+
+    ui = TransformationCenter(ocel_model, url, token)
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

@@ -250,12 +250,15 @@ api = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBV
 data_pool = "OcelBigReduccedPool"
 data_model = "OcelBigReducedModel"
 
+data_pool = "multiOCEL"
+data_model = "ordersMngmnt"
+
 # ocel_model = convertToOcelModel(url, api, data_pool, data_model)
 
 # for development purposes
 def saveToPickle(url, api, data_pool, data_model):
     ocel_model = convertToOcelModel(url, api, data_pool, data_model)
-    with open('fileBig.pkl', 'wb') as file:
+    with open('fileBig1.pkl', 'wb') as file:
         pickle.dump(ocel_model, file)
 
-# saveToPickle(url, api, data_pool, data_model)
+#saveToPickle(url, api, data_pool, data_model)
