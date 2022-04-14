@@ -369,6 +369,7 @@ class TransformationCenter(QtWidgets.QWidget):
             parameters = dialog.getInputs()
             self.ocelSideBarExportButtons[name].setEnabled(False)
             self.ocelSideBarExportButtons[name].setText("Exporting...")
+            self.ocelSideBarExportButtons[name].setStyleSheet("background-color: red")
 
             # create thread so that GUI stays responsive while exporting
             self.worker = ExportWorkerThread(name, filePath, self.url, self.api, parameters[0], parameters[1], parameters[2], parameters[3])
@@ -384,6 +385,8 @@ class TransformationCenter(QtWidgets.QWidget):
             QtWidgets.QMessageBox.question(self, 'Export Complete', 'Export of ' + name + ' completed', QtWidgets.QMessageBox.Ok)
         self.ocelSideBarExportButtons[name].setEnabled(True)
         self.ocelSideBarExportButtons[name].setText("Export")
+        self.ocelSideBarExportButtons[name].setStyleSheet("")
+
 
 
     def switchPage(self, pageNum, toOverview=False):

@@ -146,15 +146,15 @@ class Ui_LoginWindow(object):
         self.waitLabel.hide()
 
     def login(self):
-        url = self.celonisURLText.text()
-        token = self.celonisTokenText.text()
+        self.url = self.celonisURLText.text()
+        self.token = self.celonisTokenText.text()
 
         # for development
-        url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
-        token = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
+        self.url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
+        self.token = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
 
         try:
-            self.celonis = get_celonis(url, token)
+            self.celonis = get_celonis(self.url, self.token)
         except:
             print("Invalid login info. Try again")
             return
@@ -209,7 +209,7 @@ class Ui_LoginWindow(object):
     def conversionComplete(self, ocel_model):
         # open new window
         self.newWindow = QtWidgets.QMainWindow()
-        ui = TransformationCenter(ocel_model)
+        ui = TransformationCenter(ocel_model, self.url, self.token)
         ui.setupUi(self.newWindow)
         self.newWindow.show()
 
