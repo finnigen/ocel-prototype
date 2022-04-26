@@ -527,6 +527,18 @@ class ExportWorkerThread(QThread):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
+
+
+    # set style using stylesheet, templates from: https://qss-stock.devsecstudio.com/templates.php
+#    File = open("../StyleSheets/Darkeum/Darkeum.qss",'r')
+#    with File:
+#        qss = File.read()
+#        app.setStyleSheet(qss)
+
+    # set style using setStyle
+#    app.setStyle('Windows')
+
+
     MainWindow = QtWidgets.QMainWindow()
 
     with open('fileBig1.pkl', 'rb') as file:
