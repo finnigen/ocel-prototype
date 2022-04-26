@@ -9,6 +9,7 @@ from numpy import inner
 from ocel_converter import convertToOcelModel, OCEL_Model
 from operatorFrame import OperatorFrame
 from matchMinerFrame import MatchMinerFrame
+from interleavedMinerFrame import InterleavedMinerFrame
 from operators import manualMiner, matchMiner
 import pickle
 from tableWindow import TableWindow
@@ -124,6 +125,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Match Miner", description, MatchMinerFrame)
         description = "Merge events across logs based on manual matching of activities of logs."
         self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
+        description = "Merge events across logs based on interleaved interactions between events."
+        self.initOperatorPage("Interleaved Miner", description, InterleavedMinerFrame)
 
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
@@ -379,6 +382,7 @@ class TransformationCenter(QtWidgets.QWidget):
             self.worker.finished.connect(self.worker.quit)
             self.worker.finished.connect(self.worker.deleteLater)
             self.worker.start()
+
 
     def exportDone(self, name, success):
         if not success:

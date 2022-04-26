@@ -72,6 +72,7 @@ class ManualMinerFrame(OperatorFrame):
     
         self.refresh()
 
+
     def initCounter(self):
         self.numOfActComboBox.clear()
 
