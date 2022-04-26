@@ -4,7 +4,7 @@ from ocel_converter import convertToOcelModel, OCEL_Model
 from operatorFrame import OperatorFrame
 from operators import interLeavedMiner
 
-class InterleavedMinerFrame(OperatorFrame):
+class NonInterleavedMinerFrame(OperatorFrame):
  
     def __init__(self, parent, ocel, title, description):
         miner = interLeavedMiner
@@ -51,10 +51,10 @@ class InterleavedMinerFrame(OperatorFrame):
         log1 = self.ocel_model.ocels[name1]
         log2 = self.ocel_model.ocels[name2]
 
-        name = "INTERLEAVED_MINER (" + name1 + ", " + name2 + ")" 
+        name = "NON_INTERLEAVED_MINER (" + name1 + ", " + name2 + ")" 
         if name in self.ocel_model.ocels:
             return
-        newLog = self.miner(log1, log2, self.ocel_model.obj_relation, interleavedMode=True)
+        newLog = self.miner(log1, log2, self.ocel_model.obj_relation, interleavedMode=False)
 
         return (name, newLog)
 

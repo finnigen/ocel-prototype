@@ -117,8 +117,34 @@ def interleavedRelation(log1, log2, obj1, obj2):
     return matchingEvents
 
 
-# interleaved miner
-def interLeavedMiner(log1, log2, object_relationship):
+# calculates non interleaved event relation of two logs, used as helper for non/interleaved miner
+def nonInterleavedRelation(log1, log2, obj1, obj2):
+    # calculate path from obj1 and obj2
+    path = []
+    for ev_id, event in log1["ocel:events"].items():
+        if obj1 in event["ocel:omap"]:
+            path.append((1, ev_id, event))
+    
+    for ev_id, event in log2["ocel:events"].items():
+        if obj2 in event["ocel:omap"]:
+            path.append((2, ev_id, event))
+    
+    path.sort(reverse=False, key=sortByTimeStamp)
+    
+    matchingEvents = set()
+    
+    for i in range(len(path)-1):
+        if path[i][0] != path[i+1][0]:
+            if i+2 == len(path) or path[i+1][0] == path[i+2][0]:
+                matchingEvents.add((path[i][:2], path[i+1][:2]))
+    
+    # returns set of relation tuples. Each tuple contains two tuples, 
+    # first element of inner tuple indicates which log, second element indicates event id
+    return matchingEvents
+
+
+# interleaved and non-interleaved miner, depending on interleavedMode flag value
+def interLeavedMiner(log1, log2, object_relationship, interleavedMode=True):
     # start with log1 since we want all its events and objects
     newLog = copy.deepcopy(log1)
     
@@ -133,7 +159,11 @@ def interLeavedMiner(log1, log2, object_relationship):
     
     interleavedDict = {}
     for relation in reduced_object_relationship:
-        interleavedDict[relation] = interleavedRelation(log1, log2, relation[0], relation[1])
+        if interleavedMode:
+            interleavedDict[relation] = interleavedRelation(log1, log2, relation[0], relation[1])
+        else:
+            interleavedDict[relation] = nonInterleavedRelation(log1, log2, relation[0], relation[1])
+
     
     for ev_id1, event1 in log1["ocel:events"].items():
         for obj1 in event1["ocel:omap"]:
