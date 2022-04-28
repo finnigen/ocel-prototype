@@ -87,7 +87,7 @@ def manualMiner(log1, log2, object_relation, activity_relation):
 
 
 
-# interleaved miner section start
+# interleaved miner section start ----------------------------------------------------------------------
 def sortByTimeStamp(element):
     return element[2]["ocel:timestamp"]
 
@@ -190,3 +190,112 @@ def interLeavedMiner(log1, log2, object_relationship, interleavedMode=True):
             newLog["ocel:objects"][obj] = log2["ocel:objects"][obj]
     
     return newLog
+
+
+
+
+# filter operator section start ----------------------------------------------------------------------
+
+def removeEventsAndObjects(log, removeEvents):
+    # remove events
+    for ev_id in removeEvents:
+        del log["ocel:events"][ev_id]
+    
+    # remove objects that aren't mentioned anymore
+    remainingObjects = set()
+    for ev_id, event in log["ocel:events"].items():
+        for obj_id in event["ocel:omap"]:
+            remainingObjects.add(obj_id)
+    removeObjects = set(log["ocel:objects"].keys()).difference(remainingObjects)
+    for obj_id in removeObjects:
+        del log["ocel:objects"][obj_id]
+
+
+
+# activities: set of activities
+# filter out events that aren't in activities parameter set
+def filterByActivity(log, activities):
+    newLog = copy.deepcopy(log)
+    
+    # remove events that don't contain one of desired activity
+    removeEvents = set()
+    for ev_id, event in log["ocel:events"].items():
+        if event["ocel:activity"] not in activities:
+            removeEvents.add(ev_id)
+    
+    removeEventsAndObjects(newLog, removeEvents)
+    
+    return newLog
+
+
+# attributes parameter: dictionary with attribute name and set of acceptable values
+# events have to match all passed attributes
+def filterByAttributes(log, attributes):
+    newLog = copy.deepcopy(log)
+    
+    # remove events that don't contain desired attribute values
+    removeEvents = set()
+    for ev_id, event in log["ocel:events"].items():
+        for attr in attributes.keys():
+            if attr not in event["ocel:vmap"].keys():
+                removeEvents.add(ev_id)
+            else:
+                if event["ocel:vmap"][attr] not in attributes[attr]:
+                    removeEvents.add(ev_id)
+
+    removeEventsAndObjects(newLog, removeEvents)
+    
+    return newLog
+
+
+# objects parameters: set of objects that we want to keep
+def filterByObject(log, objects):
+    newLog = copy.deepcopy(log)
+    
+    # remove events that don't contain desired attribute values
+    removeEvents = set()
+    for ev_id, event in log["ocel:events"].items():
+        if objects.intersection(event["ocel:omap"]) == set():
+            del newLog["ocel:events"][ev_id]
+    
+    for obj_id in log["ocel:objects"]:
+        if obj_id not in objects:
+            del newLog["ocel:objects"][obj_id]
+    
+    return newLog
+
+
+# timestamps parameter: (start_datetime, end_datetime)
+def filterByTimestamp(log, timestamps):
+    newLog = copy.deepcopy(log)
+    
+    start_datetime = timestamps[0]
+    end_datetime = timestamps[1]
+    
+    # remove events that don't contain desired attribute values
+    removeEvents = set()
+    for ev_id, event in log["ocel:events"].items():
+        date = event["ocel:timestamp"]
+        if type(date) != datetime.datetime:
+            date = datetime.datetime(date)
+        if not (start_datetime <= date and date <= end_datetime):
+            removeEvents.add(ev_id)
+            
+    removeEventsAndObjects(newLog, removeEvents)
+    
+    return newLog
+
+
+# filter modes:
+#    activity, attribute, object, timestamp
+# parameters:
+#    actual filter criteria
+def filterLog(log, parameters, mode="activity"):
+    if mode == "activity":
+        return filterByActivity(log, parameters)
+    elif mode == "attribute":
+        return filterByAttribute(log, parameters)
+    elif mode == "object":
+        return filterByObject(log, parameters)
+    elif mode == "timestamp":
+        return filterByTimestamp(log, parameters)

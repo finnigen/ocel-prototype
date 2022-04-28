@@ -16,6 +16,8 @@ import pickle
 from tableWindow import TableWindow
 from objRelationWindow import ObjectWindow
 from manualMinerFrame import ManualMinerFrame
+from filterFrame import FilterFrame
+
 import json
 import ocel as ocel_lib
 from exportDialogBox import ExportDialog
@@ -24,6 +26,7 @@ from toCelonis import cli
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
+# import qdarkstyle
 
 class TransformationCenter(QtWidgets.QWidget):
 
@@ -120,6 +123,14 @@ class TransformationCenter(QtWidgets.QWidget):
         self.operatorOverviewStackedLayout.setAlignment(QtCore.Qt.AlignCenter)
         self.operatorOverviewStackedLayout.setSpacing(40)
 
+        # scrollarea for operators on overview page
+        self.scrollArea = QtWidgets.QScrollArea(self.operatorSelectorPage)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+        self.scrollGridLayout.setAlignment(QtCore.Qt.AlignCenter)
+        self.scrollGridLayout.setSpacing(40)
+        self.operatorOverviewStackedLayout.addWidget(self.scrollArea)
         self.operatorFrames = []
         # we need to initialize a page for every supported operator
         description = "Merge events across logs based on matching attribute(s)."
@@ -130,6 +141,9 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Interleaved Miner", description, InterleavedMinerFrame)
         description = "Merge events across logs based on non-interleaved interactions between events."
         self.initOperatorPage("Non-Interleaved Miner", description, NonInterleavedMinerFrame)
+        description = "Filter event log based on activities, attributes, objects or timestamps."
+        self.initOperatorPage("Filter Event Log", description, FilterFrame)
+
 
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
@@ -427,7 +441,7 @@ class TransformationCenter(QtWidgets.QWidget):
 
         # create frame on overview page for miner as well
         # frame on over view page
-        minerFrame = QtWidgets.QFrame(self.operatorSelectorPage)
+        minerFrame = QtWidgets.QFrame(self.scrollAreaWidgetContents)
         minerFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         minerFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         minerFrameLayout = QtWidgets.QGridLayout(minerFrame)
@@ -454,7 +468,10 @@ class TransformationCenter(QtWidgets.QWidget):
         minerFrameLayout.addWidget(minerTitleLabel)
         minerFrameLayout.addWidget(minerDescriptionLabel)
         minerFrameLayout.addWidget(minerButton)
-        self.operatorOverviewStackedLayout.addWidget(minerFrame)
+
+        self.scrollGridLayout.addWidget(minerFrame)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+       # self.operatorOverviewStackedLayout.addWidget(minerFrame)
 
         # export and add-to-logs buttons on operator page
         operatorAddButton = QtWidgets.QPushButton(operatorPage)
@@ -535,9 +552,11 @@ if __name__ == "__main__":
 #        qss = File.read()
 #        app.setStyleSheet(qss)
 
-    # set style using setStyle
-#    app.setStyle('Windows')
+    # set style using setStyle, limited on linux
+#    app.setStyle('Fusion')
 
+    # need to import qdarkstyle first
+#    app.setStyleSheet(qdarkstyle.load_stylesheet())
 
     MainWindow = QtWidgets.QMainWindow()
 
