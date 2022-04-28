@@ -147,8 +147,8 @@ class ManualMinerFrame(OperatorFrame):
         activity_relation = list(activity_relation)
 
         name = "MANUAL_MINER (" + name1 + ", " + name2 + ")" + " on " + "(" + str(activity_relation) + ")"
-        if name in self.ocel_model.ocels:
-            return
+#        if name in self.ocel_model.ocels:
+#            return
         newLog = self.miner(log1, log2, self.ocel_model.obj_relation, activity_relation)
 
         return (name, newLog)

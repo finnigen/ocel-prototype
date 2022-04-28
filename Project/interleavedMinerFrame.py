@@ -52,8 +52,8 @@ class InterleavedMinerFrame(OperatorFrame):
         log2 = self.ocel_model.ocels[name2]
 
         name = "INTERLEAVED_MINER (" + name1 + ", " + name2 + ")" 
-        if name in self.ocel_model.ocels:
-            return
+#        if name in self.ocel_model.ocels:
+#            return
         newLog = self.miner(log1, log2, self.ocel_model.obj_relation, interleavedMode=True)
 
         return (name, newLog)

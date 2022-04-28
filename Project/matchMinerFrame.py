@@ -85,8 +85,8 @@ class MatchMinerFrame(OperatorFrame):
         attr1 = self.attrSelectcomboBox1.currentText()
         attr2 = self.attrSelectcomboBox2.currentText()
         name = "MATCH_MINER (" + name1 + ", " + name2 + ")" + " on " + "(" + attr1 + ", " + attr2 + ")"
-        if name in self.ocel_model.ocels:
-            return
+#        if name in self.ocel_model.ocels:
+#            return
         newLog = self.miner(log1, log2, self.ocel_model.obj_relation, attr1, attr2)
 
         return (name, newLog)

@@ -230,7 +230,7 @@ def filterByActivity(log, activities):
 
 # attributes parameter: dictionary with attribute name and set of acceptable values
 # events have to match all passed attributes
-def filterByAttributes(log, attributes):
+def filterByAttribute(log, attributes):
     newLog = copy.deepcopy(log)
     
     # remove events that don't contain desired attribute values
@@ -253,7 +253,6 @@ def filterByObject(log, objects):
     newLog = copy.deepcopy(log)
     
     # remove events that don't contain desired attribute values
-    removeEvents = set()
     for ev_id, event in log["ocel:events"].items():
         if objects.intersection(event["ocel:omap"]) == set():
             del newLog["ocel:events"][ev_id]
@@ -277,7 +276,7 @@ def filterByTimestamp(log, timestamps):
     for ev_id, event in log["ocel:events"].items():
         date = event["ocel:timestamp"]
         if type(date) != datetime.datetime:
-            date = datetime.datetime(date)
+            date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
         if not (start_datetime <= date and date <= end_datetime):
             removeEvents.add(ev_id)
             

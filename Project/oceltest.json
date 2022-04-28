@@ -18,11 +18,11 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "EVID_products",
       "EVID_general",
-      "ATT_EVENT_price",
-      "ATT_products_producer",
       "ATT_EVENT_weight",
+      "EVID_products",
+      "ATT_products_producer",
+      "ATT_EVENT_price",
       "ATT_products_cost"
     ],
     "ocel:object-types": [
