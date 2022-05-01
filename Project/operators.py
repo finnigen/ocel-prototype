@@ -240,7 +240,7 @@ def filterByAttribute(log, attributes):
             if attr not in event["ocel:vmap"].keys():
                 removeEvents.add(ev_id)
             else:
-                if event["ocel:vmap"][attr] not in attributes[attr]:
+                if str(event["ocel:vmap"][attr]) not in attributes[attr]:
                     removeEvents.add(ev_id)
 
     removeEventsAndObjects(newLog, removeEvents)
