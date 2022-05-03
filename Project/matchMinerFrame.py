@@ -60,14 +60,14 @@ class MatchMinerFrame(OperatorFrame):
 
 
     def initAttributes1(self):
-        attributes = self.ocel_model.ocels[self.logSelectcomboBox1.currentText()]["ocel:global-log"]["ocel:attribute-names"]
+        attributes = self.ocel_model.getOCEL(self.logSelectcomboBox1.currentText())["ocel:global-log"]["ocel:attribute-names"]
         self.attrSelectcomboBox1.clear()
         for i in range(len(attributes)):
             self.attrSelectcomboBox1.addItem("")
             self.attrSelectcomboBox1.setItemText(i, attributes[i])
 
     def initAttributes2(self):
-        attributes = self.ocel_model.ocels[self.logSelectcomboBox2.currentText()]["ocel:global-log"]["ocel:attribute-names"]
+        attributes = self.ocel_model.getOCEL(self.logSelectcomboBox2.currentText())["ocel:global-log"]["ocel:attribute-names"]
         self.attrSelectcomboBox2.clear()
         for i in range(len(attributes)):
             self.attrSelectcomboBox2.addItem("")
@@ -80,14 +80,14 @@ class MatchMinerFrame(OperatorFrame):
         
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
-        log1 = self.ocel_model.ocels[name1]
-        log2 = self.ocel_model.ocels[name2]
+        log1 = self.ocel_model.getOCEL(name1)
+        log2 = self.ocel_model.getOCEL(name2)
         attr1 = self.attrSelectcomboBox1.currentText()
         attr2 = self.attrSelectcomboBox2.currentText()
         name = "MATCH_MINER (" + name1 + ", " + name2 + ")" + " on " + "(" + attr1 + ", " + attr2 + ")"
 #        if name in self.ocel_model.ocels:
 #            return
-        newLog = self.miner(log1, log2, self.ocel_model.obj_relation, attr1, attr2)
+        newLog = self.miner(log1, log2, self.ocel_model.getRelation(), attr1, attr2)
 
         return (name, newLog)
 
@@ -97,11 +97,11 @@ class MatchMinerFrame(OperatorFrame):
         self.logSelectcomboBox1.clear()
         self.logSelectcomboBox2.clear()
 
-        for i in range(len(self.ocel_model.ocels.keys())):
+        for i in range(len(self.ocel_model.getOcelNames())):
             self.logSelectcomboBox1.addItem("")
             self.logSelectcomboBox2.addItem("")
-            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.ocels.keys())[i])
-            self.logSelectcomboBox2.setItemText(i, list(self.ocel_model.ocels.keys())[i])
+            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.getOcelNames())[i])
+            self.logSelectcomboBox2.setItemText(i, list(self.ocel_model.getOcelNames())[i])
 
         self.initAttributes1()
         self.initAttributes2()

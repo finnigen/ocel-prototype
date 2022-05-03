@@ -168,7 +168,6 @@ class TransformationCenter(QtWidgets.QWidget):
         self.windows = {}
 
 
-
         self.viewObjectRelationsButton.setText("Calculating Object Relationships...")
         self.viewObjectRelationsButton.setEnabled(False)
         self.formattedObjRows = {}
@@ -197,8 +196,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarDeleteButtons = {}
         self.ocelSideBarViewButtons = {}
 
-        for i in range(len(self.ocel_model.ocels.keys())):
-            currName = list(self.ocel_model.ocels.keys())[i]
+        for i in range(len(self.ocel_model.getOcelNames())):
+            currName = list(self.ocel_model.getOcelNames())[i]
             self.ocelSideBarFrames[currName] = QtWidgets.QFrame(self.OCEL_list_frame)
             self.innerVerticalLayout.addWidget(self.ocelSideBarFrames[currName])
         
@@ -270,7 +269,7 @@ class TransformationCenter(QtWidgets.QWidget):
                 return
             # avoid duplicate names
             duplicate = False
-            if text in self.ocel_model.ocels.keys():
+            if text in self.ocel_model.getOcelNames():
                 text = ""
                 duplicate = True
 
@@ -279,7 +278,7 @@ class TransformationCenter(QtWidgets.QWidget):
             return
         name = text # name_newLog[0]
         newLog = name_newLog[1]
-        self.ocel_model.addOCEL(name, newLog)
+        self.ocel_model.addOCEL(name, ocelFileName=name+".json", ocel=newLog)
         self.refreshSelection(name)
 
     def removeFromLogs(self, name):
@@ -366,7 +365,7 @@ class TransformationCenter(QtWidgets.QWidget):
     def show_table_window(self, name):
         if name not in self.windows:
             newWindow = QtWidgets.QMainWindow()
-            ui = TableWindow(self.ocel_model.ocels[name], name)
+            ui = TableWindow(self.ocel_model.getOCEL(name), name)
             ui.setupUi(newWindow)
             self.windows[name] = newWindow
         self.windows[name].show()
@@ -385,7 +384,7 @@ class TransformationCenter(QtWidgets.QWidget):
         print("exporting " + name)
         fileName = 'ocel_' + name + '.json'
         filePath = "exportedOCELs/" + fileName
-        ocel_lib.export_log(self.ocel_model.ocels[name], filePath)
+        ocel_lib.export_log(self.ocel_model.getOCEL(name), filePath)
         dialog = ExportDialog(filePath, self.url, self.api)
         if dialog.exec():
             parameters = dialog.getInputs()
@@ -502,10 +501,10 @@ class WorkerThread(QThread):
         self.ocel_model = ocel_model
 
     def run(self):
-        obj_relations = self.ocel_model.obj_relation
+        obj_relations = self.ocel_model.getRelation()
         all_objects = set()
-        for ocel in self.ocel_model.ocels.values():
-            all_objects = all_objects.union(ocel["ocel:objects"].keys())
+        for ocelName in self.ocel_model.getOcelNames():
+            all_objects = all_objects.union(self.ocel_model.getOCEL(ocelName)["ocel:objects"].keys())
         all_objects = list(all_objects)
         rows = {}
         for obj in all_objects:

@@ -71,7 +71,7 @@ class FilterFrame(OperatorFrame):
 
     def initAttributes(self):
         logName = self.logSelectcomboBox1.currentText()
-        attributes = list(set(self.ocel_model.ocels[logName]["ocel:global-log"]["ocel:attribute-names"]))
+        attributes = list(set(self.ocel_model.getOCEL(logName)["ocel:global-log"]["ocel:attribute-names"]))
 
         self.boxes = []
         for i in range(len(attributes)):
@@ -83,7 +83,7 @@ class FilterFrame(OperatorFrame):
             
             # get all attribute values and save them in input box comma separated
             allAttributeValues = set()
-            for ev_id, event in self.ocel_model.ocels[logName]["ocel:events"].items():
+            for ev_id, event in self.ocel_model.getOCEL(logName)["ocel:events"].items():
                 if attributes[i] in event["ocel:vmap"].keys():
                     allAttributeValues.add(event["ocel:vmap"][attributes[i]])
             attributeValueStr = ""
@@ -109,7 +109,7 @@ class FilterFrame(OperatorFrame):
 
     def initActivities(self):
         logName = self.logSelectcomboBox1.currentText()
-        activities = list(set(self.ocel_model.ocels[logName]["ocel:global-event"]["ocel:activity"]))
+        activities = list(set(self.ocel_model.getOCEL(logName)["ocel:global-event"]["ocel:activity"]))
 
         self.boxes = []
         for i in range(len(activities)):
@@ -126,7 +126,7 @@ class FilterFrame(OperatorFrame):
 
     def initObjects(self):
         logName = self.logSelectcomboBox1.currentText()
-        objects = list(set(self.ocel_model.ocels[logName]["ocel:objects"].keys()))
+        objects = list(set(self.ocel_model.getOCEL(logName)["ocel:objects"].keys()))
 
         self.boxes = []
         for i in range(len(objects)):
@@ -162,7 +162,7 @@ class FilterFrame(OperatorFrame):
         # this is used for the "add to logs" and "export" button in the main window
         
         name1 = self.logSelectcomboBox1.currentText()
-        log1 = self.ocel_model.ocels[name1]
+        log1 = self.ocel_model.getOCEL(name1)
         
         mode = self.logSelectcomboBox2.currentText()
 
@@ -194,17 +194,16 @@ class FilterFrame(OperatorFrame):
     def refresh(self):
         # used to refresh comboboxes for selection of operator parameters
 
-        self.initFilterParameterSelection()
-
         self.logSelectcomboBox1.clear()
         self.logSelectcomboBox2.clear()
 
-        for i in range(len(self.ocel_model.ocels.keys())):
+        for i in range(len(self.ocel_model.getOcelNames())):
             self.logSelectcomboBox1.addItem("")
-            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.ocels.keys())[i])
+            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.getOcelNames())[i])
 
         modes = ["activity", "attribute", "object", "timestamp"]
         for i in range(len(modes)):
             self.logSelectcomboBox2.addItem("")
             self.logSelectcomboBox2.setItemText(i, modes[i])
         
+        self.initFilterParameterSelection()

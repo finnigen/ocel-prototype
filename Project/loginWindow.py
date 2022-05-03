@@ -200,7 +200,7 @@ class Ui_LoginWindow(object):
         self.spinnerLabel.show()
 
         # create thread so that GUI stays responsive
-        self.worker = WorkerThread(data_model)
+        self.worker = WorkerThread(pool, data_model)
         self.worker.updateOCEL.connect(self.conversionComplete)
         self.worker.finished.connect(self.worker.quit)
         self.worker.finished.connect(self.worker.deleteLater)
@@ -224,12 +224,13 @@ class Ui_LoginWindow(object):
 
 class WorkerThread(QThread):
     updateOCEL = pyqtSignal(OCEL_Model)
-    def __init__(self, data_model):
+    def __init__(self, pool, data_model):
         super().__init__()
         self.data_model = data_model
+        self.data_pool = pool
 
     def run(self):
-        ocel_model = convertToOcelModel("", "", "", self.data_model, skipConnection=True)
+        ocel_model = convertToOcelModel("", "", self.data_pool, self.data_model, skipConnection=True)
         self.updateOCEL.emit(ocel_model)
 
 

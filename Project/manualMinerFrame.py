@@ -78,11 +78,11 @@ class ManualMinerFrame(OperatorFrame):
 
         # get set of all activities in both logs
         activities1 = set()
-        for k, v in self.ocel_model.ocels[self.logSelectcomboBox1.currentText()]["ocel:events"].items():
+        for k, v in self.ocel_model.getOCEL(self.logSelectcomboBox1.currentText())["ocel:events"].items():
             activities1.add(v["ocel:activity"])
 
         activities2 = set()
-        for k, v in self.ocel_model.ocels[self.logSelectcomboBox2.currentText()]["ocel:events"].items():
+        for k, v in self.ocel_model.getOCEL(self.logSelectcomboBox2.currentText())["ocel:events"].items():
             activities2.add(v["ocel:activity"])
 
         length = len(activities1) * len(activities2)
@@ -110,11 +110,11 @@ class ManualMinerFrame(OperatorFrame):
         
         # get set of all activities in both logs
         activities1 = set()
-        for k, v in self.ocel_model.ocels[self.logSelectcomboBox1.currentText()]["ocel:events"].items():
+        for k, v in self.ocel_model.getOCEL(self.logSelectcomboBox1.currentText())["ocel:events"].items():
             activities1.add(v["ocel:activity"])
 
         activities2 = set()
-        for k, v in self.ocel_model.ocels[self.logSelectcomboBox2.currentText()]["ocel:events"].items():
+        for k, v in self.ocel_model.getOCEL(self.logSelectcomboBox2.currentText())["ocel:events"].items():
             activities2.add(v["ocel:activity"])
 
         for tup in self.activityComboBoxes:
@@ -136,8 +136,8 @@ class ManualMinerFrame(OperatorFrame):
         
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
-        log1 = self.ocel_model.ocels[name1]
-        log2 = self.ocel_model.ocels[name2]
+        log1 = self.ocel_model.getOCEL(name1)
+        log2 = self.ocel_model.getOCEL(name2)
 
         # get activity relation from comboboxes
         activity_relation = set()
@@ -149,7 +149,7 @@ class ManualMinerFrame(OperatorFrame):
         name = "MANUAL_MINER (" + name1 + ", " + name2 + ")" + " on " + "(" + str(activity_relation) + ")"
 #        if name in self.ocel_model.ocels:
 #            return
-        newLog = self.miner(log1, log2, self.ocel_model.obj_relation, activity_relation)
+        newLog = self.miner(log1, log2, self.ocel_model.getRelation(), activity_relation)
 
         return (name, newLog)
 
@@ -159,11 +159,11 @@ class ManualMinerFrame(OperatorFrame):
         self.logSelectcomboBox1.clear()
         self.logSelectcomboBox2.clear()
 
-        for i in range(len(self.ocel_model.ocels.keys())):
+        for i in range(len(self.ocel_model.getOcelNames())):
             self.logSelectcomboBox1.addItem("")
             self.logSelectcomboBox2.addItem("")
-            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.ocels.keys())[i])
-            self.logSelectcomboBox2.setItemText(i, list(self.ocel_model.ocels.keys())[i])
+            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.getOcelNames())[i])
+            self.logSelectcomboBox2.setItemText(i, list(self.ocel_model.getOcelNames())[i])
 
         self.initCounter()
         self.initActivitySelectors()

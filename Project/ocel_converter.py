@@ -2,23 +2,62 @@ import json
 import networkx as nx
 import ocel as ocel_lib
 import pickle
+import os
+import shutil
 
 import pandas as pd
 # import matplotlib.pyplot as plt
 from pycelonis import get_celonis
 
 
+
+# saves all OCEL_Models in OCEL_Models directory
 class OCEL_Model:
-    def __init__(self, ocels={}, obj_relation=set()):
-        self.ocels = ocels # format: {name1: ocel1, name2: ocel2 ... }
+    def __init__(self, newFolderName, ocels={}, obj_relation=set()):
+        self.rootFolder = "OCEL_Models"
+        newPath = os.path.join(self.rootFolder, newFolderName)
+        
+        # if directory for new ocel_model already exists, delete old directory, create new one
+        if os.path.exists(newPath):
+            shutil.rmtree(newPath)
+        os.mkdir(newPath)
+        
+        self.folder = newPath # save ocels as json here
+        self.ocels = ocels # new format: {name1: ocel_json_file_location1, name2: ocel_json_file_location2 ... }
         self.obj_relation = obj_relation
     
-    def addOCEL(self, name, ocel):
-        self.ocels[name] = ocel
-
+    def addOCEL(self, name, ocelFileName, ocel):
+        newPath = os.path.join(self.folder, ocelFileName)
+        # remove if exists already
+        if os.path.exists(newPath):
+            os.remove(newPath)
+        ocel_lib.export_log(ocel, newPath)
+        self.ocels[name] = ocelFileName      
+        
     def removeOCEL(self, name):
-        del self.ocels[name]
+        filePath = os.path.join(self.folder, self.ocels[name])
+        if os.path.exists(filePath):
+            os.remove(filePath)
+            del self.ocels[name]
+            return True
+        return False
 
+    def getOCEL(self, name):
+        filePath = os.path.join(self.folder, self.ocels[name])
+        if name in self.ocels:
+            with open(filePath) as json_file:
+                return json.load(json_file)
+        else:
+            return False
+    
+    def setRelation(self, relation):
+        self.obj_relation = relation
+    
+    def getRelation(self):
+        return self.obj_relation
+    
+    def getOcelNames(self):
+        return self.ocels.keys()
 
 
 
@@ -27,7 +66,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
     # download data
     # create ocels
     # create object relationships
-    # convert to OCEL_Model class
+    # add to OCEL_Model class    
 
     if skipConnection: # in this case, we already get passed a full Celonis data model
         data_model = data_model
@@ -35,11 +74,14 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         print("Establishing connection to Celonis...")
 
         celonis = get_celonis(url, api_token)
-
         data_pool = celonis.pools.find(data_pool)
         data_model = data_pool.datamodels.find(data_model)
 
+        
+    # create ocel_Model object
+    ocel_model = OCEL_Model(newFolderName = data_pool.name + "__" + data_model.name)
 
+        
     tables = {}
     all_data = {}
 
@@ -50,7 +92,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         all_data[table_name] = tables[table_name].activity_table.get_data_frame()
         all_data[tables[table_name].case_table.name] = tables[table_name].case_table.get_data_frame()
 
-    ocels = {}
+#    ocels = {}
     for table in tables:
         
         print("Transforming " + str(table) + " table...")
@@ -121,18 +163,15 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         ocel["ocel:events"] = events
         ocel["ocel:objects"] = objects
         
-        ocels[table] = ocel
-
-    print("Validating OCELs...")
-    for o in ocels:
-        ocel_lib.export_log(ocels[o], 'oceltest.json')
+        print("   Validating OCEL...")
+        ocel_lib.export_log(ocel, 'oceltest.json')
         if not ocel_lib.validate('oceltest.json', 'schema.json'):
-            print(ocels[o])
+            print(ocel)
             raise Exception("INVALID OCEL DOES NOT MATCH SCHEMA")
-    print("All logs validated successfully...")
-
-
-
+        print("   OCEL validated successfully...")
+        
+        ocel_model.addOCEL(name=table, ocelFileName = table + ".json", ocel=ocel)
+#        ocels[table] = ocel
 
 
     print("Generating object relationships...")
@@ -154,7 +193,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
 
     graph = {}
     for table in all_tables.names.keys():
-        connected_nodes = [] 
+        connected_nodes = []
         for dictionary in foreignKeys.find_keys_by_source_name(table):
             connected_nodes.append(dictionary["target_table"])
             for dictionary in foreignKeys.find_keys_by_target_name(table):
@@ -232,8 +271,10 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
                     total_relation.add((tup[1], tup[2]))
                     total_relation.add((tup[2], tup[1]))
 
-    return OCEL_Model(ocels, total_relation)
-
+    ocel_model.setRelation(total_relation)
+                    
+    return ocel_model
+    
 
 
 
@@ -261,4 +302,4 @@ def saveToPickle(url, api, data_pool, data_model):
     with open('fileBig1.pkl', 'wb') as file:
         pickle.dump(ocel_model, file)
 
-#saveToPickle(url, api, data_pool, data_model)
+# saveToPickle(url, api, data_pool, data_model)

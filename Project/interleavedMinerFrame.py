@@ -48,13 +48,13 @@ class InterleavedMinerFrame(OperatorFrame):
         
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
-        log1 = self.ocel_model.ocels[name1]
-        log2 = self.ocel_model.ocels[name2]
+        log1 = self.ocel_model.getOCEL(name1)
+        log2 = self.ocel_model.getOCEL(name2)
 
         name = "INTERLEAVED_MINER (" + name1 + ", " + name2 + ")" 
 #        if name in self.ocel_model.ocels:
 #            return
-        newLog = self.miner(log1, log2, self.ocel_model.obj_relation, interleavedMode=True)
+        newLog = self.miner(log1, log2, self.ocel_model.getRelation(), interleavedMode=True)
 
         return (name, newLog)
 
@@ -64,8 +64,8 @@ class InterleavedMinerFrame(OperatorFrame):
         self.logSelectcomboBox1.clear()
         self.logSelectcomboBox2.clear()
 
-        for i in range(len(self.ocel_model.ocels.keys())):
+        for i in range(len(self.ocel_model.getOcelNames())):
             self.logSelectcomboBox1.addItem("")
             self.logSelectcomboBox2.addItem("")
-            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.ocels.keys())[i])
-            self.logSelectcomboBox2.setItemText(i, list(self.ocel_model.ocels.keys())[i])
+            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.getOcelNames())[i])
+            self.logSelectcomboBox2.setItemText(i, list(self.ocel_model.getOcelNames())[i])
