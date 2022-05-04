@@ -204,14 +204,14 @@ def cli(ocelPath, url, api, dataPool, dataModel, selected_object_types, allowed_
         print("\n\Starting export")
         log_path = ocelPath
         log = ocel.import_log(log_path)
-        object_types = set()
-        for ev_id, ev in log["ocel:events"].items():
-            for obj_id in ev["ocel:omap"]:
-                object_types.add(log["ocel:objects"][obj_id]["ocel:type"])
-        object_types = ",".join(sorted(list(object_types)))
-        if len(selected_object_types) == 0:
-            selected_object_types = object_types
-        default_transitions = get_transitions(log, allowed_object_types=selected_object_types)
+#        object_types = set()
+#        for ev_id, ev in log["ocel:events"].items():
+#            for obj_id in ev["ocel:omap"]:
+#                object_types.add(log["ocel:objects"][obj_id]["ocel:type"])
+#        object_types = ",".join(sorted(list(object_types)))
+#        if len(selected_object_types) == 0:
+#            selected_object_types = object_types
+    #    default_transitions = get_transitions(log, allowed_object_types=selected_object_types)
         if len(allowed_transitions) == 0:
             allowed_transitions = None
         else:
@@ -220,7 +220,7 @@ def cli(ocelPath, url, api, dataPool, dataModel, selected_object_types, allowed_
                 allowed_transitions[i] = allowed_transitions[i].split(",")
                 allowed_transitions[i] = tuple(sorted(allowed_transitions[i]))
 
-        selected_object_types = selected_object_types.split(",")
+#        selected_object_types = selected_object_types.split(",")
         oct = read_ocel(log, allowed_object_types=selected_object_types, allowed_transitions=allowed_transitions)
         output_celonis(oct, url, api, dataPool, dataModel)
         print("----- FINISHED WITH SUCCESS -----")
@@ -297,11 +297,12 @@ if __name__ == "__main__":
     ocelPath = "exportedOCELs/ocel_test.json"
     url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
     api = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
-    dataPool = "TestPool"
-    dataModel = "NewExportTest"
     
-    ocelPath = "exportedOCELs/ocel_customers_EVENTS.json"
-    dataPool = "testExport"
-    dataModel = "testtttt"
+    dataPool = "EmptyPool"
+    dataModel = "ModelName"
 
-    cli(ocelPath, url, api, dataPool, dataModel, "", "")
+#    cli(ocelPath, url, api, dataPool, dataModel, "", "")
+
+#    cli("exportedOCELs/ocel_products_EVENTS.json", "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud", "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4", "EmptyPool", "MMMsaMM", ['CASE_products'], "")
+
+    

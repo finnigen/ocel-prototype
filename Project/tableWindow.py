@@ -1,5 +1,15 @@
 from asyncio import events
+from operator import is_
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+
+#def is_float(element):
+#    try:
+#        float(element)
+#        return True
+#    except ValueError:
+#        return False
 
 
 
@@ -110,11 +120,10 @@ class TableWindow(QtWidgets.QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Data Viewer: " + self.name))
+        MainWindow.setWindowTitle("Data Viewer: " + self.name)
         
         # objects table
-        self.objectsLabel.setText(_translate("MainWindow", "Objects"))
+        self.objectsLabel.setText("Objects")
 
         rowKeys = list(self.ocel["ocel:objects"].keys())
         obj_attributes = set()
@@ -126,7 +135,7 @@ class TableWindow(QtWidgets.QMainWindow):
         # set column headers
         for i in range(len(columns)):
             item = self.objectTable.horizontalHeaderItem(i)
-            item.setText(_translate("MainWindow", columns[i]))
+            item.setText(columns[i])
 
         for row in range(len(rowKeys)):
             for column in range(len(columns)):
@@ -140,12 +149,12 @@ class TableWindow(QtWidgets.QMainWindow):
                     attributes = self.ocel["ocel:objects"][rowKeys[row]]["ocel:ovmap"]
                     if columns[column] in attributes.keys():
                         data = attributes[columns[column]]
-                item.setText(_translate("MainWindow", str(data)))
+                item.setText(str(data))
 
         self.objectTable.setSortingEnabled(True)
 
         # events table
-        self.eventsLabel.setText(_translate("MainWindow", "Events"))
+        self.eventsLabel.setText("Events")
         
         columns = ["id", "omap", "activity", "timestamp"]
         for i in self.ocel['ocel:global-log']['ocel:attribute-names']:
@@ -154,13 +163,13 @@ class TableWindow(QtWidgets.QMainWindow):
         # set column headers
         for i in range(len(columns)):
             item = self.eventTable.horizontalHeaderItem(i)
-            item.setText(_translate("MainWindow", columns[i]))
+            item.setText(columns[i])
         
         # set row header
         rowKeys = list(self.ocel['ocel:events'].keys())
     #    for i in range(len(rowKeys)):
     #        item = self.eventTable.verticalHeaderItem(i)
-    #        item.setText(_translate("MainWindow", rowKeys[i]))
+    #        item.setText(rowKeys[i])
 
         # set data
         for row in range(len(rowKeys)):
@@ -175,12 +184,12 @@ class TableWindow(QtWidgets.QMainWindow):
                         data = attributes[columns[column]]
                 else:
                     data = self.ocel["ocel:events"][rowKeys[row]]["ocel:" + columns[column]]
-                item.setText(_translate("MainWindow", str(data)))
+                data = str(data)
+                item.setText(str(data))
 
         self.eventTable.setSortingEnabled(True)
         # sort on timestamp
-        self.eventTable.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)
-
+        self.eventTable.sortByColumn(3, QtCore.Qt.SortOrder.AscendingOrder)
 
 if __name__ == "__main__":
     import sys

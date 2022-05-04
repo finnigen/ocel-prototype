@@ -45,7 +45,7 @@ class FilterFrame(OperatorFrame):
         self.operatorSelectorLabel_2.setText("Select based on what you want to filter:")
         self.parameterLabel.setText("Specify filter criteria")
 
-        # scroll area for activity matching
+        # scroll area for parameter selection
         self.scrollArea = QtWidgets.QScrollArea(self.operatorFrame)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QtWidgets.QWidget()

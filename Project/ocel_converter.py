@@ -90,6 +90,9 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         table_name = conf.activity_table.name
         tables[table_name] = conf
         all_data[table_name] = tables[table_name].activity_table.get_data_frame()
+        all_data[table_name].sort_values(tables[table_name].sorting_column, inplace=True)
+        all_data[table_name].reset_index(inplace=True)
+        del all_data[table_name]["index"]
         all_data[tables[table_name].case_table.name] = tables[table_name].case_table.get_data_frame()
 
 #    ocels = {}
