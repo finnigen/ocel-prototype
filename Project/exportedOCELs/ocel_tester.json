@@ -18,11 +18,11 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "ATT_products_cost",
-      "ATT_products_producer",
       "EVID_products",
-      "ATT_EVENT_price",
+      "ATT_products_producer",
+      "ATT_products_cost",
       "ATT_EVENT_weight",
+      "ATT_EVENT_price",
       "EVID_general"
     ],
     "ocel:object-types": [
@@ -2311,8 +2311,8 @@
       "ocel:activity": "place order",
       "ocel:timestamp": "2019-05-22 12:26:23",
       "ocel:omap": [
-        "iPhone 11",
-        "660018"
+        "660018",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 893.99,
@@ -2325,8 +2325,8 @@
       "ocel:activity": "place order",
       "ocel:timestamp": "2019-05-22 12:26:23",
       "ocel:omap": [
-        "Fire Stick 4K",
-        "660018"
+        "660018",
+        "Fire Stick 4K"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 893.99,
@@ -2664,8 +2664,8 @@
       "ocel:activity": "confirm order",
       "ocel:timestamp": "2019-05-22 15:42:38",
       "ocel:omap": [
-        "Fire Stick 4K",
-        "660018"
+        "660018",
+        "Fire Stick 4K"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 893.99,
@@ -2678,8 +2678,8 @@
       "ocel:activity": "confirm order",
       "ocel:timestamp": "2019-05-22 15:42:38",
       "ocel:omap": [
-        "iPhone 11",
-        "660018"
+        "660018",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 893.99,
@@ -3291,8 +3291,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-23 11:00:25",
       "ocel:omap": [
-        "660001",
-        "Kindle"
+        "Kindle",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -3319,8 +3319,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-23 11:00:25",
       "ocel:omap": [
-        "660001",
-        "iPhone X"
+        "iPhone X",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -3347,8 +3347,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-23 11:00:25",
       "ocel:omap": [
-        "iPad Pro",
-        "660001"
+        "660001",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -3374,8 +3374,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-23 11:00:25",
       "ocel:omap": [
-        "660001",
-        "MacBook Air"
+        "MacBook Air",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -3402,8 +3402,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-23 11:00:25",
       "ocel:omap": [
-        "660001",
-        "iPhone 8"
+        "iPhone 8",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -3953,8 +3953,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-23 14:22:59",
       "ocel:omap": [
-        "660001",
-        "iPhone 8"
+        "iPhone 8",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -3981,8 +3981,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-23 14:22:59",
       "ocel:omap": [
-        "660001",
-        "iPhone X"
+        "iPhone X",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -3995,8 +3995,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-23 14:22:59",
       "ocel:omap": [
-        "660001",
-        "MacBook Air"
+        "MacBook Air",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4037,8 +4037,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-23 14:22:59",
       "ocel:omap": [
-        "660001",
-        "Kindle"
+        "Kindle",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4051,8 +4051,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-23 14:22:59",
       "ocel:omap": [
-        "iPad Pro",
-        "660001"
+        "660001",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4145,8 +4145,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-23 14:48:41",
       "ocel:omap": [
-        "660001",
-        "iPhone 8"
+        "iPhone 8",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4201,8 +4201,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-23 14:48:41",
       "ocel:omap": [
-        "660001",
-        "Kindle"
+        "Kindle",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4229,8 +4229,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-23 14:48:41",
       "ocel:omap": [
-        "660001",
-        "iPhone X"
+        "iPhone X",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4243,8 +4243,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-23 14:48:41",
       "ocel:omap": [
-        "iPad Pro",
-        "660001"
+        "660001",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4257,8 +4257,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-23 14:48:41",
       "ocel:omap": [
-        "660001",
-        "MacBook Air"
+        "MacBook Air",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4558,8 +4558,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-23 17:26:26",
       "ocel:omap": [
-        "Echo Studio",
-        "660002"
+        "660002",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3688.97,
@@ -4599,8 +4599,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-23 17:26:26",
       "ocel:omap": [
-        "iPad Pro",
-        "660002"
+        "660002",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3688.97,
@@ -4669,8 +4669,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-23 17:43:12",
       "ocel:omap": [
-        "Echo Studio",
-        "660002"
+        "660002",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3688.97,
@@ -4683,8 +4683,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-23 17:43:12",
       "ocel:omap": [
-        "iPad Pro",
-        "660002"
+        "660002",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3688.97,
@@ -4763,8 +4763,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-23 19:14:00",
       "ocel:omap": [
-        "660001",
-        "Kindle"
+        "Kindle",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4777,8 +4777,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-23 19:14:00",
       "ocel:omap": [
-        "660001",
-        "iPhone 8"
+        "iPhone 8",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4819,8 +4819,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-23 19:14:00",
       "ocel:omap": [
-        "660001",
-        "iPhone X"
+        "iPhone X",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4833,8 +4833,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-23 19:14:00",
       "ocel:omap": [
-        "iPad Pro",
-        "660001"
+        "660001",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -4875,8 +4875,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-23 19:14:00",
       "ocel:omap": [
-        "660001",
-        "MacBook Air"
+        "MacBook Air",
+        "660001"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 8169.95,
@@ -5346,8 +5346,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 10:49:32",
       "ocel:omap": [
-        "660003",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -5373,8 +5373,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 10:49:32",
       "ocel:omap": [
-        "660003",
-        "Echo Show 5"
+        "Echo Show 5",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -5387,8 +5387,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 10:49:32",
       "ocel:omap": [
-        "660003",
-        "iPad"
+        "iPad",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -5415,8 +5415,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 10:49:32",
       "ocel:omap": [
-        "660003",
-        "iPhone 11"
+        "iPhone 11",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -5443,8 +5443,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 10:49:32",
       "ocel:omap": [
-        "660003",
-        "Kindle Paperwhite"
+        "Kindle Paperwhite",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -5457,8 +5457,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 10:49:32",
       "ocel:omap": [
-        "660003",
-        "Echo Studio"
+        "Echo Studio",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -5965,8 +5965,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 15:49:44",
       "ocel:omap": [
-        "iPhone 11 Pro",
-        "660004"
+        "660004",
+        "iPhone 11 Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -5979,8 +5979,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 15:49:44",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660004"
+        "660004",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -6007,8 +6007,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 15:49:44",
       "ocel:omap": [
-        "Echo Plus",
-        "660004"
+        "660004",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -6035,8 +6035,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 15:49:44",
       "ocel:omap": [
-        "Fire Stick",
-        "660004"
+        "660004",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -6063,8 +6063,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-24 15:49:44",
       "ocel:omap": [
-        "iPad mini",
-        "660004"
+        "660004",
+        "iPad mini"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -6104,8 +6104,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-24 15:54:44",
       "ocel:omap": [
-        "Echo Studio",
-        "660002"
+        "660002",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3688.97,
@@ -6146,8 +6146,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-24 15:54:44",
       "ocel:omap": [
-        "iPad Pro",
-        "660002"
+        "660002",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3688.97,
@@ -6746,8 +6746,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-25 01:00:00",
       "ocel:omap": [
-        "660005",
-        "iPhone 8"
+        "iPhone 8",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -6760,8 +6760,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-25 01:00:00",
       "ocel:omap": [
-        "660005",
-        "iPhone X"
+        "iPhone X",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -6788,8 +6788,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-25 01:00:00",
       "ocel:omap": [
-        "660005",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -6802,8 +6802,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-25 01:00:00",
       "ocel:omap": [
-        "660005",
-        "iPad"
+        "iPad",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -7143,8 +7143,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 09:50:01",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660004"
+        "660004",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -7171,8 +7171,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 09:50:01",
       "ocel:omap": [
-        "Echo Plus",
-        "660004"
+        "660004",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -7185,8 +7185,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 09:50:01",
       "ocel:omap": [
-        "iPad mini",
-        "660004"
+        "660004",
+        "iPad mini"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -7213,8 +7213,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 09:50:01",
       "ocel:omap": [
-        "iPhone 11 Pro",
-        "660004"
+        "660004",
+        "iPhone 11 Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -7241,8 +7241,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 09:50:01",
       "ocel:omap": [
-        "Fire Stick",
-        "660004"
+        "660004",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -7346,8 +7346,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 10:40:13",
       "ocel:omap": [
-        "660003",
-        "iPhone 11"
+        "iPhone 11",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -7360,8 +7360,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 10:40:13",
       "ocel:omap": [
-        "660003",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -7388,8 +7388,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 10:40:13",
       "ocel:omap": [
-        "660003",
-        "Echo Show 5"
+        "Echo Show 5",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -7402,8 +7402,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 10:40:13",
       "ocel:omap": [
-        "660003",
-        "Kindle Paperwhite"
+        "Kindle Paperwhite",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -7416,8 +7416,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 10:40:13",
       "ocel:omap": [
-        "660003",
-        "Echo Studio"
+        "Echo Studio",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -7444,8 +7444,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 10:40:13",
       "ocel:omap": [
-        "660003",
-        "iPad"
+        "iPad",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -7562,8 +7562,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-27 11:49:13",
       "ocel:omap": [
-        "Echo Show 5",
-        "660006"
+        "660006",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3784.96,
@@ -7659,8 +7659,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-27 11:49:13",
       "ocel:omap": [
-        "660006",
-        "Kindle"
+        "Kindle",
+        "660006"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3784.96,
@@ -7855,8 +7855,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-27 12:39:25",
       "ocel:omap": [
-        "iPad mini",
-        "660004"
+        "660004",
+        "iPad mini"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -7897,8 +7897,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-27 12:39:25",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660004"
+        "660004",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -7911,8 +7911,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-27 12:39:25",
       "ocel:omap": [
-        "iPhone 11 Pro",
-        "660004"
+        "660004",
+        "iPhone 11 Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -7939,8 +7939,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-27 12:39:25",
       "ocel:omap": [
-        "Fire Stick",
-        "660004"
+        "660004",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -7953,8 +7953,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-27 12:39:25",
       "ocel:omap": [
-        "Echo Plus",
-        "660004"
+        "660004",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4659.96,
@@ -8216,8 +8216,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-27 14:56:21",
       "ocel:omap": [
-        "660003",
-        "Echo Show 5"
+        "Echo Show 5",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -8230,8 +8230,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-27 14:56:21",
       "ocel:omap": [
-        "660003",
-        "iPad"
+        "iPad",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -8244,8 +8244,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-27 14:56:21",
       "ocel:omap": [
-        "660003",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -8272,8 +8272,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-27 14:56:21",
       "ocel:omap": [
-        "660003",
-        "Kindle Paperwhite"
+        "Kindle Paperwhite",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -8286,8 +8286,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-27 14:56:21",
       "ocel:omap": [
-        "660003",
-        "Echo Studio"
+        "Echo Studio",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -8300,8 +8300,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-27 14:56:21",
       "ocel:omap": [
-        "660003",
-        "iPhone 11"
+        "iPhone 11",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -8355,8 +8355,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-27 15:11:01",
       "ocel:omap": [
-        "iPad Air",
-        "660007"
+        "660007",
+        "iPad Air"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3454.99,
@@ -8515,8 +8515,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-27 16:26:44",
       "ocel:omap": [
-        "Fire Stick",
-        "660008"
+        "660008",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4143.94,
@@ -8584,8 +8584,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-27 16:26:44",
       "ocel:omap": [
-        "Echo Studio",
-        "660008"
+        "660008",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4143.94,
@@ -8888,8 +8888,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 18:57:39",
       "ocel:omap": [
-        "Echo Studio",
-        "660008"
+        "660008",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4143.94,
@@ -8916,8 +8916,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 18:57:39",
       "ocel:omap": [
-        "Fire Stick",
-        "660008"
+        "660008",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4143.94,
@@ -9037,8 +9037,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 20:29:32",
       "ocel:omap": [
-        "660005",
-        "iPhone X"
+        "iPhone X",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -9051,8 +9051,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 20:29:32",
       "ocel:omap": [
-        "660005",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -9065,8 +9065,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 20:29:32",
       "ocel:omap": [
-        "660005",
-        "iPhone 8"
+        "iPhone 8",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -9079,8 +9079,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-27 20:29:32",
       "ocel:omap": [
-        "660005",
-        "iPad"
+        "iPad",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -9355,8 +9355,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 09:49:33",
       "ocel:omap": [
-        "iPad Pro",
-        "660009"
+        "660009",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6770.0,
@@ -9567,8 +9567,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-28 11:03:28",
       "ocel:omap": [
-        "iPad Air",
-        "660007"
+        "660007",
+        "iPad Air"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3454.99,
@@ -9665,8 +9665,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 11:12:33",
       "ocel:omap": [
-        "660010",
-        "iPad mini"
+        "iPad mini",
+        "660010"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4522.97,
@@ -9720,8 +9720,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 11:12:33",
       "ocel:omap": [
-        "660010",
-        "iPad"
+        "iPad",
+        "660010"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4522.97,
@@ -9996,8 +9996,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-28 12:29:53",
       "ocel:omap": [
-        "Echo Show 5",
-        "660006"
+        "660006",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3784.96,
@@ -10024,8 +10024,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-28 12:29:53",
       "ocel:omap": [
-        "660006",
-        "Kindle"
+        "Kindle",
+        "660006"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3784.96,
@@ -10080,8 +10080,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 12:42:06",
       "ocel:omap": [
-        "660003",
-        "Kindle Paperwhite"
+        "Kindle Paperwhite",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -10108,8 +10108,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 12:42:06",
       "ocel:omap": [
-        "660003",
-        "iPad"
+        "iPad",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -10122,8 +10122,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 12:42:06",
       "ocel:omap": [
-        "660003",
-        "Echo Show 5"
+        "Echo Show 5",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -10136,8 +10136,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 12:42:06",
       "ocel:omap": [
-        "660003",
-        "Echo Studio"
+        "Echo Studio",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -10150,8 +10150,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 12:42:06",
       "ocel:omap": [
-        "660003",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -10164,8 +10164,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 12:42:06",
       "ocel:omap": [
-        "660003",
-        "iPhone 11"
+        "iPhone 11",
+        "660003"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3148.95,
@@ -10297,8 +10297,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 14:22:11",
       "ocel:omap": [
-        "660011",
-        "iPhone X"
+        "iPhone X",
+        "660011"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 2451.98,
@@ -10604,8 +10604,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 15:50:34",
       "ocel:omap": [
-        "Echo Show 5",
-        "660006"
+        "660006",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3784.96,
@@ -10618,8 +10618,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 15:50:34",
       "ocel:omap": [
-        "660006",
-        "Kindle"
+        "Kindle",
+        "660006"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3784.96,
@@ -10688,8 +10688,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-28 15:57:57",
       "ocel:omap": [
-        "660010",
-        "iPad"
+        "iPad",
+        "660010"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4522.97,
@@ -10702,8 +10702,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-28 15:57:57",
       "ocel:omap": [
-        "660010",
-        "iPad mini"
+        "iPad mini",
+        "660010"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4522.97,
@@ -10827,8 +10827,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-28 16:01:33",
       "ocel:omap": [
-        "660011",
-        "iPhone X"
+        "iPhone X",
+        "660011"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 2451.98,
@@ -10895,8 +10895,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 16:07:01",
       "ocel:omap": [
-        "660012",
-        "MacBook Air"
+        "MacBook Air",
+        "660012"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4649.97,
@@ -10951,8 +10951,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-28 16:20:29",
       "ocel:omap": [
-        "iPad Pro",
-        "660009"
+        "660009",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6770.0,
@@ -11214,8 +11214,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "iPad Air",
-        "660013"
+        "660013",
+        "iPad Air"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11228,8 +11228,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660013"
+        "660013",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11242,8 +11242,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "iPhone 11",
-        "660013"
+        "660013",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11256,8 +11256,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "iPad Pro",
-        "660013"
+        "660013",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11270,8 +11270,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "Fire Stick 4K",
-        "660013"
+        "660013",
+        "Fire Stick 4K"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11284,8 +11284,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "iPad",
-        "660013"
+        "660013",
+        "iPad"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11312,8 +11312,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "Fire Stick",
-        "660013"
+        "660013",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11339,8 +11339,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "Echo Show 8",
-        "660013"
+        "660013",
+        "Echo Show 8"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11353,8 +11353,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "Echo Show 5",
-        "660013"
+        "660013",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11367,8 +11367,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-28 17:21:54",
       "ocel:omap": [
-        "Echo Plus",
-        "660013"
+        "660013",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -11485,8 +11485,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 17:52:39",
       "ocel:omap": [
-        "Echo Studio",
-        "660008"
+        "660008",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4143.94,
@@ -11527,8 +11527,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 17:52:39",
       "ocel:omap": [
-        "Fire Stick",
-        "660008"
+        "660008",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4143.94,
@@ -11727,8 +11727,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-28 20:08:20",
       "ocel:omap": [
-        "iPad Air",
-        "660007"
+        "660007",
+        "iPad Air"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3454.99,
@@ -11874,8 +11874,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 09:08:16",
       "ocel:omap": [
-        "660010",
-        "iPad mini"
+        "iPad mini",
+        "660010"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4522.97,
@@ -11916,8 +11916,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 09:08:16",
       "ocel:omap": [
-        "660010",
-        "iPad"
+        "iPad",
+        "660010"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4522.97,
@@ -12051,8 +12051,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 09:50:36",
       "ocel:omap": [
-        "660005",
-        "iPhone X"
+        "iPhone X",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -12079,8 +12079,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 09:50:36",
       "ocel:omap": [
-        "660005",
-        "iPhone 8"
+        "iPhone 8",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -12093,8 +12093,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 09:50:36",
       "ocel:omap": [
-        "660005",
-        "iPad"
+        "iPad",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -12107,8 +12107,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 09:50:36",
       "ocel:omap": [
-        "660005",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660005"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1982.97,
@@ -12204,8 +12204,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 09:58:19",
       "ocel:omap": [
-        "660011",
-        "iPhone X"
+        "iPhone X",
+        "660011"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 2451.98,
@@ -12621,8 +12621,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 11:18:17",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660014"
+        "660014",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3828.98,
@@ -12635,8 +12635,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 11:18:17",
       "ocel:omap": [
-        "Echo Show 5",
-        "660014"
+        "660014",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3828.98,
@@ -12690,8 +12690,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 11:18:17",
       "ocel:omap": [
-        "iPhone 11 Pro",
-        "660014"
+        "660014",
+        "iPhone 11 Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3828.98,
@@ -12879,8 +12879,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 12:01:39",
       "ocel:omap": [
-        "iPad Pro",
-        "660009"
+        "660009",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6770.0,
@@ -13023,8 +13023,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 13:59:21",
       "ocel:omap": [
-        "660015",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660015"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 229.98,
@@ -13168,8 +13168,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "Echo Show 5",
-        "660013"
+        "660013",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13182,8 +13182,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "Echo Show 8",
-        "660013"
+        "660013",
+        "Echo Show 8"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13196,8 +13196,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "iPhone 11",
-        "660013"
+        "660013",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13224,8 +13224,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "Fire Stick",
-        "660013"
+        "660013",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13238,8 +13238,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660013"
+        "660013",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13252,8 +13252,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "Fire Stick 4K",
-        "660013"
+        "660013",
+        "Fire Stick 4K"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13266,8 +13266,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "iPad",
-        "660013"
+        "660013",
+        "iPad"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13280,8 +13280,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "Echo Plus",
-        "660013"
+        "660013",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13294,8 +13294,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "iPad Pro",
-        "660013"
+        "660013",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13308,8 +13308,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 14:30:00",
       "ocel:omap": [
-        "iPad Air",
-        "660013"
+        "660013",
+        "iPad Air"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13465,8 +13465,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 15:38:06",
       "ocel:omap": [
-        "iPhone 8",
-        "660016"
+        "660016",
+        "iPhone 8"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1387.98,
@@ -13492,8 +13492,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 15:38:06",
       "ocel:omap": [
-        "iPhone 11",
-        "660016"
+        "660016",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1387.98,
@@ -13650,8 +13650,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "Fire Stick",
-        "660013"
+        "660013",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13678,8 +13678,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "Echo Show 5",
-        "660013"
+        "660013",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13692,8 +13692,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "iPad",
-        "660013"
+        "660013",
+        "iPad"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13706,8 +13706,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "Echo Plus",
-        "660013"
+        "660013",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13720,8 +13720,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "Echo Show 8",
-        "660013"
+        "660013",
+        "Echo Show 8"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13734,8 +13734,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "iPad Air",
-        "660013"
+        "660013",
+        "iPad Air"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13748,8 +13748,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "iPhone 11",
-        "660013"
+        "660013",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13762,8 +13762,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660013"
+        "660013",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13776,8 +13776,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "iPad Pro",
-        "660013"
+        "660013",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13790,8 +13790,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 16:14:22",
       "ocel:omap": [
-        "Fire Stick 4K",
-        "660013"
+        "660013",
+        "Fire Stick 4K"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4691.95,
@@ -13896,8 +13896,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 16:14:37",
       "ocel:omap": [
-        "660017",
-        "Kindle"
+        "Kindle",
+        "660017"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1174.98,
@@ -13952,8 +13952,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 16:16:17",
       "ocel:omap": [
-        "660012",
-        "MacBook Air"
+        "MacBook Air",
+        "660012"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4649.97,
@@ -14137,8 +14137,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 17:38:50",
       "ocel:omap": [
-        "Fire Stick 4K",
-        "660018"
+        "660018",
+        "Fire Stick 4K"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 888.99,
@@ -14151,8 +14151,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 17:38:50",
       "ocel:omap": [
-        "iPhone 11",
-        "660018"
+        "660018",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 888.99,
@@ -14282,8 +14282,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 18:01:12",
       "ocel:omap": [
-        "iPad Pro",
-        "660019"
+        "660019",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -14296,8 +14296,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 18:01:12",
       "ocel:omap": [
-        "iPad mini",
-        "660019"
+        "660019",
+        "iPad mini"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -14324,8 +14324,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 18:01:12",
       "ocel:omap": [
-        "Fire Stick",
-        "660019"
+        "660019",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -14338,8 +14338,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-29 18:01:12",
       "ocel:omap": [
-        "Echo Plus",
-        "660019"
+        "660019",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -14406,8 +14406,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 19:08:32",
       "ocel:omap": [
-        "660015",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660015"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 229.98,
@@ -14461,8 +14461,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 19:29:05",
       "ocel:omap": [
-        "Echo Show 5",
-        "660014"
+        "660014",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3828.98,
@@ -14503,8 +14503,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 19:29:05",
       "ocel:omap": [
-        "iPhone 11 Pro",
-        "660014"
+        "660014",
+        "iPhone 11 Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3828.98,
@@ -14531,8 +14531,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 19:29:05",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660014"
+        "660014",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3828.98,
@@ -14559,8 +14559,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 19:32:41",
       "ocel:omap": [
-        "Echo Plus",
-        "660019"
+        "660019",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -14573,8 +14573,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 19:32:41",
       "ocel:omap": [
-        "iPad Pro",
-        "660019"
+        "660019",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -14587,8 +14587,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 19:32:41",
       "ocel:omap": [
-        "iPad mini",
-        "660019"
+        "660019",
+        "iPad mini"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -14615,8 +14615,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-29 19:32:41",
       "ocel:omap": [
-        "Fire Stick",
-        "660019"
+        "660019",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -14710,8 +14710,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-29 20:01:33",
       "ocel:omap": [
-        "660012",
-        "MacBook Air"
+        "MacBook Air",
+        "660012"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4649.97,
@@ -14881,8 +14881,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 01:00:00",
       "ocel:omap": [
-        "660020",
-        "iPhone 11"
+        "iPhone 11",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -14951,8 +14951,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 01:00:00",
       "ocel:omap": [
-        "660020",
-        "iPhone X"
+        "iPhone X",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -15332,8 +15332,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-30 10:10:22",
       "ocel:omap": [
-        "iPhone 11",
-        "660016"
+        "660016",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1387.98,
@@ -15346,8 +15346,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-30 10:10:22",
       "ocel:omap": [
-        "iPhone 8",
-        "660016"
+        "660016",
+        "iPhone 8"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1387.98,
@@ -15480,8 +15480,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-30 10:19:45",
       "ocel:omap": [
-        "660017",
-        "Kindle"
+        "Kindle",
+        "660017"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1174.98,
@@ -15550,8 +15550,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 10:34:44",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660014"
+        "660014",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3828.98,
@@ -15564,8 +15564,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 10:34:44",
       "ocel:omap": [
-        "Echo Show 5",
-        "660014"
+        "660014",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3828.98,
@@ -15578,8 +15578,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 10:34:44",
       "ocel:omap": [
-        "iPhone 11 Pro",
-        "660014"
+        "660014",
+        "iPhone 11 Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3828.98,
@@ -15775,8 +15775,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 12:02:46",
       "ocel:omap": [
-        "iPhone 8",
-        "660016"
+        "660016",
+        "iPhone 8"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1387.98,
@@ -15789,8 +15789,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 12:02:46",
       "ocel:omap": [
-        "iPhone 11",
-        "660016"
+        "660016",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1387.98,
@@ -16025,8 +16025,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-30 13:16:22",
       "ocel:omap": [
-        "Fire Stick",
-        "660019"
+        "660019",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -16039,8 +16039,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-30 13:16:22",
       "ocel:omap": [
-        "iPad Pro",
-        "660019"
+        "660019",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -16053,8 +16053,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-30 13:16:22",
       "ocel:omap": [
-        "Echo Plus",
-        "660019"
+        "660019",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -16081,8 +16081,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-30 13:16:22",
       "ocel:omap": [
-        "iPad mini",
-        "660019"
+        "660019",
+        "iPad mini"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -16109,8 +16109,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-30 13:17:32",
       "ocel:omap": [
-        "Fire Stick 4K",
-        "660018"
+        "660018",
+        "Fire Stick 4K"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 888.99,
@@ -16123,8 +16123,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-30 13:17:32",
       "ocel:omap": [
-        "iPhone 11",
-        "660018"
+        "660018",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 888.99,
@@ -16293,8 +16293,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-30 14:38:24",
       "ocel:omap": [
-        "660020",
-        "iPhone X"
+        "iPhone X",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -16363,8 +16363,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-30 14:38:24",
       "ocel:omap": [
-        "660020",
-        "iPhone 11"
+        "iPhone 11",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -16445,8 +16445,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 14:50:42",
       "ocel:omap": [
-        "660015",
-        "Echo Show 8"
+        "Echo Show 8",
+        "660015"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 229.98,
@@ -16576,8 +16576,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 15:42:57",
       "ocel:omap": [
-        "iPhone 11",
-        "660018"
+        "660018",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 888.99,
@@ -16590,8 +16590,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 15:42:57",
       "ocel:omap": [
-        "Fire Stick 4K",
-        "660018"
+        "660018",
+        "Fire Stick 4K"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 888.99,
@@ -16682,8 +16682,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 15:56:05",
       "ocel:omap": [
-        "660021",
-        "iPhone 8"
+        "iPhone 8",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -16696,8 +16696,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 15:56:05",
       "ocel:omap": [
-        "660021",
-        "MacBook Air"
+        "MacBook Air",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -16710,8 +16710,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 15:56:05",
       "ocel:omap": [
-        "660021",
-        "Kindle"
+        "Kindle",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -16724,8 +16724,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 15:56:05",
       "ocel:omap": [
-        "660021",
-        "iPad"
+        "iPad",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -16832,8 +16832,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 16:23:46",
       "ocel:omap": [
-        "iPad Pro",
-        "660019"
+        "660019",
+        "iPad Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -16860,8 +16860,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 16:23:46",
       "ocel:omap": [
-        "Fire Stick",
-        "660019"
+        "660019",
+        "Fire Stick"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -16874,8 +16874,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 16:23:46",
       "ocel:omap": [
-        "iPad mini",
-        "660019"
+        "660019",
+        "iPad mini"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -16902,8 +16902,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-30 16:23:46",
       "ocel:omap": [
-        "Echo Plus",
-        "660019"
+        "660019",
+        "Echo Plus"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3315.97,
@@ -16956,8 +16956,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-30 16:34:12",
       "ocel:omap": [
-        "660020",
-        "iPhone X"
+        "iPhone X",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -16998,8 +16998,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-30 16:34:12",
       "ocel:omap": [
-        "660020",
-        "iPhone 11"
+        "iPhone 11",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -17237,8 +17237,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 17:36:37",
       "ocel:omap": [
-        "iPad Air",
-        "660022"
+        "660022",
+        "iPad Air"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3153.98,
@@ -17251,8 +17251,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 17:36:37",
       "ocel:omap": [
-        "Echo Show 5",
-        "660022"
+        "660022",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3153.98,
@@ -17306,8 +17306,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 17:36:37",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660022"
+        "660022",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3153.98,
@@ -17452,8 +17452,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 20:10:16",
       "ocel:omap": [
-        "Echo Studio",
-        "660023"
+        "660023",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 569.95,
@@ -17479,8 +17479,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-30 20:10:16",
       "ocel:omap": [
-        "Echo Show 8",
-        "660023"
+        "660023",
+        "Echo Show 8"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 569.95,
@@ -17753,8 +17753,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 09:59:47",
       "ocel:omap": [
-        "Echo Studio",
-        "660024"
+        "660024",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 848.98,
@@ -17872,8 +17872,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-31 10:30:10",
       "ocel:omap": [
-        "660020",
-        "iPhone X"
+        "iPhone X",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -17942,8 +17942,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-31 10:30:10",
       "ocel:omap": [
-        "660020",
-        "iPhone 11"
+        "iPhone 11",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -18036,8 +18036,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 11:00:07",
       "ocel:omap": [
-        "660017",
-        "Kindle"
+        "Kindle",
+        "660017"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 1174.98,
@@ -18092,8 +18092,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 11:02:37",
       "ocel:omap": [
-        "660025",
-        "Kindle"
+        "Kindle",
+        "660025"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 209.97,
@@ -18106,8 +18106,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 11:02:37",
       "ocel:omap": [
-        "660025",
-        "Fire Stick"
+        "Fire Stick",
+        "660025"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 209.97,
@@ -18120,8 +18120,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 11:02:37",
       "ocel:omap": [
-        "Echo Show 5",
-        "660025"
+        "660025",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 209.97,
@@ -18200,8 +18200,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 12:07:26",
       "ocel:omap": [
-        "660021",
-        "iPhone 8"
+        "iPhone 8",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -18214,8 +18214,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 12:07:26",
       "ocel:omap": [
-        "660021",
-        "Kindle"
+        "Kindle",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -18242,8 +18242,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 12:07:26",
       "ocel:omap": [
-        "660021",
-        "iPad"
+        "iPad",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -18256,8 +18256,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 12:07:26",
       "ocel:omap": [
-        "660021",
-        "MacBook Air"
+        "MacBook Air",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -18349,8 +18349,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 12:36:18",
       "ocel:omap": [
-        "660026",
-        "MacBook Air"
+        "MacBook Air",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -18363,8 +18363,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 12:36:18",
       "ocel:omap": [
-        "660026",
-        "iPad mini"
+        "iPad mini",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -18390,8 +18390,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 12:36:18",
       "ocel:omap": [
-        "660026",
-        "Echo Plus"
+        "Echo Plus",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -18404,8 +18404,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 12:36:18",
       "ocel:omap": [
-        "660026",
-        "Echo Show 5"
+        "Echo Show 5",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -18418,8 +18418,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 12:36:18",
       "ocel:omap": [
-        "660026",
-        "Echo"
+        "Echo",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -18432,8 +18432,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 12:36:18",
       "ocel:omap": [
-        "660026",
-        "Kindle"
+        "Kindle",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -18446,8 +18446,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 12:36:18",
       "ocel:omap": [
-        "660026",
-        "iPhone 11 Pro"
+        "iPhone 11 Pro",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -18474,8 +18474,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 12:37:28",
       "ocel:omap": [
-        "Echo Studio",
-        "660023"
+        "660023",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 569.95,
@@ -18488,8 +18488,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 12:37:28",
       "ocel:omap": [
-        "Echo Show 8",
-        "660023"
+        "660023",
+        "Echo Show 8"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 569.95,
@@ -18529,8 +18529,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 12:59:10",
       "ocel:omap": [
-        "660021",
-        "MacBook Air"
+        "MacBook Air",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -18543,8 +18543,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 12:59:10",
       "ocel:omap": [
-        "660021",
-        "Kindle"
+        "Kindle",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -18557,8 +18557,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 12:59:10",
       "ocel:omap": [
-        "660021",
-        "iPhone 8"
+        "iPhone 8",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -18599,8 +18599,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 12:59:10",
       "ocel:omap": [
-        "660021",
-        "iPad"
+        "iPad",
+        "660021"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 6033.97,
@@ -18641,8 +18641,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 13:02:49",
       "ocel:omap": [
-        "Echo Studio",
-        "660024"
+        "660024",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 848.98,
@@ -18681,8 +18681,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 13:32:02",
       "ocel:omap": [
-        "660025",
-        "Fire Stick"
+        "Fire Stick",
+        "660025"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 209.97,
@@ -18695,8 +18695,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 13:32:02",
       "ocel:omap": [
-        "660025",
-        "Kindle"
+        "Kindle",
+        "660025"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 209.97,
@@ -18709,8 +18709,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-05-31 13:32:02",
       "ocel:omap": [
-        "Echo Show 5",
-        "660025"
+        "660025",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 209.97,
@@ -18893,8 +18893,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-31 14:58:13",
       "ocel:omap": [
-        "660020",
-        "iPhone 11"
+        "iPhone 11",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -18907,8 +18907,8 @@
       "ocel:activity": "failed delivery",
       "ocel:timestamp": "2019-05-31 14:58:13",
       "ocel:omap": [
-        "660020",
-        "iPhone X"
+        "iPhone X",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -18991,8 +18991,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 15:13:21",
       "ocel:omap": [
-        "660025",
-        "Fire Stick"
+        "Fire Stick",
+        "660025"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 209.97,
@@ -19005,8 +19005,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 15:13:21",
       "ocel:omap": [
-        "660025",
-        "Kindle"
+        "Kindle",
+        "660025"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 209.97,
@@ -19019,8 +19019,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 15:13:21",
       "ocel:omap": [
-        "Echo Show 5",
-        "660025"
+        "660025",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 209.97,
@@ -19334,8 +19334,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 16:18:19",
       "ocel:omap": [
-        "660020",
-        "iPhone X"
+        "iPhone X",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -19348,8 +19348,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 16:18:19",
       "ocel:omap": [
-        "660020",
-        "iPhone 11"
+        "iPhone 11",
+        "660020"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5193.97,
@@ -19784,8 +19784,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 19:05:24",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660027"
+        "660027",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3473.96,
@@ -19812,8 +19812,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-05-31 19:05:24",
       "ocel:omap": [
-        "Echo Studio",
-        "660027"
+        "660027",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3473.96,
@@ -20023,8 +20023,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-05-31 20:47:49",
       "ocel:omap": [
-        "Echo Studio",
-        "660024"
+        "660024",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 848.98,
@@ -20376,8 +20376,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-06-03 09:14:37",
       "ocel:omap": [
-        "Echo Studio",
-        "660023"
+        "660023",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 569.95,
@@ -20404,8 +20404,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-06-03 09:14:37",
       "ocel:omap": [
-        "Echo Show 8",
-        "660023"
+        "660023",
+        "Echo Show 8"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 569.95,
@@ -20523,8 +20523,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-06-03 10:42:52",
       "ocel:omap": [
-        "Echo Show 5",
-        "660028"
+        "660028",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 699.93,
@@ -20578,8 +20578,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-06-03 10:42:52",
       "ocel:omap": [
-        "660028",
-        "Echo"
+        "Echo",
+        "660028"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 699.93,
@@ -20606,8 +20606,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-06-03 10:42:52",
       "ocel:omap": [
-        "660028",
-        "Kindle"
+        "Kindle",
+        "660028"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 699.93,
@@ -20945,8 +20945,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 11:23:31",
       "ocel:omap": [
-        "Echo Show 5",
-        "660022"
+        "660022",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3153.98,
@@ -20959,8 +20959,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 11:23:31",
       "ocel:omap": [
-        "iPad Air",
-        "660022"
+        "660022",
+        "iPad Air"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3153.98,
@@ -20973,8 +20973,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 11:23:31",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660022"
+        "660022",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3153.98,
@@ -21185,8 +21185,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-06-03 13:21:46",
       "ocel:omap": [
-        "iPhone 11",
-        "660029"
+        "660029",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4553.99,
@@ -21199,8 +21199,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-06-03 13:21:46",
       "ocel:omap": [
-        "iPhone 11 Pro",
-        "660029"
+        "660029",
+        "iPhone 11 Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4553.99,
@@ -21213,8 +21213,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-06-03 13:21:46",
       "ocel:omap": [
-        "iPad mini",
-        "660029"
+        "660029",
+        "iPad mini"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4553.99,
@@ -21227,8 +21227,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-06-03 13:21:46",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660029"
+        "660029",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4553.99,
@@ -21438,8 +21438,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 14:07:59",
       "ocel:omap": [
-        "Echo Studio",
-        "660027"
+        "660027",
+        "Echo Studio"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3473.96,
@@ -21466,8 +21466,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 14:07:59",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660027"
+        "660027",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3473.96,
@@ -21534,8 +21534,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 14:44:40",
       "ocel:omap": [
-        "660026",
-        "Echo"
+        "Echo",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -21548,8 +21548,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 14:44:40",
       "ocel:omap": [
-        "660026",
-        "Echo Show 5"
+        "Echo Show 5",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -21562,8 +21562,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 14:44:40",
       "ocel:omap": [
-        "660026",
-        "MacBook Air"
+        "MacBook Air",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -21576,8 +21576,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 14:44:40",
       "ocel:omap": [
-        "660026",
-        "Kindle"
+        "Kindle",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -21590,8 +21590,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 14:44:40",
       "ocel:omap": [
-        "660026",
-        "iPad mini"
+        "iPad mini",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -21604,8 +21604,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 14:44:40",
       "ocel:omap": [
-        "660026",
-        "iPhone 11 Pro"
+        "iPhone 11 Pro",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -21618,8 +21618,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 14:44:40",
       "ocel:omap": [
-        "660026",
-        "Echo Plus"
+        "Echo Plus",
+        "660026"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 5815.96,
@@ -21775,8 +21775,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 15:15:53",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660029"
+        "660029",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4553.99,
@@ -21803,8 +21803,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 15:15:53",
       "ocel:omap": [
-        "iPad mini",
-        "660029"
+        "660029",
+        "iPad mini"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4553.99,
@@ -21817,8 +21817,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 15:15:53",
       "ocel:omap": [
-        "iPhone 11",
-        "660029"
+        "660029",
+        "iPhone 11"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4553.99,
@@ -21831,8 +21831,8 @@
       "ocel:activity": "send package",
       "ocel:timestamp": "2019-06-03 15:15:53",
       "ocel:omap": [
-        "iPhone 11 Pro",
-        "660029"
+        "660029",
+        "iPhone 11 Pro"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 4553.99,
@@ -22079,8 +22079,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-06-03 16:22:21",
       "ocel:omap": [
-        "660030",
-        "Kindle"
+        "Kindle",
+        "660030"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 398.97,
@@ -22121,8 +22121,8 @@
       "ocel:activity": "create package",
       "ocel:timestamp": "2019-06-03 16:22:21",
       "ocel:omap": [
-        "Echo Show 5",
-        "660030"
+        "660030",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 398.97,
@@ -22200,8 +22200,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-06-03 16:37:21",
       "ocel:omap": [
-        "Echo Show 5",
-        "660022"
+        "660022",
+        "Echo Show 5"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3153.98,
@@ -22214,8 +22214,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-06-03 16:37:21",
       "ocel:omap": [
-        "Kindle Paperwhite",
-        "660022"
+        "660022",
+        "Kindle Paperwhite"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3153.98,
@@ -22242,8 +22242,8 @@
       "ocel:activity": "package delivered",
       "ocel:timestamp": "2019-06-03 16:37:21",
       "ocel:omap": [
-        "iPad Air",
-        "660022"
+        "660022",
+        "iPad Air"
       ],
       "ocel:vmap": {
         "ATT_EVENT_price": 3153.98,
@@ -22421,111 +22421,7 @@
         "ATT_products_producer": "B"
       }
     },
-    "660001": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660005": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660030": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660028": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660013": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660015": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660011": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660021": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
     "660017": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660010": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660009": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660008": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660020": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660027": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660006": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660025": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660016": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660029": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660018": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660023": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660019": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660026": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660007": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660022": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660012": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660014": {
-      "ocel:type": "CASE_packages",
-      "ocel:ovmap": {}
-    },
-    "660004": {
       "ocel:type": "CASE_packages",
       "ocel:ovmap": {}
     },
@@ -22533,11 +22429,115 @@
       "ocel:type": "CASE_packages",
       "ocel:ovmap": {}
     },
-    "660003": {
+    "660028": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660012": {
       "ocel:type": "CASE_packages",
       "ocel:ovmap": {}
     },
     "660024": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660027": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660018": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660021": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660008": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660026": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660014": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660016": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660005": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660022": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660004": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660023": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660003": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660011": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660001": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660010": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660015": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660009": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660013": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660029": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660030": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660025": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660019": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660006": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660020": {
+      "ocel:type": "CASE_packages",
+      "ocel:ovmap": {}
+    },
+    "660007": {
       "ocel:type": "CASE_packages",
       "ocel:ovmap": {}
     }

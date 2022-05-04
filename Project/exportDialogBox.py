@@ -143,26 +143,26 @@ class ExportDialog(QDialog):
                     obj1 = label1.text()
                     obj2 = label2.text()
                     if obj1 in objects and obj2 in objects:
-                        transitions.append((obj1, obj2))
-        return (self.dataPool.currentText(), self.dataModel.text(), objects, "") # self.transitions.text())
+                        transitions.append(tuple(sorted([obj1, obj2])))
+        return (self.dataPool.currentText(), self.dataModel.text(), objects, transitions)
 
 
-def get_transitions(log, allowed_object_types=None):
-    transitions = set()
-    for event in log["ocel:events"].values():
-        for objid in event["ocel:omap"]:
-            obj = log["ocel:objects"][objid]
-            objtype = obj["ocel:type"]
-            if allowed_object_types is None or objtype in allowed_object_types:
-                for objid2 in event["ocel:omap"]:
-                    if objid != objid2:
-                        obj2 = log["ocel:objects"][objid2]
-                        objtype2 = obj2["ocel:type"]
-                        if allowed_object_types is None or objtype2 in allowed_object_types:
-                            if objtype < objtype2:
-                                transitions.add((objtype, objtype2))
-    transitions = ";".join(sorted(list(",".join(list(x)) for x in transitions)))
-    return transitions
+#def get_transitions(log, allowed_object_types=None):
+#    transitions = set()
+#    for event in log["ocel:events"].values():
+#        for objid in event["ocel:omap"]:
+#            obj = log["ocel:objects"][objid]
+#            objtype = obj["ocel:type"]
+#            if allowed_object_types is None or objtype in allowed_object_types:
+#                for objid2 in event["ocel:omap"]:
+#                    if objid != objid2:
+#                        obj2 = log["ocel:objects"][objid2]
+#                        objtype2 = obj2["ocel:type"]
+#                        if allowed_object_types is None or objtype2 in allowed_object_types:
+#                            if objtype < objtype2:
+#                                transitions.add((objtype, objtype2))
+#    transitions = ";".join(sorted(list(",".join(list(x)) for x in transitions)))
+#    return transitions
 
 if __name__ == '__main__':
 

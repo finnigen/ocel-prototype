@@ -214,11 +214,11 @@ def cli(ocelPath, url, api, dataPool, dataModel, selected_object_types, allowed_
     #    default_transitions = get_transitions(log, allowed_object_types=selected_object_types)
         if len(allowed_transitions) == 0:
             allowed_transitions = None
-        else:
-            allowed_transitions = allowed_transitions.split(";")
-            for i in range(len(allowed_transitions)):
-                allowed_transitions[i] = allowed_transitions[i].split(",")
-                allowed_transitions[i] = tuple(sorted(allowed_transitions[i]))
+#        else:
+#            allowed_transitions = allowed_transitions.split(";")
+#            for i in range(len(allowed_transitions)):
+#                allowed_transitions[i] = allowed_transitions[i].split(",")
+#                allowed_transitions[i] = tuple(sorted(allowed_transitions[i]))
 
 #        selected_object_types = selected_object_types.split(",")
         oct = read_ocel(log, allowed_object_types=selected_object_types, allowed_transitions=allowed_transitions)
@@ -303,6 +303,8 @@ if __name__ == "__main__":
 
 #    cli(ocelPath, url, api, dataPool, dataModel, "", "")
 
-#    cli("exportedOCELs/ocel_products_EVENTS.json", "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud", "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4", "EmptyPool", "MMMsaMM", ['CASE_products'], "")
+#    cli("exportedOCELs/ocel_products_EVENTS.json", "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud", "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4", "EmptyPool", "MMMsaMM", ['CASE_products'], [])
+
+    cli("exportedOCELs/ocel_yesii.json","https://louis-herrmann-rwth-aachen-de.training.celonis.cloud","NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4","EmptyPool","plsWork",['CASE_packages', 'CASE_products'],[('CASE_packages', 'CASE_products')])
 
     
