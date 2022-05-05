@@ -60,7 +60,6 @@ class OCEL_Model:
         return self.ocels.keys()
 
 
-
 def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=False):
     # establish connection
     # download data
@@ -96,8 +95,15 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         all_data[table_name].sort_values(sorting_column, inplace=True)
         all_data[table_name].reset_index(inplace=True)
         del all_data[table_name]["index"]
-        all_data[tables[table_name].case_table.name] = tables[table_name].case_table.get_data_frame()
+        
+        case_table_name = tables[table_name].case_table.name
+        all_data[case_table_name] = tables[table_name].case_table.get_data_frame()
 
+        # prefix column names with table names to ensure uniquness
+        all_data[table_name].columns = [table_name + column for column in all_data[table_name].columns]
+        all_data[case_table_name].columns = [case_table_name + column for column in all_data[case_table_name].columns]
+
+               
 #    ocels = {}
     for table in tables:
         
@@ -110,23 +116,24 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         
         print("Fetching Data...")
         df = all_data[table]
-        case_table = all_data[tables[table].case_table.name]
-
+        case_table_name = tables[table].case_table.name
+        case_table = all_data[case_table_name]
+        
         # since case table might have different case column name, we need to find its name
         activity_table_f_keys = data_model.foreign_keys.find_keys_by_name(table)
-        case_table_f_keys = data_model.foreign_keys.find_keys_by_name(tables[table].case_table.name)
+        case_table_f_keys = data_model.foreign_keys.find_keys_by_name(case_table_name)
         for key in activity_table_f_keys:
             if key in case_table_f_keys:
                 if tables[table].case_column == key["columns"][0][0]:
-                    case_table_case_column = key["columns"][0][1]
+                    case_table_case_column = case_table_name + key["columns"][0][1]
                 else:
-                    case_table_case_column = key["columns"][0][0]
+                    case_table_case_column = case_table_name + key["columns"][0][0]
     
-#        case_table_case_column = tables[table].case_column   # only would work if case table case column same name as activity case column name        
+#        case_table_case_column = tables[table].case_column   # only would work if case table case column same name as activity case column name
         
-        act_column = tables[table].activity_column
-        time_column = tables[table].timestamp_column
-        case_column = tables[table].case_column
+        act_column = table + tables[table].activity_column
+        time_column = table + tables[table].timestamp_column
+        case_column = table + tables[table].case_column
         attr_columns = df.columns.difference([act_column, time_column, case_column, tables[table].sorting_column])
         
         attribute_names = attribute_names.union(attr_columns)
@@ -143,7 +150,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
             
             o["ocel:timestamp"] = str(event[time_column])
             o["ocel:omap"] = [ event[case_column] ]
-            o["ocel:vmap"] = {col: event[col] for col in attr_columns}
+            o["ocel:vmap"] = {col[len(table):]: event[col] for col in attr_columns}
 
 
             events[str(row[0])] = o
@@ -160,8 +167,8 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
             event = row[1]
 
             o = {}
-            o["ocel:type"] = case_table_case_column
-            o["ocel:ovmap"] = {col: event[col] for col in attr_columns}
+            o["ocel:type"] = case_table_case_column[len(case_table_name):]
+            o["ocel:ovmap"] = {col[len(case_table_name):]: event[col] for col in attr_columns}
 
             objects[str(event[case_table_case_column])] = o 
             
@@ -172,7 +179,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         print("   Global Values...")
         ocel = {  "ocel:global-event": {"ocel:activity": list(activities)}}
         ocel["ocel:global-object"] =  {"ocel:type": "__INVALID__"} # {"ocel:type": list(global_objects)}
-        ocel["ocel:global-log"] = {"ocel:attribute-names": list(attribute_names),
+        ocel["ocel:global-log"] = {"ocel:attribute-names": [attr[len(table):] for attr in attribute_names],
                                     "ocel:object-types": list(object_types),
                                     "ocel:version": "1.0",
                                     "ocel:ordering": "timestamp"}
@@ -249,25 +256,29 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
             if key_relation == {}:
                 print("No Relation Found!")
                 break
-            mergePath.append({"leftTable": key_relation["source_table"], "leftColumn": key_relation["columns"][0][0], 
-                                "rightTable": key_relation["target_table"], "rightColumn": key_relation["columns"][0][1]})
-
+                
+            leftTable = key_relation["source_table"]
+            rightTable = key_relation["target_table"]
+            mergePath.append({"leftTable": leftTable, "leftColumn": leftTable + key_relation["columns"][0][0], 
+                                "rightTable": rightTable, "rightColumn": rightTable + key_relation["columns"][0][1]})
         
         print("   Getting data...")
         
         for tab in path:
             if tab not in all_data:
                 all_data[tab] = data_model.tables.find(tab).get_data_frame()
-        
+                # prefix column names with table names to ensure uniquness
+                all_data[tab].columns = [tab + column for column in all_data[tab].columns]
+                
         print("   Joining tables...")
-
+        
         df = all_data[table1]
         for relation in mergePath:
             df = df.merge(all_data[relation["leftTable"]] \
                 .merge(all_data[relation["rightTable"]], \
                         left_on=relation["leftColumn"], right_on=relation["rightColumn"]))
-
-        columns_to_keep = [tables[table1].case_column, tables[table2].case_column]
+            
+        columns_to_keep = [table1 + tables[table1].case_column, table2 + tables[table2].case_column]
 
         df = df[list(set(columns_to_keep).intersection(df.columns))]
 

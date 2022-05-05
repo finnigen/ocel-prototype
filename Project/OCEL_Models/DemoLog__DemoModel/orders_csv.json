@@ -3,10 +3,10 @@
     "ocel:activity": [
       "order dispatched",
       "pay order",
-      "confirm order",
-      "order delayed",
       "place order",
-      "order updated"
+      "confirm order",
+      "order updated",
+      "order delayed"
     ]
   },
   "ocel:global-object": {
@@ -18,7 +18,7 @@
       "PRICE"
     ],
     "ocel:object-types": [
-      "CASE ORDERS"
+      "ordersCases_csvCASE ORDERS"
     ],
     "ocel:version": "1.0",
     "ocel:ordering": "timestamp"

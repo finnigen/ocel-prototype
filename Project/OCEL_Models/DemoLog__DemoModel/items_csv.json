@@ -1,12 +1,12 @@
 {
   "ocel:global-event": {
     "ocel:activity": [
-      "remove item",
-      "pay item",
-      "item out of stock",
       "select item",
+      "remove item",
       "pack item",
-      "add item to package"
+      "add item to package",
+      "item out of stock",
+      "pay item"
     ]
   },
   "ocel:global-object": {
@@ -19,7 +19,7 @@
       "PACKAGENUMBER"
     ],
     "ocel:object-types": [
-      "CASE ITEMS"
+      "itemsCases_csvCASE ITEMS"
     ],
     "ocel:version": "1.0",
     "ocel:ordering": "timestamp"
