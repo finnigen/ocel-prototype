@@ -305,6 +305,6 @@ if __name__ == "__main__":
 
 #    cli("exportedOCELs/ocel_products_EVENTS.json", "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud", "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4", "EmptyPool", "MMMsaMM", ['CASE_products'], [])
 
-    cli("exportedOCELs/ocel_yesii.json","https://louis-herrmann-rwth-aachen-de.training.celonis.cloud","NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4","EmptyPool","plsWork",['CASE_packages', 'CASE_products'],[('CASE_packages', 'CASE_products')])
+#    cli("exportedOCELs/ocel_yesii.json","https://louis-herrmann-rwth-aachen-de.training.celonis.cloud","NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4","EmptyPool","plsWork",['CASE_packages', 'CASE_products'],[('CASE_packages', 'CASE_products')])
 
     

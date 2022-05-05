@@ -90,7 +90,10 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         table_name = conf.activity_table.name
         tables[table_name] = conf
         all_data[table_name] = tables[table_name].activity_table.get_data_frame()
-        all_data[table_name].sort_values(tables[table_name].sorting_column, inplace=True)
+        sorting_column = tables[table_name].sorting_column
+        if not sorting_column:
+            sorting_column = tables[table_name].timestamp_column
+        all_data[table_name].sort_values(sorting_column, inplace=True)
         all_data[table_name].reset_index(inplace=True)
         del all_data[table_name]["index"]
         all_data[tables[table_name].case_table.name] = tables[table_name].case_table.get_data_frame()
@@ -108,8 +111,18 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         print("Fetching Data...")
         df = all_data[table]
         case_table = all_data[tables[table].case_table.name]
-        case_table_case_column = tables[table].case_column # ASSUME SAME AS IN ACTIVITY TABLE
-        
+
+        # since case table might have different case column name, we need to find its name
+        activity_table_f_keys = data_model.foreign_keys.find_keys_by_name(table)
+        case_table_f_keys = data_model.foreign_keys.find_keys_by_name(tables[table].case_table.name)
+        for key in activity_table_f_keys:
+            if key in case_table_f_keys:
+                if tables[table].case_column == key["columns"][0][0]:
+                    case_table_case_column = key["columns"][0][1]
+                else:
+                    case_table_case_column = key["columns"][0][0]
+    
+#        case_table_case_column = tables[table].case_column   # only would work if case table case column same name as activity case column name        
         
         act_column = tables[table].activity_column
         time_column = tables[table].timestamp_column
