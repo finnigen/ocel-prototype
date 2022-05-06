@@ -529,13 +529,13 @@ class ExportWorkerThread(QThread):
 
     def run(self):
         try:
-            print(self.filePath)
-            print(self.url)
-            print(self.api)
-            print(self.dataPool)
-            print(self.dataModel)
-            print(self.objects)
-            print(self.transitions)
+        #    print(self.filePath)
+        #    print(self.url)
+        #    print(self.api)
+        #    print(self.dataPool)
+        #    print(self.dataModel)
+        #    print(self.objects)
+        #    print(self.transitions)
             cli(self.filePath, self.url, self.api, self.dataPool, self.dataModel, self.objects, self.transitions)
             self.exportDone.emit(self.name, True)
         except:

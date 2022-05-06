@@ -14,8 +14,8 @@ def matchMiner(log1, log2, object_relation, attribute1, attribute2=""):
     newLog = copy.deepcopy(log1)
     
     # adjust global
-    newLog['ocel:global-log']['ocel:attribute-names'] = list(set(newLog['ocel:global-log']['ocel:attribute-names']).union(set(log1['ocel:global-log']['ocel:attribute-names'])))
-    newLog['ocel:global-log']['ocel:object-types'] = list(set(newLog['ocel:global-log']['ocel:object-types']).union(set(log1['ocel:global-log']['ocel:object-types'])))
+    newLog['ocel:global-log']['ocel:attribute-names'] = list(set(newLog['ocel:global-log']['ocel:attribute-names']).union(set(log2['ocel:global-log']['ocel:attribute-names'])))
+    newLog['ocel:global-log']['ocel:object-types'] = list(set(newLog['ocel:global-log']['ocel:object-types']).union(set(log2['ocel:global-log']['ocel:object-types'])))
 
     added_objects = set()
     # find objects in log2 that match attribute value and are in object relation
@@ -52,8 +52,8 @@ def manualMiner(log1, log2, object_relation, activity_relation):
     newLog = copy.deepcopy(log1)
     
     # adjust global
-    newLog['ocel:global-log']['ocel:attribute-names'] = list(set(newLog['ocel:global-log']['ocel:attribute-names']).union(set(log1['ocel:global-log']['ocel:attribute-names'])))
-    newLog['ocel:global-log']['ocel:object-types'] = list(set(newLog['ocel:global-log']['ocel:object-types']).union(set(log1['ocel:global-log']['ocel:object-types'])))
+    newLog['ocel:global-log']['ocel:attribute-names'] = list(set(newLog['ocel:global-log']['ocel:attribute-names']).union(set(log2['ocel:global-log']['ocel:attribute-names'])))
+    newLog['ocel:global-log']['ocel:object-types'] = list(set(newLog['ocel:global-log']['ocel:object-types']).union(set(log2['ocel:global-log']['ocel:object-types'])))
     
     added_objects = set()
     # find objects in log2 that match attribute value and are in object relation
@@ -148,6 +148,10 @@ def interLeavedMiner(log1, log2, object_relationship, interleavedMode=True):
     # start with log1 since we want all its events and objects
     newLog = copy.deepcopy(log1)
     
+    # adjust global
+    newLog['ocel:global-log']['ocel:attribute-names'] = list(set(newLog['ocel:global-log']['ocel:attribute-names']).union(set(log2['ocel:global-log']['ocel:attribute-names'])))
+    newLog['ocel:global-log']['ocel:object-types'] = list(set(newLog['ocel:global-log']['ocel:object-types']).union(set(log2['ocel:global-log']['ocel:object-types'])))
+
     newObjEventPairs = set()
     
     log1_objects = log1["ocel:objects"].keys()
