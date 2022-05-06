@@ -388,6 +388,7 @@ class TransformationCenter(QtWidgets.QWidget):
         dialog = ExportDialog(filePath, self.url, self.api)
         if dialog.exec():
             parameters = dialog.getInputs()
+            self.ocelSideBarDeleteButtons[name].setEnabled(False)
             self.ocelSideBarExportButtons[name].setEnabled(False)
             self.ocelSideBarExportButtons[name].setText("Exporting...")
             self.ocelSideBarExportButtons[name].setStyleSheet("background-color: red")
@@ -408,6 +409,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarExportButtons[name].setEnabled(True)
         self.ocelSideBarExportButtons[name].setText("Export")
         self.ocelSideBarExportButtons[name].setStyleSheet("")
+        self.ocelSideBarDeleteButtons[name].setEnabled(True)
 
 
 
@@ -527,13 +529,13 @@ class ExportWorkerThread(QThread):
 
     def run(self):
         try:
-        #    print(self.filePath)
-        #    print(self.url)
-        #    print(self.api)
-        #    print(self.dataPool)
-        #    print(self.dataModel)
-        #    print(self.objects)
-        #    print(self.transitions)
+            print(self.filePath)
+            print(self.url)
+            print(self.api)
+            print(self.dataPool)
+            print(self.dataModel)
+            print(self.objects)
+            print(self.transitions)
             cli(self.filePath, self.url, self.api, self.dataPool, self.dataModel, self.objects, self.transitions)
             self.exportDone.emit(self.name, True)
         except:

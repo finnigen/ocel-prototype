@@ -154,7 +154,7 @@ class Ui_LoginWindow(object):
         self.token = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
 
         try:
-            self.celonis = get_celonis(self.url, self.token)
+            self.celonis = get_celonis(self.url, self.token, key_type="USER_KEY")
         except:
             print("Invalid login info. Try again")
             return

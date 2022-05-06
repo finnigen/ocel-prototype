@@ -72,7 +72,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
     else: # in this case, we first have to setup connection
         print("Establishing connection to Celonis...")
 
-        celonis = get_celonis(url, api_token)
+        celonis = get_celonis(url, api_token, key_type="USER_KEY")
         data_pool = celonis.pools.find(data_pool)
         data_model = data_pool.datamodels.find(data_model)
 
@@ -167,14 +167,16 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
             event = row[1]
 
             o = {}
-            o["ocel:type"] = case_table_case_column[len(case_table_name):]
-            o["ocel:ovmap"] = {col[len(case_table_name):]: event[col] for col in attr_columns}
+
+            # for compatability reasons, we don't want any blank spaces, so we replace them with "_"
+            o["ocel:type"] = case_table_case_column[len(case_table_name):].replace(" ", "_")
+            o["ocel:ovmap"] = {col[len(case_table_name):].replace(" ", "_"): event[col] for col in attr_columns}
 
             objects[str(event[case_table_case_column])] = o 
             
             global_objects.add(str(event[case_table_case_column]))
             
-        object_types.add(str(case_table_case_column))
+        object_types.add(str(case_table_case_column[len(case_table_name):].replace(" ", "_")))
             
         print("   Global Values...")
         ocel = {  "ocel:global-event": {"ocel:activity": list(activities)}}

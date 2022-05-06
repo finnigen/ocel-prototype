@@ -1,12 +1,12 @@
 {
   "ocel:global-event": {
     "ocel:activity": [
-      "order dispatched",
-      "pay order",
-      "place order",
       "confirm order",
+      "order delayed",
+      "place order",
+      "order dispatched",
       "order updated",
-      "order delayed"
+      "pay order"
     ]
   },
   "ocel:global-object": {
@@ -14,11 +14,11 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "WEIGHT",
-      "PRICE"
+      "PRICE",
+      "WEIGHT"
     ],
     "ocel:object-types": [
-      "ordersCases_csvCASE ORDERS"
+      "CASE_ORDERS"
     ],
     "ocel:version": "1.0",
     "ocel:ordering": "timestamp"
@@ -137,11 +137,11 @@
   },
   "ocel:objects": {
     "o1": {
-      "ocel:type": "CASE ORDERS",
+      "ocel:type": "CASE_ORDERS",
       "ocel:ovmap": {}
     },
     "o2": {
-      "ocel:type": "CASE ORDERS",
+      "ocel:type": "CASE_ORDERS",
       "ocel:ovmap": {}
     }
   }

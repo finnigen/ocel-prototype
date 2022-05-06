@@ -8,7 +8,7 @@ class ExportDialog(QDialog):
     def __init__(self, filePath, url, api, parent=None):
         super().__init__(parent)
         try:
-            self.celonis = get_celonis(url, api)
+            self.celonis = get_celonis(url, api, key_type="USER_KEY")
         except:
             print("Invalid login info. Try again")
             return

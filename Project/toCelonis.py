@@ -245,7 +245,7 @@ def output_csv(oct):
 
 
 def output_celonis(oct, url, api, data_pool_name, data_model_name):
-    celonis = get_celonis(api_token=api, celonis_url=url)
+    celonis = get_celonis(api_token=api, celonis_url=url, key_type="USER_KEY")
     data_pool = celonis.pools.find(data_pool_name)
     data_model = get_data_model(data_pool, data_model_name)
     upload_to_celonis(oct, data_pool, data_model)
