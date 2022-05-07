@@ -14,8 +14,10 @@ def matchMiner(log1, log2, object_relation, attribute1, attribute2=""):
     newLog = copy.deepcopy(log1)
     
     # adjust global
-    newLog['ocel:global-log']['ocel:attribute-names'] = list(set(newLog['ocel:global-log']['ocel:attribute-names']).union(set(log2['ocel:global-log']['ocel:attribute-names'])))
     newLog['ocel:global-log']['ocel:object-types'] = list(set(newLog['ocel:global-log']['ocel:object-types']).union(set(log2['ocel:global-log']['ocel:object-types'])))
+    newLog['ocel:global-log']['ocel:attribute-names'] = list(set(newLog['ocel:global-log']['ocel:attribute-names']).union(set(log2['ocel:global-log']['ocel:attribute-names'])))
+
+
 
     added_objects = set()
     # find objects in log2 that match attribute value and are in object relation
@@ -29,11 +31,14 @@ def matchMiner(log1, log2, object_relation, attribute1, attribute2=""):
                             if (obj1, obj2) in object_relation: ####### THIS HAS TO BE ADJUSTED DEPENDING ON FORMAT OF object_relation or format adjusted
                                 added_objects.add(obj2)
                                 newLog['ocel:events'][str(i)]['ocel:omap'] = list(set(newLog['ocel:events'][str(i)]['ocel:omap']).union([obj2]))
-        
+                                # fix vmap
+                                for key, value in log2['ocel:events'][str(j)]['ocel:vmap'].items():
+                                    if key not in newLog['ocel:events'][str(i)]['ocel:vmap']:
+                                        newLog['ocel:events'][str(i)]['ocel:vmap'][key] = value
+
     # adjust objects
     for obj in added_objects:
-        newLog['ocel:objects'][obj] = {'ocel:type': log2['ocel:objects'][obj]['ocel:type'],
-                                       'ocel:ovmap': log2['ocel:objects'][obj]['ocel:ovmap'] }
+        newLog['ocel:objects'][obj] = log2['ocel:objects'][obj] # {'ocel:type': log2['ocel:objects'][obj]['ocel:type'], 'ocel:ovmap': log2['ocel:objects'][obj]['ocel:ovmap'] }
                             
     # validation
     ocel_lib.export_log(newLog, 'oceltest.json')
@@ -68,11 +73,14 @@ def manualMiner(log1, log2, object_relation, activity_relation):
                         if (obj1, obj2) in object_relation: ####### THIS HAS TO BE ADJUSTED DEPENDING ON FORMAT OF object_relation or format adjusted
                             added_objects.add(obj2)
                             newLog['ocel:events'][str(i)]['ocel:omap'] = list(set(newLog['ocel:events'][str(i)]['ocel:omap']).union([obj2]))
-    
+                                # fix vmap
+                            for key, value in log2['ocel:events'][str(j)]['ocel:vmap'].items():
+                                if key not in newLog['ocel:events'][str(i)]['ocel:vmap']:
+                                    newLog['ocel:events'][str(i)]['ocel:vmap'][key] = value
+
     # adjust objects
     for obj in added_objects:
-        newLog['ocel:objects'][obj] = {'ocel:type': log2['ocel:objects'][obj]['ocel:type'],
-                                       'ocel:ovmap': log2['ocel:objects'][obj]['ocel:ovmap'] }
+        newLog['ocel:objects'][obj] = log2['ocel:objects'][obj] # {'ocel:type': log2['ocel:objects'][obj]['ocel:type'], 'ocel:ovmap': log2['ocel:objects'][obj]['ocel:ovmap'] }
                             
     # validation
     ocel_lib.export_log(newLog, 'oceltest.json')
@@ -177,18 +185,24 @@ def interLeavedMiner(log1, log2, object_relationship, interleavedMode=True):
                     for ev_id2, event2 in log2["ocel:events"].items():
                         if obj2 in event2["ocel:omap"]:
                             if ((1, ev_id1), (2, ev_id2)) in interleavedDict[(obj1, obj2)]:
-                                newObjEventPairs.add((ev_id1, obj2))
+                                newObjEventPairs.add((ev_id1, obj2, ev_id2))
 
     # add new pairs to newLog
     for pair in newObjEventPairs:
         ev_id = pair[0]
         obj = pair[1]
+        ev_id2 = pair[2]
         
         # add new object to event omap, but avoid duplicates
         objects = newLog["ocel:events"][ev_id]["ocel:omap"]
         objects.append(obj)
         newLog["ocel:events"][ev_id]["ocel:omap"] = list(set(objects))
         
+        # fix vmap
+        for key, value in log2["ocel:events"][ev_id2]["ocel:vmap"].items():
+            if key not in newLog['ocel:events'][ev_id]['ocel:vmap']:
+                newLog['ocel:events'][ev_id]['ocel:vmap'][key] = value
+
         # add new object to objects of log
         if obj not in newLog["ocel:objects"].keys():
             newLog["ocel:objects"][obj] = log2["ocel:objects"][obj]

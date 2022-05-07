@@ -1,12 +1,12 @@
 {
   "ocel:global-event": {
     "ocel:activity": [
-      "order dispatched",
       "order delayed",
-      "confirm order",
-      "order updated",
       "pay order",
-      "place order"
+      "order updated",
+      "order dispatched",
+      "place order",
+      "confirm order"
     ]
   },
   "ocel:global-object": {
@@ -14,8 +14,8 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "WEIGHT",
-      "PRICE"
+      "PRICE",
+      "WEIGHT"
     ],
     "ocel:object-types": [
       "CASE_ORDERS"
