@@ -388,6 +388,12 @@ class TransformationCenter(QtWidgets.QWidget):
         dialog = ExportDialog(filePath, self.url, self.api)
         if dialog.exec():
             parameters = dialog.getInputs()
+            
+            # if no objects selected, don't export
+            if len(parameters[2]) == 0:
+                print(parameters[2])
+                return
+
             self.ocelSideBarDeleteButtons[name].setEnabled(False)
             self.ocelSideBarExportButtons[name].setEnabled(False)
             self.ocelSideBarExportButtons[name].setText("Exporting...")
@@ -561,7 +567,7 @@ if __name__ == "__main__":
 
     MainWindow = QtWidgets.QMainWindow()
 
-    with open('fileBig1.pkl', 'rb') as file:
+    with open('filePresentation.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

@@ -173,10 +173,10 @@ def get_data_model(data_pool, name):
 def upload_to_celonis(oct, data_pool, data_model):
     for table in oct.tables:
         try:
-            data_pool.create_table(oct.tables[table], table, if_exists="error")
+            data_pool.create_table(oct.tables[table], table, if_exists="drop") # alternative, if_exists = "error" to not overwrite
         except:
             traceback.print_exc()
-    for table in oct.tables:
+    for table in oct.tables:    
         try:
             data_model.add_table_from_pool(table, table)
         except:
@@ -245,7 +245,7 @@ def output_csv(oct):
 
 
 def output_celonis(oct, url, api, data_pool_name, data_model_name):
-    celonis = get_celonis(api_token=api, celonis_url=url, key_type="USER_KEY")
+    celonis = get_celonis(api_token=api, url=url, key_type="USER_KEY")
     data_pool = celonis.pools.find(data_pool_name)
     data_model = get_data_model(data_pool, data_model_name)
     upload_to_celonis(oct, data_pool, data_model)

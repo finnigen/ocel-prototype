@@ -134,12 +134,13 @@ class ExportDialog(QDialog):
     def getInputs(self):
         objects = []
         for label, checkbox in self.objectWidgets:
-            if checkbox.isChecked:
+            if checkbox.isChecked():
                 objects.append(label.text())
+        
         transitions = []
         if len(objects) > 1:
             for label1, label2, checkbox in self.transitionWidgets:
-                if checkbox.isChecked:
+                if checkbox.isChecked():
                     obj1 = label1.text()
                     obj2 = label2.text()
                     if obj1 in objects and obj2 in objects:

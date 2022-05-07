@@ -1,12 +1,12 @@
 {
   "ocel:global-event": {
     "ocel:activity": [
-      "pack item",
-      "item out of stock",
-      "add item to package",
-      "pay item",
       "remove item",
-      "select item"
+      "item out of stock",
+      "pack item",
+      "add item to package",
+      "select item",
+      "pay item"
     ]
   },
   "ocel:global-object": {
@@ -15,8 +15,8 @@
   "ocel:global-log": {
     "ocel:attribute-names": [
       "PRICE",
-      "PACKAGENUMBER",
-      "WEIGHT"
+      "WEIGHT",
+      "PACKAGENUMBER"
     ],
     "ocel:object-types": [
       "CASE_ITEMS"

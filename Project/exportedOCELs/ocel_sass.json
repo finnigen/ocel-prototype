@@ -1,11 +1,11 @@
 {
   "ocel:global-event": {
     "ocel:activity": [
-      "send package",
-      "package suspended",
       "create package",
+      "send package",
+      "add item to package",
       "package received",
-      "add item to package"
+      "package suspended"
     ]
   },
   "ocel:global-object": {
@@ -13,13 +13,13 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "WEIGHT",
       "ORDERNUMBER",
+      "WEIGHT",
       "PRICE"
     ],
     "ocel:object-types": [
-      "CASE_PACKAGES",
-      "CASE_ORDERS"
+      "CASE_ORDERS",
+      "CASE_PACKAGES"
     ],
     "ocel:version": "1.0",
     "ocel:ordering": "timestamp"
