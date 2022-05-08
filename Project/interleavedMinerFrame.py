@@ -64,8 +64,11 @@ class InterleavedMinerFrame(OperatorFrame):
         self.logSelectcomboBox1.clear()
         self.logSelectcomboBox2.clear()
 
-        for i in range(len(self.ocel_model.getOcelNames())):
+        names = list(self.ocel_model.getOcelNames())
+        names.sort()
+
+        for i in range(len(names)):
             self.logSelectcomboBox1.addItem("")
             self.logSelectcomboBox2.addItem("")
-            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.getOcelNames())[i])
-            self.logSelectcomboBox2.setItemText(i, list(self.ocel_model.getOcelNames())[i])
+            self.logSelectcomboBox1.setItemText(i, names[i])
+            self.logSelectcomboBox2.setItemText(i, names[i])

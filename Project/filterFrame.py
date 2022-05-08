@@ -72,6 +72,7 @@ class FilterFrame(OperatorFrame):
     def initAttributes(self):
         logName = self.logSelectcomboBox1.currentText()
         attributes = list(set(self.ocel_model.getOCEL(logName)["ocel:global-log"]["ocel:attribute-names"]))
+        attributes.sort()
 
         self.boxes = []
         for i in range(len(attributes)):
@@ -110,6 +111,7 @@ class FilterFrame(OperatorFrame):
     def initActivities(self):
         logName = self.logSelectcomboBox1.currentText()
         activities = list(set(self.ocel_model.getOCEL(logName)["ocel:global-event"]["ocel:activity"]))
+        activities.sort()
 
         self.boxes = []
         for i in range(len(activities)):
@@ -127,6 +129,7 @@ class FilterFrame(OperatorFrame):
     def initObjects(self):
         logName = self.logSelectcomboBox1.currentText()
         objects = list(set(self.ocel_model.getOCEL(logName)["ocel:objects"].keys()))
+        objects.sort()
 
         self.boxes = []
         for i in range(len(objects)):
@@ -197,9 +200,12 @@ class FilterFrame(OperatorFrame):
         self.logSelectcomboBox1.clear()
         self.logSelectcomboBox2.clear()
 
-        for i in range(len(self.ocel_model.getOcelNames())):
+        names = list(self.ocel_model.getOcelNames())
+        names.sort()
+
+        for i in range(len(names)):
             self.logSelectcomboBox1.addItem("")
-            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.getOcelNames())[i])
+            self.logSelectcomboBox1.setItemText(i, names[i])
 
         modes = ["activity", "attribute", "object", "timestamp"]
         for i in range(len(modes)):

@@ -218,7 +218,7 @@ def removeEventsAndObjects(log, removeEvents):
     # remove events
     for ev_id in removeEvents:
         del log["ocel:events"][ev_id]
-    
+
     # remove objects that aren't mentioned anymore
     remainingObjects = set()
     for ev_id, event in log["ocel:events"].items():
@@ -270,10 +270,23 @@ def filterByAttribute(log, attributes):
 def filterByObject(log, objects):
     newLog = copy.deepcopy(log)
     
+    # find object types
+    object_types = set()
+    for obj in objects:
+        if obj in log["ocel:objects"]:
+            object_types.add(log["ocel:objects"][obj]["ocel:type"])
+
+    # adjust global
+    newLog['ocel:global-log']['ocel:object-types'] = list(object_types)
+
     # remove events that don't contain desired attribute values
     for ev_id, event in log["ocel:events"].items():
-        if objects.intersection(event["ocel:omap"]) == set():
+        intersec = objects.intersection(event["ocel:omap"])
+        if intersec == set():
             del newLog["ocel:events"][ev_id]
+        # remove other objects
+        else:
+            newLog["ocel:events"][ev_id]["ocel:omap"] = list(intersec)
     
     for obj_id in log["ocel:objects"]:
         if obj_id not in objects:

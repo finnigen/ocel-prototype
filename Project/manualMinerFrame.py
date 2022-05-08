@@ -117,14 +117,19 @@ class ManualMinerFrame(OperatorFrame):
         for k, v in self.ocel_model.getOCEL(self.logSelectcomboBox2.currentText())["ocel:events"].items():
             activities2.add(v["ocel:activity"])
 
+        activities1 = list(activities1)
+        activities1.sort()
+        activities2 = list(activities2)
+        activities2.sort()
+
         for tup in self.activityComboBoxes:
             for i in range(len(activities1)):
                 tup[0].addItem("")
-                tup[0].setItemText(i, list(activities1)[i])
+                tup[0].setItemText(i, activities1[i])
 
             for i in range(len(activities2)):
                 tup[1].addItem("")
-                tup[1].setItemText(i, list(activities2)[i])
+                tup[1].setItemText(i, activities2[i])
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
@@ -145,6 +150,7 @@ class ManualMinerFrame(OperatorFrame):
             relation = (tup[0].currentText(), tup[1].currentText())
             activity_relation.add(relation)
         activity_relation = list(activity_relation)
+        activity_relation.sort()
 
         name = "MANUAL_MINER (" + name1 + ", " + name2 + ")" + " on " + "(" + str(activity_relation) + ")"
 #        if name in self.ocel_model.ocels:
@@ -159,11 +165,14 @@ class ManualMinerFrame(OperatorFrame):
         self.logSelectcomboBox1.clear()
         self.logSelectcomboBox2.clear()
 
-        for i in range(len(self.ocel_model.getOcelNames())):
+        names = list(self.ocel_model.getOcelNames())
+        names.sort()
+
+        for i in range(len(names)):
             self.logSelectcomboBox1.addItem("")
             self.logSelectcomboBox2.addItem("")
-            self.logSelectcomboBox1.setItemText(i, list(self.ocel_model.getOcelNames())[i])
-            self.logSelectcomboBox2.setItemText(i, list(self.ocel_model.getOcelNames())[i])
+            self.logSelectcomboBox1.setItemText(i, names[i])
+            self.logSelectcomboBox2.setItemText(i, names[i])
 
         self.initCounter()
         self.initActivitySelectors()
