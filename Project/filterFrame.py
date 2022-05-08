@@ -128,17 +128,28 @@ class FilterFrame(OperatorFrame):
 
     def initObjects(self):
         logName = self.logSelectcomboBox1.currentText()
-        objects = list(set(self.ocel_model.getOCEL(logName)["ocel:objects"].keys()))
+        ocelObjects = self.ocel_model.getOCEL(logName)["ocel:objects"]
+        objects = list(set(ocelObjects.keys()))
         objects.sort()
+
+        myFont=QtGui.QFont()
+        myFont.setBold(True)
 
         self.boxes = []
         for i in range(len(objects)):
+            # object type
+            labelType = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+            labelType.setText(ocelObjects[objects[i]]["ocel:type"] + ":")
+            labelType.setFont(myFont)
+
+            # object
             label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
             label.setText(objects[i])
             checkbox = QtWidgets.QCheckBox(self.scrollAreaWidgetContents)
             checkbox.setChecked(True)
-            self.scrollGridLayout.addWidget(label, i+6, 0, QtCore.Qt.AlignCenter)
-            self.scrollGridLayout.addWidget(checkbox, i+6, 1, QtCore.Qt.AlignCenter)
+            self.scrollGridLayout.addWidget(labelType, i, 0, QtCore.Qt.AlignCenter)
+            self.scrollGridLayout.addWidget(label, i, 1, QtCore.Qt.AlignCenter)
+            self.scrollGridLayout.addWidget(checkbox, i, 2, QtCore.Qt.AlignCenter)
             # save activity and checkbox so we can check state later
             self.boxes.append((label, checkbox))
 
