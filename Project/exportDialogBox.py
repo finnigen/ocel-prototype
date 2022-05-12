@@ -13,6 +13,8 @@ class ExportDialog(QDialog):
             print("Invalid login info. Try again")
             return
 
+        self.setWindowTitle("Export Center")
+
         self.ocelPath = filePath
         self.api = api
         self.url = url

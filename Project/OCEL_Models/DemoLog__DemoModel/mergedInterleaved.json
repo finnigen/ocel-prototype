@@ -14,15 +14,15 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "WEIGHT",
       "PACKAGENUMBER",
       "PRICE",
-      "ORDERNUMBER"
+      "ORDERNUMBER",
+      "WEIGHT"
     ],
     "ocel:object-types": [
-      "CASE_ORDERS",
       "CASE_ITEMS",
-      "CASE_PACKAGES"
+      "CASE_PACKAGES",
+      "CASE_ORDERS"
     ],
     "ocel:version": "1.0",
     "ocel:ordering": "timestamp"
@@ -56,8 +56,8 @@
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-15 13:00:00",
       "ocel:omap": [
-        "i1",
-        "o1"
+        "o1",
+        "i1"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
@@ -95,8 +95,8 @@
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-15 14:00:00",
       "ocel:omap": [
-        "i1",
-        "o1"
+        "o1",
+        "i1"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
@@ -148,8 +148,8 @@
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-15 14:10:00",
       "ocel:omap": [
-        "p1",
-        "i3"
+        "i3",
+        "p1"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
@@ -163,8 +163,8 @@
       "ocel:timestamp": "2020-07-15 14:10:00",
       "ocel:omap": [
         "i2",
-        "p1",
-        "o1"
+        "o1",
+        "p1"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
@@ -190,8 +190,8 @@
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-15 14:30:00",
       "ocel:omap": [
-        "i1",
-        "o1"
+        "o1",
+        "i1"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
@@ -216,8 +216,8 @@
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-16 09:21:00",
       "ocel:omap": [
-        "o2",
-        "i4"
+        "i4",
+        "o2"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
@@ -229,8 +229,8 @@
       "ocel:activity": "item out of stock",
       "ocel:timestamp": "2020-07-16 10:12:00",
       "ocel:omap": [
-        "o2",
-        "i4"
+        "i4",
+        "o2"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
@@ -278,9 +278,9 @@
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-20 10:31:00",
       "ocel:omap": [
-        "o2",
         "i4",
-        "p2"
+        "p2",
+        "o2"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
@@ -308,8 +308,8 @@
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-20 12:44:20",
       "ocel:omap": [
-        "o2",
-        "i4"
+        "i4",
+        "o2"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
@@ -370,8 +370,8 @@
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-20 17:24:00",
       "ocel:omap": [
-        "i6",
         "o2",
+        "i6",
         "p3"
       ],
       "ocel:vmap": {
@@ -407,10 +407,6 @@
       "ocel:type": "CASE_ITEMS",
       "ocel:ovmap": {}
     },
-    "p1": {
-      "ocel:type": "CASE_PACKAGES",
-      "ocel:ovmap": {}
-    },
     "p2": {
       "ocel:type": "CASE_PACKAGES",
       "ocel:ovmap": {}
@@ -419,11 +415,15 @@
       "ocel:type": "CASE_PACKAGES",
       "ocel:ovmap": {}
     },
-    "o2": {
-      "ocel:type": "CASE_ORDERS",
+    "p1": {
+      "ocel:type": "CASE_PACKAGES",
       "ocel:ovmap": {}
     },
     "o1": {
+      "ocel:type": "CASE_ORDERS",
+      "ocel:ovmap": {}
+    },
+    "o2": {
       "ocel:type": "CASE_ORDERS",
       "ocel:ovmap": {}
     }
