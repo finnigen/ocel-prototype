@@ -274,15 +274,24 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
                 
         print("   Joining tables...")
         
+        # find columns we need for merging so that we can drop others for better efficiency
+        remainingColumns = set()
+        for d in mergePath:
+            remainingColumns.add(d["leftColumn"])
+            remainingColumns.add(d["rightColumn"])
+        remainingColumns.add(table1 + tables[table1].case_column)
+        remainingColumns.add(table2 + tables[table2].case_column)
+
         df = all_data[table1]
         for relation in mergePath:
             df = df.merge(all_data[relation["leftTable"]] \
                 .merge(all_data[relation["rightTable"]], \
                         left_on=relation["leftColumn"], right_on=relation["rightColumn"]))
+            df.drop(list(set(df.columns).difference(remainingColumns)), axis=1, inplace=True)
             
         columns_to_keep = [table1 + tables[table1].case_column, table2 + tables[table2].case_column]
 
-        df = df[list(set(columns_to_keep).intersection(df.columns))]
+        df.drop(list(set(columns_to_keep).intersection(df.columns)), axis=1, inplace=True)
 
         df.drop_duplicates(inplace=True)
         df.reset_index(drop=True, inplace=True)

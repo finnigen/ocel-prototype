@@ -232,11 +232,13 @@ class WorkerThread(QThread):
         self.data_pool = pool
 
     def run(self):
-#        ocel_model = convertToOcelModel("", "", self.data_pool, self.data_model, skipConnection=True)
-        time.sleep(10)
-        with open('filePresentation.pkl', 'rb') as file:
+        ocel_model = convertToOcelModel("", "", self.data_pool, self.data_model, skipConnection=True)
+
+        # for presentation...
+#        time.sleep(10)
+#        with open('filePresentation.pkl', 'rb') as file:
             # Call load method to deserialze
-            ocel_model = pickle.load(file)
+#            ocel_model = pickle.load(file)
         self.updateOCEL.emit(ocel_model)
 
 
