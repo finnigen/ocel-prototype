@@ -18,6 +18,8 @@ from objRelationWindow import ObjectWindow
 from manualMinerFrame import ManualMinerFrame
 from filterFrame import FilterFrame
 from flattenFrame import FlattenFrame
+from concatFrame import ConcatFrame
+
 
 import json
 import ocel as ocel_lib
@@ -146,6 +148,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Filter Event Log", description, FilterFrame)
         description = "Map all events to one object type based on relationships."
         self.initOperatorPage("Flatten Event Log", description, FlattenFrame)
+        description = "Merge all events of two logs into one without merging any objects."
+        self.initOperatorPage("Concatenate Event Log", description, ConcatFrame)
 
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)

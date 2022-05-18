@@ -3,7 +3,6 @@ import json
 import ocel as ocel_lib
 import datetime
 
-
 # input: 2 ocels, object relationship, attribute name(s) from ocels
 # output: 1 ocel, objects from log2 merged into log1 based on matches in values of passed attribute(s)
 # attribute 1 are attribute names from log1, while attribute2 are attribute names from log2
@@ -173,7 +172,6 @@ def interLeavedMiner(log1, log2, object_relationship, interleavedMode=True):
             interleavedDict[relation] = interleavedRelation(log1, log2, relation[0], relation[1])
         else:
             interleavedDict[relation] = nonInterleavedRelation(log1, log2, relation[0], relation[1])
-
     
     for ev_id1, event1 in log1["ocel:events"].items():
         for obj1 in event1["ocel:omap"]:
@@ -204,7 +202,7 @@ def interLeavedMiner(log1, log2, object_relationship, interleavedMode=True):
         # add new object to objects of log
         if obj not in newLog["ocel:objects"].keys():
             newLog["ocel:objects"][obj] = log2["ocel:objects"][obj]
-    
+
     return newLog
 
 
@@ -331,8 +329,6 @@ def filterLog(log, parameters, mode="activity"):
 
 
 # flattening operator that transforms all events to one object notion
-
-
 def flatten(log, object_relation, objectType):
     newLog = copy.deepcopy(log)
     
@@ -362,5 +358,44 @@ def flatten(log, object_relation, objectType):
     for k,v in log["ocel:objects"].items():
         if v["ocel:type"] != objectType:
             del newLog["ocel:objects"][k]
+
+    return newLog
+
+
+# concat operator, simply merges all events into one log, does not group any objects, sorts events on timestamp
+def concat(log1, log2):
+    newLog = copy.deepcopy(log1)
+    
+    # adjust global
+    newLog['ocel:global-log']['ocel:object-types'] = list(set(newLog['ocel:global-log']['ocel:object-types']).union(set(log2['ocel:global-log']['ocel:object-types'])))
+    newLog['ocel:global-log']['ocel:attribute-names'] = list(set(newLog['ocel:global-log']['ocel:attribute-names']).union(set(log2['ocel:global-log']['ocel:attribute-names'])))
+
+    # reset events so that we can add them based on timestamps in right order
+    newLog["ocel:events"] = {}
+
+    all_events = []
+    for ev_id, event in log1["ocel:events"].items():
+        # add tuples with (logNumber, eventID, timestamp)
+        all_events.append((1, ev_id, event["ocel:timestamp"]))
+    for ev_id, event in log2["ocel:events"].items():
+        # add tuples with (logNumber, eventID, timestamp)
+        all_events.append((2, ev_id, event["ocel:timestamp"]))
+
+    # sort based on timestamp
+    all_events.sort(key=lambda x: x[2])
+
+    for i in range(len(all_events)):
+        whichLog = all_events[i][0]
+        ev_id = all_events[i][1] 
+        if whichLog == 1: # event is from log1
+            newLog["ocel:events"][i] = log1["ocel:events"][ev_id]
+        else: # event is from log2
+            newLog["ocel:events"][i] = log2["ocel:events"][ev_id]
+
+
+    # add objects from log2 to newLog
+    for obj, values in log2["ocel:objects"].items():
+        if obj not in newLog["ocel:objects"].keys():
+            newLog["ocel:objects"][obj] = values
 
     return newLog

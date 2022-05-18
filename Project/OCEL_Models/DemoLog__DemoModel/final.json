@@ -14,10 +14,10 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "ORDERNUMBER",
       "PRICE",
-      "PACKAGENUMBER",
-      "WEIGHT"
+      "ORDERNUMBER",
+      "WEIGHT",
+      "PACKAGENUMBER"
     ],
     "ocel:object-types": [
       "CASE_ITEMS"
@@ -54,9 +54,7 @@
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-15 13:00:00",
       "ocel:omap": [
-        "i2",
-        "i1",
-        "i3"
+        "i1"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
@@ -68,9 +66,7 @@
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-15 13:00:00",
       "ocel:omap": [
-        "i2",
-        "i1",
-        "i3"
+        "i2"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
@@ -82,9 +78,7 @@
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-15 13:00:00",
       "ocel:omap": [
-        "i2",
-        "i3",
-        "i1"
+        "i3"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
@@ -93,171 +87,325 @@
       }
     },
     "5": {
-      "ocel:activity": "pack item",
-      "ocel:timestamp": "2020-07-15 14:00:00",
+      "ocel:activity": "place order",
+      "ocel:timestamp": "2020-07-15 13:00:00",
       "ocel:omap": [
-        "i2",
         "i1",
+        "i2",
         "i3"
       ],
       "ocel:vmap": {
-        "PACKAGENUMBER": "p1",
-        "PRICE": 10,
-        "WEIGHT": 300,
-        "ORDERNUMBER": "o1"
+        "PRICE": 30,
+        "WEIGHT": 550
       }
     },
     "6": {
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-15 14:00:00",
       "ocel:omap": [
-        "i2",
-        "i1",
-        "i3"
+        "i1"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
-        "PRICE": 15,
-        "WEIGHT": 210,
-        "ORDERNUMBER": "o1"
+        "PRICE": 10,
+        "WEIGHT": 300
       }
     },
     "7": {
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-15 14:00:00",
       "ocel:omap": [
-        "i2",
-        "i3",
-        "i1"
+        "i2"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
-        "PRICE": 3,
-        "WEIGHT": 40,
-        "ORDERNUMBER": "o1"
+        "PRICE": 15,
+        "WEIGHT": 210
       }
     },
     "8": {
-      "ocel:activity": "add item to package",
-      "ocel:timestamp": "2020-07-15 14:10:00",
+      "ocel:activity": "pack item",
+      "ocel:timestamp": "2020-07-15 14:00:00",
       "ocel:omap": [
-        "i2",
-        "i1",
         "i3"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
-        "PRICE": 10,
-        "WEIGHT": 300,
-        "ORDERNUMBER": "o1"
+        "PRICE": 3,
+        "WEIGHT": 40
       }
     },
     "9": {
-      "ocel:activity": "add item to package",
-      "ocel:timestamp": "2020-07-15 14:10:00",
+      "ocel:activity": "confirm order",
+      "ocel:timestamp": "2020-07-15 14:00:00",
       "ocel:omap": [
+        "i1",
         "i2",
-        "i3",
-        "i1"
+        "i3"
       ],
       "ocel:vmap": {
-        "PACKAGENUMBER": "p1",
-        "PRICE": 3,
-        "WEIGHT": 40,
-        "ORDERNUMBER": "o1"
+        "PRICE": 30,
+        "WEIGHT": 550
       }
     },
     "10": {
-      "ocel:activity": "add item to package",
-      "ocel:timestamp": "2020-07-15 14:10:00",
+      "ocel:activity": "create package",
+      "ocel:timestamp": "2020-07-15 14:00:00",
       "ocel:omap": [
-        "i2",
         "i1",
+        "i2",
         "i3"
       ],
       "ocel:vmap": {
-        "PACKAGENUMBER": "p1",
-        "PRICE": 15,
-        "WEIGHT": 210,
-        "ORDERNUMBER": "o1"
+        "ORDERNUMBER": "o1",
+        "PRICE": 28,
+        "WEIGHT": 550
       }
     },
     "11": {
-      "ocel:activity": "pay item",
-      "ocel:timestamp": "2020-07-15 14:30:00",
+      "ocel:activity": "add item to package",
+      "ocel:timestamp": "2020-07-15 14:10:00",
       "ocel:omap": [
-        "i2",
-        "i3",
         "i1"
-      ],
-      "ocel:vmap": {
-        "PACKAGENUMBER": "p1",
-        "PRICE": 3,
-        "WEIGHT": 40,
-        "ORDERNUMBER": "o1"
-      }
-    },
-    "12": {
-      "ocel:activity": "pay item",
-      "ocel:timestamp": "2020-07-15 14:30:00",
-      "ocel:omap": [
-        "i2",
-        "i1",
-        "i3"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
         "PRICE": 10,
-        "WEIGHT": 300,
-        "ORDERNUMBER": "o1"
+        "WEIGHT": 300
       }
     },
-    "13": {
-      "ocel:activity": "pay item",
-      "ocel:timestamp": "2020-07-15 14:30:00",
+    "12": {
+      "ocel:activity": "add item to package",
+      "ocel:timestamp": "2020-07-15 14:10:00",
       "ocel:omap": [
-        "i2",
-        "i1",
         "i3"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p1",
+        "PRICE": 3,
+        "WEIGHT": 40
+      }
+    },
+    "13": {
+      "ocel:activity": "add item to package",
+      "ocel:timestamp": "2020-07-15 14:10:00",
+      "ocel:omap": [
+        "i2"
+      ],
+      "ocel:vmap": {
+        "PACKAGENUMBER": "p1",
         "PRICE": 15,
-        "WEIGHT": 210,
-        "ORDERNUMBER": "o1"
+        "WEIGHT": 210
       }
     },
     "14": {
-      "ocel:activity": "select item",
-      "ocel:timestamp": "2020-07-16 09:21:00",
+      "ocel:activity": "add item to package",
+      "ocel:timestamp": "2020-07-15 14:10:00",
       "ocel:omap": [
-        "i6",
-        "i5",
-        "i4"
+        "i1",
+        "i2",
+        "i3"
       ],
       "ocel:vmap": {
-        "PACKAGENUMBER": "p2",
-        "PRICE": 16,
-        "WEIGHT": 1200,
-        "ORDERNUMBER": "o2"
+        "ORDERNUMBER": "o1",
+        "PRICE": 28,
+        "WEIGHT": 550
       }
     },
     "15": {
-      "ocel:activity": "item out of stock",
-      "ocel:timestamp": "2020-07-16 10:12:00",
+      "ocel:activity": "add item to package",
+      "ocel:timestamp": "2020-07-15 14:10:00",
       "ocel:omap": [
-        "i6",
-        "i5",
+        "i1",
+        "i2",
+        "i3"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o1",
+        "PRICE": 28,
+        "WEIGHT": 550
+      }
+    },
+    "16": {
+      "ocel:activity": "add item to package",
+      "ocel:timestamp": "2020-07-15 14:10:00",
+      "ocel:omap": [
+        "i1",
+        "i2",
+        "i3"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o1",
+        "PRICE": 28,
+        "WEIGHT": 550
+      }
+    },
+    "17": {
+      "ocel:activity": "pay item",
+      "ocel:timestamp": "2020-07-15 14:30:00",
+      "ocel:omap": [
+        "i3"
+      ],
+      "ocel:vmap": {
+        "PACKAGENUMBER": "p1",
+        "PRICE": 3,
+        "WEIGHT": 40
+      }
+    },
+    "18": {
+      "ocel:activity": "pay item",
+      "ocel:timestamp": "2020-07-15 14:30:00",
+      "ocel:omap": [
+        "i1"
+      ],
+      "ocel:vmap": {
+        "PACKAGENUMBER": "p1",
+        "PRICE": 10,
+        "WEIGHT": 300
+      }
+    },
+    "19": {
+      "ocel:activity": "pay item",
+      "ocel:timestamp": "2020-07-15 14:30:00",
+      "ocel:omap": [
+        "i2"
+      ],
+      "ocel:vmap": {
+        "PACKAGENUMBER": "p1",
+        "PRICE": 15,
+        "WEIGHT": 210
+      }
+    },
+    "20": {
+      "ocel:activity": "pay order",
+      "ocel:timestamp": "2020-07-15 14:30:00",
+      "ocel:omap": [
+        "i1",
+        "i2",
+        "i3"
+      ],
+      "ocel:vmap": {
+        "PRICE": 30,
+        "WEIGHT": 550
+      }
+    },
+    "21": {
+      "ocel:activity": "select item",
+      "ocel:timestamp": "2020-07-16 09:21:00",
+      "ocel:omap": [
         "i4"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
         "PRICE": 16,
-        "WEIGHT": 1200,
-        "ORDERNUMBER": "o2"
+        "WEIGHT": 1200
       }
     },
-    "16": {
+    "22": {
+      "ocel:activity": "place order",
+      "ocel:timestamp": "2020-07-16 09:21:00",
+      "ocel:omap": [
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "ocel:vmap": {
+        "PRICE": 316,
+        "WEIGHT": 2480
+      }
+    },
+    "23": {
+      "ocel:activity": "confirm order",
+      "ocel:timestamp": "2020-07-16 09:22:00",
+      "ocel:omap": [
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "ocel:vmap": {
+        "PRICE": 316,
+        "WEIGHT": 2480
+      }
+    },
+    "24": {
+      "ocel:activity": "create package",
+      "ocel:timestamp": "2020-07-16 09:22:00",
+      "ocel:omap": [
+        "i4",
+        "i5"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 246,
+        "WEIGHT": 2150
+      }
+    },
+    "25": {
+      "ocel:activity": "order dispatched",
+      "ocel:timestamp": "2020-07-16 10:00:00",
+      "ocel:omap": [
+        "i1",
+        "i2",
+        "i3"
+      ],
+      "ocel:vmap": {
+        "PRICE": 30,
+        "WEIGHT": 550
+      }
+    },
+    "26": {
+      "ocel:activity": "send package",
+      "ocel:timestamp": "2020-07-16 10:00:00",
+      "ocel:omap": [
+        "i1",
+        "i2",
+        "i3"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o1",
+        "PRICE": 28,
+        "WEIGHT": 550
+      }
+    },
+    "27": {
+      "ocel:activity": "item out of stock",
+      "ocel:timestamp": "2020-07-16 10:12:00",
+      "ocel:omap": [
+        "i4"
+      ],
+      "ocel:vmap": {
+        "PACKAGENUMBER": "p2",
+        "PRICE": 16,
+        "WEIGHT": 1200
+      }
+    },
+    "28": {
+      "ocel:activity": "order delayed",
+      "ocel:timestamp": "2020-07-19 18:00:00",
+      "ocel:omap": [
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "ocel:vmap": {
+        "PRICE": 316,
+        "WEIGHT": 2480
+      }
+    },
+    "29": {
+      "ocel:activity": "package suspended",
+      "ocel:timestamp": "2020-07-19 18:00:00",
+      "ocel:omap": [
+        "i4",
+        "i5"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 246,
+        "WEIGHT": 2150
+      }
+    },
+    "30": {
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-20 10:29:00",
       "ocel:omap": [
@@ -269,95 +417,144 @@
         "WEIGHT": 950
       }
     },
-    "17": {
+    "31": {
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-20 10:30:00",
       "ocel:omap": [
-        "i5",
         "i4"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
         "PRICE": 16,
-        "WEIGHT": 1200,
-        "ORDERNUMBER": "o2"
+        "WEIGHT": 1200
       }
     },
-    "18": {
+    "32": {
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-20 10:30:00",
       "ocel:omap": [
-        "i5",
-        "i4"
+        "i5"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
         "PRICE": 230,
-        "WEIGHT": 950,
-        "ORDERNUMBER": "o2"
+        "WEIGHT": 950
       }
     },
-    "19": {
+    "33": {
+      "ocel:activity": "create package",
+      "ocel:timestamp": "2020-07-20 10:30:00",
+      "ocel:omap": [
+        "i4",
+        "i5"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 246,
+        "WEIGHT": 2150
+      }
+    },
+    "34": {
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-20 10:31:00",
       "ocel:omap": [
-        "i6",
-        "i5",
         "i4"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
         "PRICE": 16,
-        "WEIGHT": 1200,
-        "ORDERNUMBER": "o2"
+        "WEIGHT": 1200
       }
     },
-    "20": {
+    "35": {
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-20 10:31:00",
       "ocel:omap": [
-        "i6",
-        "i5",
-        "i4"
+        "i5"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
         "PRICE": 230,
-        "WEIGHT": 950,
-        "ORDERNUMBER": "o2"
+        "WEIGHT": 950
       }
     },
-    "21": {
+    "36": {
+      "ocel:activity": "order updated",
+      "ocel:timestamp": "2020-07-20 10:31:00",
+      "ocel:omap": [
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "ocel:vmap": {
+        "PRICE": 316,
+        "WEIGHT": 2480
+      }
+    },
+    "37": {
+      "ocel:activity": "add item to package",
+      "ocel:timestamp": "2020-07-20 10:31:00",
+      "ocel:omap": [
+        "i4",
+        "i5"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 246,
+        "WEIGHT": 2150
+      }
+    },
+    "38": {
+      "ocel:activity": "add item to package",
+      "ocel:timestamp": "2020-07-20 10:31:00",
+      "ocel:omap": [
+        "i4",
+        "i5"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 246,
+        "WEIGHT": 2150
+      }
+    },
+    "39": {
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-20 12:44:20",
       "ocel:omap": [
-        "i6",
-        "i5",
         "i4"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
         "PRICE": 16,
-        "WEIGHT": 1200,
-        "ORDERNUMBER": "o2"
+        "WEIGHT": 1200
       }
     },
-    "22": {
+    "40": {
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-20 12:44:20",
       "ocel:omap": [
-        "i6",
-        "i5",
-        "i4"
+        "i5"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p2",
         "PRICE": 230,
-        "WEIGHT": 950,
-        "ORDERNUMBER": "o2"
+        "WEIGHT": 950
       }
     },
-    "23": {
+    "41": {
+      "ocel:activity": "pay order",
+      "ocel:timestamp": "2020-07-20 12:44:20",
+      "ocel:omap": [
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "ocel:vmap": {
+        "PRICE": 316,
+        "WEIGHT": 2480
+      }
+    },
+    "42": {
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-20 17:20:00",
       "ocel:omap": [
@@ -366,11 +563,22 @@
       "ocel:vmap": {
         "PACKAGENUMBER": "p3",
         "PRICE": 70,
-        "WEIGHT": 330,
-        "ORDERNUMBER": "o2"
+        "WEIGHT": 330
       }
     },
-    "24": {
+    "43": {
+      "ocel:activity": "create package",
+      "ocel:timestamp": "2020-07-20 17:20:00",
+      "ocel:omap": [
+        "i6"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 70,
+        "WEIGHT": 330
+      }
+    },
+    "44": {
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-20 17:20:33",
       "ocel:omap": [
@@ -382,7 +590,7 @@
         "WEIGHT": 330
       }
     },
-    "25": {
+    "45": {
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-20 17:22:10",
       "ocel:omap": [
@@ -394,19 +602,105 @@
         "WEIGHT": 330
       }
     },
-    "26": {
+    "46": {
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-20 17:24:00",
       "ocel:omap": [
-        "i6",
-        "i5",
-        "i4"
+        "i6"
       ],
       "ocel:vmap": {
         "PACKAGENUMBER": "p3",
         "PRICE": 70,
-        "WEIGHT": 330,
-        "ORDERNUMBER": "o2"
+        "WEIGHT": 330
+      }
+    },
+    "47": {
+      "ocel:activity": "add item to package",
+      "ocel:timestamp": "2020-07-20 17:24:00",
+      "ocel:omap": [
+        "i6"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 70,
+        "WEIGHT": 330
+      }
+    },
+    "48": {
+      "ocel:activity": "order dispatched",
+      "ocel:timestamp": "2020-07-21 10:00:00",
+      "ocel:omap": [
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "ocel:vmap": {
+        "PRICE": 316,
+        "WEIGHT": 2480
+      }
+    },
+    "49": {
+      "ocel:activity": "send package",
+      "ocel:timestamp": "2020-07-21 10:00:00",
+      "ocel:omap": [
+        "i6"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 70,
+        "WEIGHT": 330
+      }
+    },
+    "50": {
+      "ocel:activity": "send package",
+      "ocel:timestamp": "2020-07-21 10:00:00",
+      "ocel:omap": [
+        "i4",
+        "i5"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 246,
+        "WEIGHT": 2150
+      }
+    },
+    "51": {
+      "ocel:activity": "package received",
+      "ocel:timestamp": "2020-07-22 11:29:00",
+      "ocel:omap": [
+        "i1",
+        "i2",
+        "i3"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o1",
+        "PRICE": 28,
+        "WEIGHT": 550
+      }
+    },
+    "52": {
+      "ocel:activity": "package received",
+      "ocel:timestamp": "2020-07-25 09:25:00",
+      "ocel:omap": [
+        "i6"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 70,
+        "WEIGHT": 330
+      }
+    },
+    "53": {
+      "ocel:activity": "package received",
+      "ocel:timestamp": "2020-07-26 13:52:00",
+      "ocel:omap": [
+        "i4",
+        "i5"
+      ],
+      "ocel:vmap": {
+        "ORDERNUMBER": "o2",
+        "PRICE": 246,
+        "WEIGHT": 2150
       }
     }
   },
