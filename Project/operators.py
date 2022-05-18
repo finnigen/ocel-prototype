@@ -41,12 +41,11 @@ def matchMiner(log1, log2, object_relation, attribute1, attribute2=""):
         newLog['ocel:objects'][obj] = log2['ocel:objects'][obj] # {'ocel:type': log2['ocel:objects'][obj]['ocel:type'], 'ocel:ovmap': log2['ocel:objects'][obj]['ocel:ovmap'] }
                             
     # validation
-    ocel_lib.export_log(newLog, 'oceltest.json')
-    if not ocel_lib.validate('oceltest.json', 'schema.json'):
-        print(newLog)
-        raise Exception("INVALID OCEL DOES NOT MATCH SCHEMA")
-        
-    print("successful validation of new log")
+#    ocel_lib.export_log(newLog, 'oceltest.json')
+#    if not ocel_lib.validate('oceltest.json', 'schema.json'):
+#        print(newLog)
+#        raise Exception("INVALID OCEL DOES NOT MATCH SCHEMA")       
+#    print("successful validation of new log")
     
     return newLog
 
@@ -83,12 +82,11 @@ def manualMiner(log1, log2, object_relation, activity_relation):
         newLog['ocel:objects'][obj] = log2['ocel:objects'][obj] # {'ocel:type': log2['ocel:objects'][obj]['ocel:type'], 'ocel:ovmap': log2['ocel:objects'][obj]['ocel:ovmap'] }
                             
     # validation
-    ocel_lib.export_log(newLog, 'oceltest.json')
-    if not ocel_lib.validate('oceltest.json', 'schema.json'):
-        print(newLog)
-        raise Exception("INVALID OCEL DOES NOT MATCH SCHEMA")
-        
-    print("successful validation of new log")
+#    ocel_lib.export_log(newLog, 'oceltest.json')
+#    if not ocel_lib.validate('oceltest.json', 'schema.json'):
+#        print(newLog)
+#        raise Exception("INVALID OCEL DOES NOT MATCH SCHEMA")
+#    print("successful validation of new log")
     
     return newLog
 
@@ -329,3 +327,40 @@ def filterLog(log, parameters, mode="activity"):
         return filterByObject(log, parameters)
     elif mode == "timestamp":
         return filterByTimestamp(log, parameters)
+
+
+
+# flattening operator that transforms all events to one object notion
+
+
+def flatten(log, object_relation, objectType):
+    newLog = copy.deepcopy(log)
+    
+    # adjust global
+    newLog['ocel:global-log']['ocel:object-types'] = [objectType]
+
+    # find all objects of type objectType
+    allObjects = set()
+    for k,v in log["ocel:objects"].items():
+        if v["ocel:type"] == objectType:
+            allObjects.add(k)
+
+    for ev_id, event in log["ocel:events"].items():
+        relatedObjects = event["ocel:omap"]
+        toBeAddedObjects = allObjects.intersection(relatedObjects)
+        relatedObjects = set(relatedObjects).difference(toBeAddedObjects)
+        
+        # check which objects from relatedObjects are in relation with objects from objectType
+        for relatedObj in relatedObjects:
+            for obj in allObjects:
+                if (relatedObj, obj) in object_relation:
+                    toBeAddedObjects.add(obj)
+        
+        # set omap of event to only objects from type objectType
+        newLog["ocel:events"][ev_id]["ocel:omap"] = list(toBeAddedObjects)
+    
+    for k,v in log["ocel:objects"].items():
+        if v["ocel:type"] != objectType:
+            del newLog["ocel:objects"][k]
+
+    return newLog

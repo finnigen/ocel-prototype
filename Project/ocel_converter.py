@@ -189,11 +189,11 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         ocel["ocel:objects"] = objects
         
         print("   Validating OCEL...")
-        ocel_lib.export_log(ocel, 'oceltest.json')
-        if not ocel_lib.validate('oceltest.json', 'schema.json'):
-            print(ocel)
-            raise Exception("INVALID OCEL DOES NOT MATCH SCHEMA")
-        print("   OCEL validated successfully...")
+#        ocel_lib.export_log(ocel, 'oceltest.json')
+#        if not ocel_lib.validate('oceltest.json', 'schema.json'):
+#            print(ocel)
+#            raise Exception("INVALID OCEL DOES NOT MATCH SCHEMA")
+#        print("   OCEL validated successfully...")
         
         ocel_model.addOCEL(name=table, ocelFileName = table + ".json", ocel=ocel)
 #        ocels[table] = ocel

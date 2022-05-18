@@ -17,6 +17,7 @@ from tableWindow import TableWindow
 from objRelationWindow import ObjectWindow
 from manualMinerFrame import ManualMinerFrame
 from filterFrame import FilterFrame
+from flattenFrame import FlattenFrame
 
 import json
 import ocel as ocel_lib
@@ -143,7 +144,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Non-Interleaved Miner", description, NonInterleavedMinerFrame)
         description = "Filter event log based on activities, attributes, objects or timestamps."
         self.initOperatorPage("Filter Event Log", description, FilterFrame)
-
+        description = "Map all events to one object type based on relationships."
+        self.initOperatorPage("Flatten Event Log", description, FlattenFrame)
 
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
@@ -573,6 +575,9 @@ if __name__ == "__main__":
 
     url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
     token = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
+
+    url = "https://students-pads.eu-1.celonis.cloud"
+    token = "MmRlZTU4M2MtNjg5NS00YTU4LTlhOWEtODQ1ZDAxYTUzNTcxOmNaUjhMUllkSUQ4Y0E2cG9uRERkSWJSY2FtdVp0NkxLTVhuTm92TGk0Q0Fi"
 
     ui = TransformationCenter(ocel_model, url, token)
     ui.setupUi(MainWindow)
