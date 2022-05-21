@@ -291,7 +291,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
             
         columns_to_keep = [table1 + tables[table1].case_column, table2 + tables[table2].case_column]
 
-        df.drop(list(set(columns_to_keep).intersection(df.columns)), axis=1, inplace=True)
+        df = df[list(set(columns_to_keep).intersection(df.columns))]
 
         df.drop_duplicates(inplace=True)
         df.reset_index(drop=True, inplace=True)

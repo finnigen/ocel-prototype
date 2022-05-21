@@ -2,10 +2,10 @@
   "ocel:global-event": {
     "ocel:activity": [
       "create package",
-      "send package",
       "add item to package",
-      "package received",
-      "package suspended"
+      "package suspended",
+      "send package",
+      "package received"
     ]
   },
   "ocel:global-object": {
@@ -13,9 +13,9 @@
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
-      "PRICE",
       "ORDERNUMBER",
-      "WEIGHT"
+      "WEIGHT",
+      "PRICE"
     ],
     "ocel:object-types": [
       "CASE_PACKAGES"

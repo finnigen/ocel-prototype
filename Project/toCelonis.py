@@ -204,25 +204,16 @@ def cli(ocelPath, url, api, dataPool, dataModel, selected_object_types, allowed_
         print("\n\Starting export")
         log_path = ocelPath
         log = ocel.import_log(log_path)
-#        object_types = set()
-#        for ev_id, ev in log["ocel:events"].items():
-#            for obj_id in ev["ocel:omap"]:
-#                object_types.add(log["ocel:objects"][obj_id]["ocel:type"])
-#        object_types = ",".join(sorted(list(object_types)))
-#        if len(selected_object_types) == 0:
-#            selected_object_types = object_types
-    #    default_transitions = get_transitions(log, allowed_object_types=selected_object_types)
+
         if len(allowed_transitions) == 0:
             allowed_transitions = None
-#        else:
-#            allowed_transitions = allowed_transitions.split(";")
-#            for i in range(len(allowed_transitions)):
-#                allowed_transitions[i] = allowed_transitions[i].split(",")
-#                allowed_transitions[i] = tuple(sorted(allowed_transitions[i]))
 
-#        selected_object_types = selected_object_types.split(",")
         oct = read_ocel(log, allowed_object_types=selected_object_types, allowed_transitions=allowed_transitions)
         output_celonis(oct, url, api, dataPool, dataModel)
+
+        output_yaml(oct)
+        output_pql(oct)
+
         print("----- FINISHED WITH SUCCESS -----")
     except:
         traceback.print_exc()
@@ -252,7 +243,7 @@ def output_celonis(oct, url, api, data_pool_name, data_model_name):
 
 
 def output_yaml(oct):
-    user_path = os.path.expanduser('~')
+    user_path = os.path.expanduser('exportedOCELS')
     default_yaml_path = os.path.join(user_path, "output.yaml")
     file_path = input("insert the path where the YAML should be inserted (default: "+default_yaml_path+") -> ")
     if len(file_path) == 0:
@@ -269,7 +260,7 @@ def output_yaml(oct):
 
 
 def output_pql(oct):
-    user_path = os.path.expanduser('~')
+    user_path = os.path.expanduser('exportedOCELS')
     default_pql_path = os.path.join(user_path, "pql.txt")
     file_path = input("insert the path where the PQL queries should be saved (default: "+default_pql_path+") -> ")
     if len(file_path) == 0:
