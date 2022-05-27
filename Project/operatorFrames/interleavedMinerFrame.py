@@ -1,13 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from ocel_converter import convertToOcelModel, OCEL_Model
-from operatorFrame import OperatorFrame
-from operators import concat
+from operatorFrames.operatorFrame import OperatorFrame
+from operators import interLeavedMiner
 
-class ConcatFrame(OperatorFrame):
+class InterleavedMinerFrame(OperatorFrame):
  
     def __init__(self, parent, ocel, title, description):
-        miner = concat
+        miner = interLeavedMiner
         super().__init__(parent, ocel, title, description, miner)
 
 
@@ -51,10 +51,10 @@ class ConcatFrame(OperatorFrame):
         log1 = self.ocel_model.getOCEL(name1)
         log2 = self.ocel_model.getOCEL(name2)
 
-        name = "CONCAT (" + name1 + ", " + name2 + ")" 
+        name = "INTERLEAVED_MINER (" + name1 + ", " + name2 + ")" 
 #        if name in self.ocel_model.ocels:
 #            return
-        newLog = self.miner(log1, log2)
+        newLog = self.miner(log1, log2, self.ocel_model.getRelation(), interleavedMode=True)
 
         return (name, newLog)
 

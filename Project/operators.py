@@ -399,3 +399,48 @@ def concat(log1, log2):
             newLog["ocel:objects"][obj] = values
 
     return newLog
+
+
+
+
+
+# aggregate operator (merge objects of events with same activty / timestamp into first occurence)
+def aggregate(log):
+    newLog = copy.deepcopy(log)
+
+    # find all events with same activty and timestamp and add them to duplicates list
+    duplicates = []
+    allMentionedActTimePairs = set()
+    keys = list(log["ocel:events"].keys())
+    for i in range(len(keys)):
+        ev_id1 = keys[i]
+        event1 = log["ocel:events"][ev_id1]
+        activity1 = event1["ocel:activity"]
+        timestamp1 = event1["ocel:timestamp"]
+        if (activity1, timestamp1) not in allMentionedActTimePairs:
+            allMentionedActTimePairs.add((activity1, timestamp1))       
+            mergeEventIds = [ev_id1]
+            for j in range(i+1, len(keys)):
+                ev_id2 = keys[j]
+                event2 = log["ocel:events"][ev_id2]
+                activity2 = event2["ocel:activity"]
+                timestamp2 = event2["ocel:timestamp"]
+                if activity1 == activity2 and timestamp1 == timestamp2:
+                    mergeEventIds.append(ev_id2)
+            if len(mergeEventIds) > 1:
+                duplicates.append(mergeEventIds)
+
+    # merge all objects into first occurence of event and remove duplicates
+    for events in duplicates:
+        associatedObjects = set()
+        for ev_id in events[1:]:
+            associatedObjects = associatedObjects.union(log["ocel:events"][ev_id]["ocel:omap"])
+            del newLog["ocel:events"][ev_id]
+        firstEventObjects = newLog["ocel:events"][events[0]]["ocel:omap"]
+        newLog["ocel:events"][events[0]]["ocel:omap"] = list(set(firstEventObjects).union(associatedObjects))
+    
+    return newLog
+
+                
+
+

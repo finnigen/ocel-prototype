@@ -7,18 +7,19 @@ from re import S
 
 from numpy import inner
 from ocel_converter import convertToOcelModel, OCEL_Model
-from operatorFrame import OperatorFrame
-from matchMinerFrame import MatchMinerFrame
-from interleavedMinerFrame import InterleavedMinerFrame
-from nonInterleavedMinerFrame import NonInterleavedMinerFrame
+# from operatorFrames.operatorFrame import OperatorFrame
+from operatorFrames.matchMinerFrame import MatchMinerFrame
+from operatorFrames.interleavedMinerFrame import InterleavedMinerFrame
+from operatorFrames.nonInterleavedMinerFrame import NonInterleavedMinerFrame
 from operators import manualMiner, matchMiner
 import pickle
 from tableWindow import TableWindow
 from objRelationWindow import ObjectWindow
-from manualMinerFrame import ManualMinerFrame
-from filterFrame import FilterFrame
-from flattenFrame import FlattenFrame
-from concatFrame import ConcatFrame
+from operatorFrames.manualMinerFrame import ManualMinerFrame
+from operatorFrames.filterFrame import FilterFrame
+from operatorFrames.flattenFrame import FlattenFrame
+from operatorFrames.concatFrame import ConcatFrame
+from operatorFrames.aggregateFrame import AggregateFrame
 
 
 import json
@@ -150,6 +151,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Flatten Event Log", description, FlattenFrame)
         description = "Merge all events of two logs into one without merging any objects."
         self.initOperatorPage("Concatenate Event Log", description, ConcatFrame)
+        description = "Merge objects of one log from duplicate events into its first occurence."
+        self.initOperatorPage("Aggregate Event Log", description, AggregateFrame)
 
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)

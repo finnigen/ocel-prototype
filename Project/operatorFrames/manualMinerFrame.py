@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from ocel_converter import convertToOcelModel, OCEL_Model
-from operatorFrame import OperatorFrame
+from operatorFrames.operatorFrame import OperatorFrame
 from operators import manualMiner
 
 class ManualMinerFrame(OperatorFrame):

@@ -243,11 +243,9 @@ def output_celonis(oct, url, api, data_pool_name, data_model_name):
 
 
 def output_yaml(oct):
-    user_path = os.path.expanduser('exportedOCELS')
+    user_path = os.path.expanduser('exportedOCELs')
     default_yaml_path = os.path.join(user_path, "output.yaml")
-    file_path = input("insert the path where the YAML should be inserted (default: "+default_yaml_path+") -> ")
-    if len(file_path) == 0:
-        file_path = default_yaml_path
+    file_path = default_yaml_path
     F = open(file_path, "w")
     stru = export_knowledge_yaml(oct)
     F.write("YAML for knowledge model:\n\n")
@@ -260,11 +258,9 @@ def output_yaml(oct):
 
 
 def output_pql(oct):
-    user_path = os.path.expanduser('exportedOCELS')
+    user_path = os.path.expanduser('exportedOCELs')
     default_pql_path = os.path.join(user_path, "pql.txt")
-    file_path = input("insert the path where the PQL queries should be saved (default: "+default_pql_path+") -> ")
-    if len(file_path) == 0:
-        file_path = default_pql_path
+    file_path = default_pql_path
     F = open(file_path, "w")
     for trans in oct.transitions:
         ot0 = trans[0]

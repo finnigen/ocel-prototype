@@ -1,0 +1,23 @@
+YAML for knowledge model:
+
+eventLogsMetadata:
+    eventLogs:
+        - id: CASE_ORDERS
+          displayName: CASE_ORDERS
+          pql: '"CASE_ORDERS_EVENTS"."ACT_CASE_ORDERS"'
+        - id: CASE_PACKAGES
+          displayName: CASE_PACKAGES
+          pql: '"CASE_PACKAGES_EVENTS"."ACT_CASE_PACKAGES"'
+    transitions:
+        - id: CASE_ORDERS_CASE_PACKAGES
+          displayName: CASE_ORDERS_CASE_PACKAGES
+          firstEventLogId: CASE_ORDERS
+          secondEventLogId: CASE_PACKAGES
+          type: INTERLEAVED
+
+YAML for process model:
+
+settings:
+    eventLogs:
+        - eventLog: CASE_ORDERS
+        - eventLog: CASE_PACKAGES

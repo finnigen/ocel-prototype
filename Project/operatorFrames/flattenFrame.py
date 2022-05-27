@@ -1,13 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from ocel_converter import convertToOcelModel, OCEL_Model
-from operatorFrame import OperatorFrame
-from operators import interLeavedMiner
+from operatorFrames.operatorFrame import OperatorFrame
+from operators import flatten
 
-class InterleavedMinerFrame(OperatorFrame):
+class FlattenFrame(OperatorFrame):
  
     def __init__(self, parent, ocel, title, description):
-        miner = interLeavedMiner
+        miner = flatten
         super().__init__(parent, ocel, title, description, miner)
 
 
@@ -37,7 +37,9 @@ class InterleavedMinerFrame(OperatorFrame):
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
 
         self.operatorSelectorLabel_1.setText("Select first event log:")
-        self.operatorSelectorLabel_2.setText("Select second event log:")
+        self.operatorSelectorLabel_2.setText("Select object type:")
+
+        self.logSelectcomboBox1.activated.connect(self.initObjectTypes)
 
         self.refresh()
  
@@ -46,17 +48,29 @@ class InterleavedMinerFrame(OperatorFrame):
         # returns new log that is created by applying given operator with selected parameters + name
         # this is used for the "add to logs" and "export" button in the main window
         
-        name1 = self.logSelectcomboBox1.currentText()
-        name2 = self.logSelectcomboBox2.currentText()
-        log1 = self.ocel_model.getOCEL(name1)
-        log2 = self.ocel_model.getOCEL(name2)
+        name = self.logSelectcomboBox1.currentText()
+        objectType = self.logSelectcomboBox2.currentText()
+        log = self.ocel_model.getOCEL(name)
 
-        name = "INTERLEAVED_MINER (" + name1 + ", " + name2 + ")" 
+        name = "FLATTEN (" + name + ", " + objectType + ")" 
 #        if name in self.ocel_model.ocels:
 #            return
-        newLog = self.miner(log1, log2, self.ocel_model.getRelation(), interleavedMode=True)
+        newLog = self.miner(log, self.ocel_model.getRelation(), objectType)
 
         return (name, newLog)
+
+
+    def initObjectTypes(self):
+        self.logSelectcomboBox2.clear()
+        name = self.logSelectcomboBox1.currentText()
+        log = self.ocel_model.getOCEL(name)
+        types = log["ocel:global-log"]["ocel:object-types"]
+        types.sort()
+        for i in range(len(types)):
+            self.logSelectcomboBox2.addItem("")
+            self.logSelectcomboBox2.setItemText(i, types[i])
+
+
 
     def refresh(self):
         # used to refresh comboboxes for selection of operator parameters
@@ -69,6 +83,6 @@ class InterleavedMinerFrame(OperatorFrame):
 
         for i in range(len(names)):
             self.logSelectcomboBox1.addItem("")
-            self.logSelectcomboBox2.addItem("")
             self.logSelectcomboBox1.setItemText(i, names[i])
-            self.logSelectcomboBox2.setItemText(i, names[i])
+
+        self.initObjectTypes()
