@@ -5,14 +5,12 @@ from ocel_converter import convertToOcelModel, OCEL_Model
 
 class OperatorFrame(QtWidgets.QFrame):
  
-    def __init__(self, parent, ocel, title, description, miner):
+    def __init__(self, parent, ocel_model, title, description):
         super().__init__()
         self.parent = parent
-        self.ocel_model = ocel
+        self.ocel_model = ocel_model
         self.title = title
         self.description = description
-        self.miner = miner
-
 
         self.layout = QtWidgets.QGridLayout()
         self.setLayout(self.layout)
@@ -59,7 +57,7 @@ class OperatorFrame(QtWidgets.QFrame):
         self.operatorDescriptionLabel.setText(self.description)
  
 
-    def getNewLog(self):
+    def getNewLog(self, newName):
         # returns new log that is created by applying given operator with selected parameters
         # this is used for the "add to logs" and "export" button in the main window
         pass

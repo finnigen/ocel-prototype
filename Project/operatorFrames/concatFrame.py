@@ -6,9 +6,8 @@ from operators import concat
 
 class ConcatFrame(OperatorFrame):
  
-    def __init__(self, parent, ocel, title, description):
-        miner = concat
-        super().__init__(parent, ocel, title, description, miner)
+    def __init__(self, parent, ocel_model, title, description):
+        super().__init__(parent, ocel_model, title, description)
 
 
         self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.operatorFrame)
@@ -42,21 +41,14 @@ class ConcatFrame(OperatorFrame):
         self.refresh()
  
 
-    def getNewLog(self):
+    def getNewLog(self, newName):
         # returns new log that is created by applying given operator with selected parameters + name
         # this is used for the "add to logs" and "export" button in the main window
         
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
-        log1 = self.ocel_model.getOCEL(name1)
-        log2 = self.ocel_model.getOCEL(name2)
 
-        name = "CONCAT (" + name1 + ", " + name2 + ")" 
-#        if name in self.ocel_model.ocels:
-#            return
-        newLog = self.miner(log1, log2)
-
-        return (name, newLog)
+        return self.ocel_model.concat(name1, name2, newName=newName)
 
     def refresh(self):
         # used to refresh comboboxes for selection of operator parameters

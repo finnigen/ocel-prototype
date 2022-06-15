@@ -8,65 +8,18 @@ import shutil
 import pandas as pd
 # import matplotlib.pyplot as plt
 from pycelonis import get_celonis
-
-
-
-# saves all OCEL_Models in OCEL_Models directory
-class OCEL_Model:
-    def __init__(self, newFolderName, ocels={}, obj_relation=set()):
-        self.rootFolder = "OCEL_Models"
-        newPath = os.path.join(self.rootFolder, newFolderName)
-        
-        # if directory for new ocel_model already exists, delete old directory, create new one
-        if os.path.exists(newPath):
-            shutil.rmtree(newPath)
-        os.mkdir(newPath)
-        
-        self.folder = newPath # save ocels as json here
-        self.ocels = ocels # new format: {name1: ocel_json_file_location1, name2: ocel_json_file_location2 ... }
-        self.obj_relation = obj_relation
-    
-    def addOCEL(self, name, ocelFileName, ocel):
-        newPath = os.path.join(self.folder, ocelFileName)
-        # remove if exists already
-        if os.path.exists(newPath):
-            os.remove(newPath)
-        ocel_lib.export_log(ocel, newPath)
-        self.ocels[name] = ocelFileName      
-        
-    def removeOCEL(self, name):
-        filePath = os.path.join(self.folder, self.ocels[name])
-        if os.path.exists(filePath):
-            os.remove(filePath)
-            del self.ocels[name]
-            return True
-        return False
-
-    def getOCEL(self, name):
-        filePath = os.path.join(self.folder, self.ocels[name])
-        if name in self.ocels:
-            with open(filePath) as json_file:
-                return json.load(json_file)
-        else:
-            return False
-    
-    def setRelation(self, relation):
-        self.obj_relation = relation
-    
-    def getRelation(self):
-        return self.obj_relation
-    
-    def getOcelNames(self):
-        return self.ocels.keys()
+from ocel_model import *
 
 
 def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=False):
-    # establish connection
-    # download data
-    # create ocels
-    # create object relationships
-    # add to OCEL_Model class    
-
+    # connect to Celonis
+    # download all data
+    # for all activity tables:
+        # associate case and activity table 
+        # convert Celonis ActDf To EventDf and convert Celonis CaseDf To ObjectDf and add to OCEL_Model
+    # calculate object relationships
+    # add relationships to OCEL_Model
+    
     if skipConnection: # in this case, we already get passed a full Celonis data model
         data_model = data_model
     else: # in this case, we first have to setup connection
@@ -89,124 +42,70 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         table_name = conf.activity_table.name
         tables[table_name] = conf
         all_data[table_name] = tables[table_name].activity_table.get_data_frame()
+        
+        # sort based on sorting column. If there is no sorting column, use timestamp column
         sorting_column = tables[table_name].sorting_column
         if not sorting_column:
             sorting_column = tables[table_name].timestamp_column
         all_data[table_name].sort_values(sorting_column, inplace=True)
+        
+        # reset index after sorting
         all_data[table_name].reset_index(inplace=True)
         del all_data[table_name]["index"]
         
+        # save case table
         case_table_name = tables[table_name].case_table.name
         all_data[case_table_name] = tables[table_name].case_table.get_data_frame()
 
-        # prefix column names with table names to ensure uniquness
-        all_data[table_name].columns = [table_name + column for column in all_data[table_name].columns]
-        all_data[case_table_name].columns = [case_table_name + column for column in all_data[case_table_name].columns]
-
-               
-#    ocels = {}
-    for table in tables:
-        
-        print("Transforming " + str(table) + " table...")
-        
-        attribute_names = set()
-        object_types = set()
-        activities = set()
-        global_objects = set()
+    
+    for table_name in tables:
+        print("Transforming " + str(table_name) + " table...")
         
         print("Fetching Data...")
-        df = all_data[table]
-        case_table_name = tables[table].case_table.name
+        df = all_data[table_name]
+        case_table_name = tables[table_name].case_table.name
         case_table = all_data[case_table_name]
         
-        # since case table might have different case column name, we need to find its name
-        activity_table_f_keys = data_model.foreign_keys.find_keys_by_name(table)
+        # find case table's case column name by looking at foreign key relation
+        activity_table_f_keys = data_model.foreign_keys.find_keys_by_name(table_name)
         case_table_f_keys = data_model.foreign_keys.find_keys_by_name(case_table_name)
         for key in activity_table_f_keys:
             if key in case_table_f_keys:
-                if tables[table].case_column == key["columns"][0][0]:
-                    case_table_case_column = case_table_name + key["columns"][0][1]
+                if tables[table_name].case_column == key["columns"][0][0]:
+                    case_table_case_column =  key["columns"][0][1]
                 else:
-                    case_table_case_column = case_table_name + key["columns"][0][0]
-    
-#        case_table_case_column = tables[table].case_column   # only would work if case table case column same name as activity case column name
+                    case_table_case_column = key["columns"][0][0]
         
-        act_column = table + tables[table].activity_column
-        time_column = table + tables[table].timestamp_column
-        case_column = table + tables[table].case_column
-        attr_columns = df.columns.difference([act_column, time_column, case_column, tables[table].sorting_column])
+        # save case, activity, timestamp column name of activity table
+        case_column = tables[table_name].case_column
+        act_column = tables[table_name].activity_column
+        time_column = tables[table_name].timestamp_column
+ 
+        print("Converting to OCEL-Based Dataframes")
+        # convert tables to OCEL-based dataframes
+        eventsDf = convertCelonisActDfToEventDf(df, case_column, act_column, time_column)
+        objectsDf = convertCelonisCaseDfToObjectDf(case_table, case_table_case_column)
         
-        attribute_names = attribute_names.union(attr_columns)
+        # add OCEL-based events and object dataframes to ocel_model
+        ocel_model.addEventObjectDf(table_name, eventsDf, objectsDf)
+        # align objects and events dataframe so that there aren't objects in objectsDf not mentioned in any events and no objects in eventsDf not mentioned in objectsDf (conflicts are being handles by removing events/objects)
+        ocel_model.alignEventsObjects(table_name)
         
-        print("   Transforming Events...")
-        events = {}
-        for row in df.iterrows():
-            event = row[1]
-
-            o = {"ocel:activity": event}
-            o["ocel:activity"] = event[act_column]
-            
-            activities.add(event[act_column])
-            
-            o["ocel:timestamp"] = str(event[time_column])
-            o["ocel:omap"] = [ event[case_column] ]
-            o["ocel:vmap"] = {col[len(table):]: event[col] for col in attr_columns}
-
-
-            events[str(row[0])] = o
-        
-        
-        print("   Transforming Objects...")
-
-        attr_columns = case_table.columns.difference([case_table_case_column])
-        
-        attribute_names = attribute_names.union(attr_columns)
-        
-        objects = {}
-        for row in case_table.iterrows():
-            event = row[1]
-
-            o = {}
-
-            # for compatability reasons, we don't want any blank spaces, so we replace them with "_"
-            o["ocel:type"] = case_table_case_column[len(case_table_name):].replace(" ", "_")
-            o["ocel:ovmap"] = {col[len(case_table_name):].replace(" ", "_"): event[col] for col in attr_columns}
-
-            objects[str(event[case_table_case_column])] = o 
-            
-            global_objects.add(str(event[case_table_case_column]))
-            
-        object_types.add(str(case_table_case_column[len(case_table_name):].replace(" ", "_")))
-            
-        print("   Global Values...")
-        ocel = {  "ocel:global-event": {"ocel:activity": list(activities)}}
-        ocel["ocel:global-object"] =  {"ocel:type": "__INVALID__"} # {"ocel:type": list(global_objects)}
-        ocel["ocel:global-log"] = {"ocel:attribute-names": [attr[len(table):] for attr in attribute_names],
-                                    "ocel:object-types": list(object_types),
-                                    "ocel:version": "1.0",
-                                    "ocel:ordering": "timestamp"}
-        ocel["ocel:events"] = events
-        ocel["ocel:objects"] = objects
-        
-        print("   Validating OCEL...")
-#        ocel_lib.export_log(ocel, 'oceltest.json')
-#        if not ocel_lib.validate('oceltest.json', 'schema.json'):
-#            print(ocel)
-#            raise Exception("INVALID OCEL DOES NOT MATCH SCHEMA")
-#        print("   OCEL validated successfully...")
-        
-        ocel_model.addOCEL(name=table, ocelFileName = table + ".json", ocel=ocel)
-#        ocels[table] = ocel
 
 
     print("Generating object relationships...")
-
+        
+    # prefix column names of all columns to ensure uniqueness. We do this before joining tables to compute obj relationships
+    for table_name in all_data:
+        all_data[table_name].columns = [table_name + column for column in all_data[table_name].columns]    
+    
 
     object_relations = {}
 
     foreignKeys = data_model.foreign_keys
     all_tables = data_model.tables
 
+    # compute possible connections between activity tables
     product = []
     for x in tables.keys():
         for y in tables.keys():
@@ -215,7 +114,8 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
 
         
     print("Creating foreign key graph...")
-
+    
+    # create foreign key graph so we can find shortest path from one activity table to another
     graph = {}
     for table in all_tables.names.keys():
         connected_nodes = []
@@ -239,13 +139,15 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         table2 = pair[1]
         
         print("Object relations between: " + table1 + " and " + table2)
-            
+        
+        # calculate path of tables to be merged on
         path = nx.algorithms.shortest_paths.generic.shortest_path(foreignKeyGraph, source=table1, target=table2)
-
 
         print("   Calculating join path...")
 
         potential_relations2 = foreignKeys.find_keys_by_source_name(path[0]) + foreignKeys.find_keys_by_target_name(path[0])
+        
+        # calculate merge path with table names and column names of these tables to join on (format: [{"leftTable" : lTable, "leftColumn: lColumn, rightTable": rtable, "rightColumn": rColumn}, ...])
         mergePath = []
         for i in range(len(path)-1):
             potential_relations1 = potential_relations2
@@ -266,6 +168,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         
         print("   Getting data...")
         
+        # get data of other tables (so far we only downloaded case and activity table data)
         for tab in path:
             if tab not in all_data:
                 all_data[tab] = data_model.tables.find(tab).get_data_frame()
@@ -282,6 +185,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         remainingColumns.add(table1 + tables[table1].case_column)
         remainingColumns.add(table2 + tables[table2].case_column)
 
+        # perform pandas merge along merge path
         df = all_data[table1]
         for relation in mergePath:
             df = df.merge(all_data[relation["leftTable"]] \
@@ -289,17 +193,18 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
                         left_on=relation["leftColumn"], right_on=relation["rightColumn"]))
             df.drop(list(set(df.columns).difference(remainingColumns)), axis=1, inplace=True)
             
+        # we only want the two object columns, so we can drop rest
         columns_to_keep = [table1 + tables[table1].case_column, table2 + tables[table2].case_column]
-
         df = df[list(set(columns_to_keep).intersection(df.columns))]
-
+        
+        # reset index
         df.drop_duplicates(inplace=True)
         df.reset_index(drop=True, inplace=True)
         
         object_relations[(table1, table2)] = df
         object_relations[(table2, table1)] = df
 
-
+    # add all object relationships in form of tuples to a set
     total_relation = set()
     for i in range(len(tables)):
         for j in range(len(tables)):
@@ -312,7 +217,6 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
     ocel_model.setRelation(total_relation)
                     
     return ocel_model
-    
 
 
 
@@ -326,13 +230,17 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
 url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
 api = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
 
+url = "https://students-pads.eu-1.celonis.cloud"
+api = "MmRlZTU4M2MtNjg5NS00YTU4LTlhOWEtODQ1ZDAxYTUzNTcxOmNaUjhMUllkSUQ4Y0E2cG9uRERkSWJSY2FtdVp0NkxLTVhuTm92TGk0Q0Fi"
+
+
 data_pool = "OcelBigReduccedPool"
 data_model = "OcelBigReducedModel"
 
 data_pool = "multiOCEL"
 data_model = "ordersMngmnt"
 
-data_pool = "DemoLog"
+data_pool = "DemoPool"
 data_model = "DemoModel"
 
 # ocel_model = convertToOcelModel(url, api, data_pool, data_model)
@@ -340,7 +248,7 @@ data_model = "DemoModel"
 # for development purposes
 def saveToPickle(url, api, data_pool, data_model):
     ocel_model = convertToOcelModel(url, api, data_pool, data_model)
-    with open('filePresentation.pkl', 'wb') as file:
+    with open('fileDf.pkl', 'wb') as file:
         pickle.dump(ocel_model, file)
 
-#saveToPickle(url, api, data_pool, data_model)
+# saveToPickle(url, api, data_pool, data_model)

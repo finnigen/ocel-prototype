@@ -6,9 +6,8 @@ from operators import manualMiner
 
 class ManualMinerFrame(OperatorFrame):
  
-    def __init__(self, parent, ocel, title, description):
-        miner = manualMiner
-        super().__init__(parent, ocel, title, description, miner)
+    def __init__(self, parent, ocel_model, title, description):
+        super().__init__(parent, ocel_model, title, description)
 
 
         self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.operatorFrame)
@@ -76,14 +75,12 @@ class ManualMinerFrame(OperatorFrame):
     def initCounter(self):
         self.numOfActComboBox.clear()
 
-        # get set of all activities in both logs
-        activities1 = set()
-        for k, v in self.ocel_model.getOCEL(self.logSelectcomboBox1.currentText())["ocel:events"].items():
-            activities1.add(v["ocel:activity"])
+        name1 = self.logSelectcomboBox1.currentText()
+        name2 = self.logSelectcomboBox2.currentText()
 
-        activities2 = set()
-        for k, v in self.ocel_model.getOCEL(self.logSelectcomboBox2.currentText())["ocel:events"].items():
-            activities2.add(v["ocel:activity"])
+        # get set of all activities in both logs
+        activities1 = set(self.ocel_model.getEventsDf(name1)[("ocel:activity", "ocel:activity")])
+        activities2 = set(self.ocel_model.getEventsDf(name2)[("ocel:activity", "ocel:activity")])
 
         length = len(activities1) * len(activities2)
         for i in range(length):
@@ -94,6 +91,9 @@ class ManualMinerFrame(OperatorFrame):
 
 
     def initActivitySelectors(self):
+
+        name1 = self.logSelectcomboBox1.currentText()
+        name2 = self.logSelectcomboBox2.currentText()
 
         # clear all to begin with
         for tup in self.activityComboBoxes:
@@ -109,13 +109,8 @@ class ManualMinerFrame(OperatorFrame):
             self.activityComboBoxes.append((leftActivityComboBox, rightActivityComboBox))
         
         # get set of all activities in both logs
-        activities1 = set()
-        for k, v in self.ocel_model.getOCEL(self.logSelectcomboBox1.currentText())["ocel:events"].items():
-            activities1.add(v["ocel:activity"])
-
-        activities2 = set()
-        for k, v in self.ocel_model.getOCEL(self.logSelectcomboBox2.currentText())["ocel:events"].items():
-            activities2.add(v["ocel:activity"])
+        activities1 = set(self.ocel_model.getEventsDf(name1)[("ocel:activity", "ocel:activity")])
+        activities2 = set(self.ocel_model.getEventsDf(name2)[("ocel:activity", "ocel:activity")])
 
         activities1 = list(activities1)
         activities1.sort()
@@ -135,14 +130,12 @@ class ManualMinerFrame(OperatorFrame):
 
 
 
-    def getNewLog(self):
+    def getNewLog(self, newName):
         # returns new log that is created by applying given operator with selected parameters + name
         # this is used for the "add to logs" and "export" button in the main window
         
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
-        log1 = self.ocel_model.getOCEL(name1)
-        log2 = self.ocel_model.getOCEL(name2)
 
         # get activity relation from comboboxes
         activity_relation = set()
@@ -152,12 +145,8 @@ class ManualMinerFrame(OperatorFrame):
         activity_relation = list(activity_relation)
         activity_relation.sort()
 
-        name = "MANUAL_MINER (" + name1 + ", " + name2 + ")" + " on " + "(" + str(activity_relation) + ")"
-#        if name in self.ocel_model.ocels:
-#            return
-        newLog = self.miner(log1, log2, self.ocel_model.getRelation(), activity_relation)
+        return self.ocel_model.manualMiner(name1, name2, activity_relation, newName=newName)
 
-        return (name, newLog)
 
     def refresh(self):
         # used to refresh comboboxes for selection of operator parameters

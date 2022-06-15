@@ -1,0 +1,57 @@
+from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtCore import Qt
+import sys
+import pandas as pd
+
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self, *args, obj=None, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+
+        self.centralwidget = QtWidgets.QWidget(self)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
+        self.centralwidget.setSizePolicy(sizePolicy)
+
+        self.pdtable = QtWidgets.QTableView(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
+        self.pdtable.setSizePolicy(sizePolicy)
+
+        dataPD = [['tom', 10.0, 180.3], ['nick', 15.0, 175.7], ['juli', 14.0, 160.6]]
+        df = pd.DataFrame(dataPD, columns=['Name', 'Age', 'Height'])
+        print(df.dtypes)
+        
+        self.model = PandasTableModel(df)
+        self.pdtable.setModel(self.model)
+
+        self.setCentralWidget(self.centralwidget)
+
+
+class PandasTableModel(QtGui.QStandardItemModel):
+    def __init__(self, data, parent=None):
+        QtGui.QStandardItemModel.__init__(self, parent)
+        self._data = data
+        for col in data.columns:
+            data_col = [QtGui.QStandardItem("{}".format(x)) for x in data[col].values]
+            self.appendColumn(data_col)
+        return
+
+    def rowCount(self, parent=None):
+        return len(self._data.values)
+
+    def columnCount(self, parent=None):
+        return self._data.columns.size
+
+    def headerData(self, x, orientation, role):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self._data.columns[x]
+        if orientation == Qt.Vertical and role == Qt.DisplayRole:
+            return self._data.index[x]
+        return None
+
+
+if __name__ == "__main__":
+    app  = QtWidgets.QApplication(sys.argv)
+    app.setStyle("Fusion")
+    main = MainWindow()
+    main.show()
+    main.resize(600, 400)
+    sys.exit(app.exec_())

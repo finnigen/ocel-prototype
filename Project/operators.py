@@ -17,7 +17,6 @@ def matchMiner(log1, log2, object_relation, attribute1, attribute2=""):
     newLog['ocel:global-log']['ocel:attribute-names'] = list(set(newLog['ocel:global-log']['ocel:attribute-names']).union(set(log2['ocel:global-log']['ocel:attribute-names'])))
 
 
-
     added_objects = set()
     # find objects in log2 that match attribute value and are in object relation
     # adjust events

@@ -21,6 +21,8 @@ from operatorFrames.flattenFrame import FlattenFrame
 from operatorFrames.concatFrame import ConcatFrame
 from operatorFrames.aggregateFrame import AggregateFrame
 
+from ocel_model import *
+
 
 import json
 import ocel as ocel_lib
@@ -205,8 +207,9 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarDeleteButtons = {}
         self.ocelSideBarViewButtons = {}
 
-        for i in range(len(self.ocel_model.getOcelNames())):
-            currName = list(self.ocel_model.getOcelNames())[i]
+        ocel_names = list(self.ocel_model.getOcelNames())
+        for i in range(len(ocel_names)):
+            currName = ocel_names[i]
             self.ocelSideBarFrames[currName] = QtWidgets.QFrame(self.OCEL_list_frame)
             self.innerVerticalLayout.addWidget(self.ocelSideBarFrames[currName])
         
@@ -281,14 +284,14 @@ class TransformationCenter(QtWidgets.QWidget):
             if text in self.ocel_model.getOcelNames():
                 text = ""
                 duplicate = True
+        newName=text
 
-        name_newLog = self.operatorFrames[pageNum].getNewLog()
-        if not name_newLog:
+        result = self.operatorFrames[pageNum].getNewLog(newName)
+        if not result:
             return
-        name = text # name_newLog[0]
-        newLog = name_newLog[1]
-        self.ocel_model.addOCEL(name, ocelFileName=name+".json", ocel=newLog)
-        self.refreshSelection(name)
+
+        self.refreshSelection(newName)
+
 
     def removeFromLogs(self, name):
         if len(self.ocel_model.ocels) == 1:
@@ -374,7 +377,7 @@ class TransformationCenter(QtWidgets.QWidget):
     def show_table_window(self, name):
         if name not in self.windows:
             newWindow = QtWidgets.QMainWindow()
-            ui = TableWindow(self.ocel_model.getOCEL(name), name)
+            ui = TableWindow(self.ocel_model, name)
             ui.setupUi(newWindow)
             self.windows[name] = newWindow
         self.windows[name].show()
@@ -393,7 +396,10 @@ class TransformationCenter(QtWidgets.QWidget):
         print("exporting " + name)
         fileName = 'ocel_' + name + '.json'
         filePath = "exportedOCELs/" + fileName
-        ocel_lib.export_log(self.ocel_model.getOCEL(name), filePath)
+
+        ocelDict = self.ocel_model.transformEventDfObjectDfToOcel(name)
+
+        ocel_lib.export_log(ocelDict, filePath)
         dialog = ExportDialog(filePath, self.url, self.api)
         if dialog.exec():
             parameters = dialog.getInputs()
@@ -521,7 +527,7 @@ class WorkerThread(QThread):
         obj_relations = self.ocel_model.getRelation()
         all_objects = set()
         for ocelName in self.ocel_model.getOcelNames():
-            all_objects = all_objects.union(self.ocel_model.getOCEL(ocelName)["ocel:objects"].keys())
+            all_objects = all_objects.union(self.ocel_model.getObjectsDf(ocelName).index)
         all_objects = list(all_objects)
         rows = {}
         for obj in all_objects:
@@ -576,7 +582,7 @@ if __name__ == "__main__":
 
     MainWindow = QtWidgets.QMainWindow()
 
-    with open('filePresentation.pkl', 'rb') as file:
+    with open('fileDf.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

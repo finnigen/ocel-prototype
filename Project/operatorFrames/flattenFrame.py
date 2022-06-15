@@ -6,9 +6,8 @@ from operators import flatten
 
 class FlattenFrame(OperatorFrame):
  
-    def __init__(self, parent, ocel, title, description):
-        miner = flatten
-        super().__init__(parent, ocel, title, description, miner)
+    def __init__(self, parent, ocel_model, title, description):
+        super().__init__(parent, ocel_model, title, description)
 
 
         self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.operatorFrame)
@@ -44,27 +43,20 @@ class FlattenFrame(OperatorFrame):
         self.refresh()
  
 
-    def getNewLog(self):
+    def getNewLog(self, newName):
         # returns new log that is created by applying given operator with selected parameters + name
         # this is used for the "add to logs" and "export" button in the main window
         
         name = self.logSelectcomboBox1.currentText()
         objectType = self.logSelectcomboBox2.currentText()
-        log = self.ocel_model.getOCEL(name)
 
-        name = "FLATTEN (" + name + ", " + objectType + ")" 
-#        if name in self.ocel_model.ocels:
-#            return
-        newLog = self.miner(log, self.ocel_model.getRelation(), objectType)
-
-        return (name, newLog)
+        return self.ocel_model.flatten(name, objectType, newName=newName)
 
 
     def initObjectTypes(self):
         self.logSelectcomboBox2.clear()
         name = self.logSelectcomboBox1.currentText()
-        log = self.ocel_model.getOCEL(name)
-        types = log["ocel:global-log"]["ocel:object-types"]
+        types = list(set(self.ocel_model.getObjectsDf(name)[("ocel:type", "ocel:type")]))
         types.sort()
         for i in range(len(types)):
             self.logSelectcomboBox2.addItem("")

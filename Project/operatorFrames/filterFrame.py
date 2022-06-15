@@ -7,9 +7,8 @@ import datetime
 
 class FilterFrame(OperatorFrame):
  
-    def __init__(self, parent, ocel, title, description):
-        miner = filterLog
-        super().__init__(parent, ocel, title, description, miner)
+    def __init__(self, parent, ocel_model, title, description):
+        super().__init__(parent, ocel_model, title, description)
 
         font = QtGui.QFont()
         font.setPointSize(16)
@@ -71,7 +70,8 @@ class FilterFrame(OperatorFrame):
 
     def initAttributes(self):
         logName = self.logSelectcomboBox1.currentText()
-        attributes = list(set(self.ocel_model.getOCEL(logName)["ocel:global-log"]["ocel:attribute-names"]))
+        eventsDf = self.ocel_model.getEventsDf(logName)
+        attributes = list(eventsDf["ocel:vmap"].columns)
         attributes.sort()
 
         self.boxes = []
@@ -84,9 +84,9 @@ class FilterFrame(OperatorFrame):
             
             # get all attribute values and save them in input box comma separated
             allAttributeValues = set()
-            for ev_id, event in self.ocel_model.getOCEL(logName)["ocel:events"].items():
-                if attributes[i] in event["ocel:vmap"].keys():
-                    allAttributeValues.add(event["ocel:vmap"][attributes[i]])
+            for attr in attributes:
+                allAttributeValues = allAttributeValues.union(eventsDf["ocel:vmap"][attr])
+            
             attributeValueStr = ""
             for value in allAttributeValues:
                 attributeValueStr += str(value) + ";"
@@ -110,7 +110,7 @@ class FilterFrame(OperatorFrame):
 
     def initActivities(self):
         logName = self.logSelectcomboBox1.currentText()
-        activities = list(set(self.ocel_model.getOCEL(logName)["ocel:global-event"]["ocel:activity"]))
+        activities = list(set(self.ocel_model.getEventsDf(logName)[("ocel:activity", "ocel:activity")]))
         activities.sort()
 
         self.boxes = []
@@ -128,8 +128,8 @@ class FilterFrame(OperatorFrame):
 
     def initObjects(self):
         logName = self.logSelectcomboBox1.currentText()
-        ocelObjects = self.ocel_model.getOCEL(logName)["ocel:objects"]
-        objects = list(set(ocelObjects.keys()))
+        objectsDf = self.ocel_model.getObjectsDf(logName)
+        objects = list(set(objectsDf.index))
         objects.sort()
 
         myFont=QtGui.QFont()
@@ -139,7 +139,7 @@ class FilterFrame(OperatorFrame):
         for i in range(len(objects)):
             # object type
             labelType = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-            labelType.setText(ocelObjects[objects[i]]["ocel:type"] + ":")
+            labelType.setText(objectsDf.loc[objects[i]][("ocel:type", "ocel:type")] + ":")
             labelType.setFont(myFont)
 
             # object
@@ -171,12 +171,11 @@ class FilterFrame(OperatorFrame):
             self.scrollGridLayout.itemAt(i).widget().deleteLater()
     
 
-    def getNewLog(self):
+    def getNewLog(self, newName):
         # returns new log that is created by applying given operator with selected parameters + name
         # this is used for the "add to logs" and "export" button in the main window
         
-        name1 = self.logSelectcomboBox1.currentText()
-        log1 = self.ocel_model.getOCEL(name1)
+        name = self.logSelectcomboBox1.currentText()
         
         mode = self.logSelectcomboBox2.currentText()
 
@@ -197,12 +196,8 @@ class FilterFrame(OperatorFrame):
             end = datetime.datetime.strptime(self.endDate.text(), '%m/%d/%y %H:%M %p')
             parameters = (start, end)
 
-        name = "FILTER (" + name1 + ")"
-#        if name in self.ocel_model.ocels:
-#            return
-        newLog = self.miner(log1, parameters, mode)
 
-        return (name, newLog)
+        return self.ocel_model.filterLog(name, parameters, mode, newName=newName)
 
 
     def refresh(self):
