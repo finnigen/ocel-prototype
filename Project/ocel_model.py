@@ -101,8 +101,8 @@ class OCEL_Model:
         objectsDf.to_pickle(os.path.join(newPath, "objectsDf.pkl"))
 
         self.ocels.add(name)
-        
-        
+
+
     def alignEventsObjects(self, name):
         # remove objects that aren't mentioned in any events
         # remove objects from events that aren't mentioned in objectsDf
@@ -134,17 +134,16 @@ class OCEL_Model:
         self.setEventsDf(name, eventsDf)
         self.setObjectsDf(name, objectsDf)
         
-        
     def removeOCEL(self, name):
         if name not in self.ocels:
             return True
         filePath = os.path.join(self.folder, name)
         if os.path.exists(filePath):
-            os.remove(filePath)
+            shutil.rmtree(filePath)
             self.ocels.remove(name)
             return True
         return False
-    
+
     def getEventsDf(self, name):
         if name not in self.ocels:
             return False
