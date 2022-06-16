@@ -65,13 +65,24 @@ class FilterFrame(OperatorFrame):
             self.initActivities()
         elif mode == "object":
             self.initObjects()
-        elif mode == "attribute":
-            self.initAttributes()
+        elif mode == "eventAttribute" or mode == "objectAttribute":
+            self.initAttributes(mode)
 
-    def initAttributes(self):
+    def initAttributes(self, mode):
         logName = self.logSelectcomboBox1.currentText()
-        eventsDf = self.ocel_model.getEventsDf(logName)
-        attributes = list(eventsDf["ocel:vmap"].columns)
+
+        if mode == "eventAttribute":
+            if "ocel:vmap" in self.ocel_model.getEventsDf(logName).columns:
+                attributesDf = self.ocel_model.getEventsDf(logName)["ocel:vmap"]
+            else:
+                return
+        else:
+            if "ocel:ovmap" in self.ocel_model.getObjectsDf(logName).columns:
+                attributesDf = self.ocel_model.getObjectsDf(logName)["ocel:ovmap"]
+            else:
+                return
+
+        attributes = list(attributesDf.columns)
         attributes.sort()
 
         self.boxes = []
@@ -82,16 +93,21 @@ class FilterFrame(OperatorFrame):
             checkbox.setChecked(True)
             text = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
             
-            # get all attribute values and save them in input box comma separated
-            allAttributeValues = set()
-            for attr in attributes:
-                allAttributeValues = allAttributeValues.union(eventsDf["ocel:vmap"][attr])
-            
-            attributeValueStr = ""
-            for value in allAttributeValues:
-                attributeValueStr += str(value) + ";"
-            if attributeValueStr != "" and attributeValueStr[-1] == ";":
-                attributeValueStr = attributeValueStr[:-1]
+            typ = attributesDf[attributes[i]].dtype
+            if typ == "int64" or typ == "float64" or typ == "datetime64[ns]":
+                mini = min(attributesDf[attributes[i]])
+                maxi = max(attributesDf[attributes[i]])
+                attributeValueStr = str(mini) + ";" + str(maxi)
+            else:
+                # get all attribute values and save them in input box comma separated
+                allAttributeValues = set(attributesDf[attributes[i]])
+
+                attributeValueStr = ""
+                for value in allAttributeValues:
+                    attributeValueStr += str(value) + ";"
+                if attributeValueStr != "" and attributeValueStr[-1] == ";":
+                    attributeValueStr = attributeValueStr[:-1]
+
             text.setText(attributeValueStr)
 
             label2 = QtWidgets.QLabel(self.scrollAreaWidgetContents)
@@ -185,17 +201,16 @@ class FilterFrame(OperatorFrame):
             for label, checkbox in self.boxes:
                 if checkbox.isChecked():
                     parameters.add(label.text())
-        elif mode == "attribute":
+        elif mode == "eventAttribute" or "objectAttribute":
             parameters = {}
             for attribute, checkbox, text in self.boxes:
                 if checkbox.isChecked() and len(text.text()) != 0:
-                    values = set(text.text().split(";"))
+                    values = text.text().split(";")
                     parameters[attribute.text()] = values
         elif mode == "timestamp":
             start = datetime.datetime.strptime(self.startDate.text(), '%m/%d/%y %H:%M %p')
             end = datetime.datetime.strptime(self.endDate.text(), '%m/%d/%y %H:%M %p')
             parameters = (start, end)
-
 
         return self.ocel_model.filterLog(name, parameters, mode, newName=newName)
 
@@ -213,7 +228,7 @@ class FilterFrame(OperatorFrame):
             self.logSelectcomboBox1.addItem("")
             self.logSelectcomboBox1.setItemText(i, names[i])
 
-        modes = ["activity", "attribute", "object", "timestamp"]
+        modes = ["activity", "eventAttribute", "objectAttribute", "object", "timestamp"]
         for i in range(len(modes)):
             self.logSelectcomboBox2.addItem("")
             self.logSelectcomboBox2.setItemText(i, modes[i])

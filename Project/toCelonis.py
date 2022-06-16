@@ -211,8 +211,8 @@ def cli(ocelPath, url, api, dataPool, dataModel, selected_object_types, allowed_
         oct = read_ocel(log, allowed_object_types=selected_object_types, allowed_transitions=allowed_transitions)
         output_celonis(oct, url, api, dataPool, dataModel)
 
-        output_yaml(oct)
-        output_pql(oct)
+    #    output_yaml(oct)
+    #    output_pql(oct)
 
         print("----- FINISHED WITH SUCCESS -----")
     except:

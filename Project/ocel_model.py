@@ -101,8 +101,8 @@ class OCEL_Model:
         objectsDf.to_pickle(os.path.join(newPath, "objectsDf.pkl"))
 
         self.ocels.add(name)
-
-
+        
+        
     def alignEventsObjects(self, name):
         # remove objects that aren't mentioned in any events
         # remove objects from events that aren't mentioned in objectsDf
@@ -134,6 +134,7 @@ class OCEL_Model:
         self.setEventsDf(name, eventsDf)
         self.setObjectsDf(name, objectsDf)
         
+        
     def removeOCEL(self, name):
         if name not in self.ocels:
             return True
@@ -143,7 +144,7 @@ class OCEL_Model:
             self.ocels.remove(name)
             return True
         return False
-
+    
     def getEventsDf(self, name):
         if name not in self.ocels:
             return False
@@ -529,22 +530,83 @@ class OCEL_Model:
         return eventsDf[eventsDf[("ocel:activity", "ocel:activity")].isin(activities)]
 
 
-    # attributes parameter: dictionary with attribute name and set of acceptable values
-    # events have to match all passed attributes
-    def filterByAttribute(self, eventsDf, attributes):
-        toBeRemoved = []
-        for index, event in eventsDf.iterrows():
-            for key, values in attributes.items():
-                if ("ocel:vmap", key) not in eventsDf.columns:
-                    toBeRemoved.append(index)
-                    break
-                elif event[("ocel:vmap", key)] not in values:
-                    toBeRemoved.append(index)
-                    break
+    # parameters = {attr : values, ...}
+    # type int/float/datetime: values = (min, max)
+    # type other: values = set([a,b,c,...])
+    def filterEventAttributes(self, name, parameters, newName):
 
-        eventsDf.drop(toBeRemoved, inplace=True)
+        # get logs
+        eventsDf = self.getEventsDf(name)
+        objectsDf = self.getObjectsDf(name)
 
-        return eventsDf
+        newEventsDf = copy.deepcopy(eventsDf)
+
+        # first remove non-fitting objects from objectsDf
+        for key, values in parameters.items():
+            typ = eventsDf["ocel:vmap"][key].dtype
+            if typ == "int64" or typ == "float64" or typ == "datetime64[ns]":
+                values = list(values)
+                mini = values[0]
+                maxi = values[1]
+                if typ == "int64" or typ == "float64":
+                    mini = float(mini)
+                    maxi = float(maxi)
+            
+                newEventsDf = newEventsDf[(newEventsDf["ocel:vmap"][key] <= maxi) & (newEventsDf["ocel:vmap"][key] >= mini)]
+            else:
+                newEventsDf = newEventsDf[newEventsDf["ocel:vmap"][key].isin(values)]
+
+        # if no new name given, create own
+        if newName == "":
+            newName = "FILTER_EVENT_ATTRIBUTES(" + name  + ")"
+
+        # reset index of events dataframe
+        eventsDf.reset_index(inplace=True, drop=True)
+
+        self.addEventObjectDf(newName, newEventsDf, objectsDf)
+
+        # remove potentially unnecessary objects from objectsDf
+        self.alignEventsObjects(newName)
+
+        return True
+
+
+    # parameters = {attr : values, ...}
+    # type int/float/datetime: values = (min, max)
+    # type other: values = set([a,b,c,...])
+    def filterObjectAttributes(self, name, parameters, newName):
+
+        # get logs
+        eventsDf = self.getEventsDf(name)
+        objectsDf = self.getObjectsDf(name)
+
+        newObjectsDf = copy.deepcopy(objectsDf)
+
+        # first remove non-fitting objects from objectsDf
+        for key, values in parameters.items():
+            typ = objectsDf["ocel:ovmap"][key].dtype
+            if typ == "int64" or typ == "float64" or typ == "datetime64[ns]":
+                values = list(values)
+                mini = values[0]
+                maxi = values[1]
+                newObjectsDf = newObjectsDf[(newObjectsDf["ocel:ovmap"][key] <= maxi) & (newObjectsDf["ocel:ovmap"][key] >= mini)]
+            else:
+                newObjectsDf = newObjectsDf[newObjectsDf["ocel:ovmap"][key].isin(values)]
+
+        # if no new name given, create own
+        if newName == "":
+            newName = "FILTER_OBJECT_ATTRIBUTES(" + name  + ")"
+
+        # reset index of events dataframe
+        eventsDf.reset_index(inplace=True, drop=True)
+
+        self.addEventObjectDf(newName, eventsDf, newObjectsDf)
+
+        # remove potentially unnecessary objects from eventsDf
+        self.alignEventsObjects(newName)
+
+        return True
+
 
 
     # objects parameters: set of objects that we want to keep
@@ -581,34 +643,39 @@ class OCEL_Model:
     #    actual filter criteria
     def filterLog(self, name, parameters, mode="activity", newName=""):
 
-        # get logs
-        eventsDf = self.getEventsDf(name)
-        objectsDf = self.getObjectsDf(name)    
+        if mode == "eventAttribute":
+            return self.filterEventAttributes(name, parameters, newName)
+        elif mode == "objectAttribute":
+            return self.filterObjectAttributes(name, parameters, newName)
+        
+        else:
+            
+            # get logs
+            eventsDf = self.getEventsDf(name)
+            objectsDf = self.getObjectsDf(name)    
 
-        newEventsDf = copy.deepcopy(eventsDf)
+            newEventsDf = copy.deepcopy(eventsDf)
+        
+            if mode == "activity":
+                newEventsDf = self.filterByActivity(newEventsDf, parameters)
+            elif mode == "object":
+                newEventsDf = self.filterByObject(newEventsDf, parameters)
+            elif mode == "timestamp":
+                newEventsDf = self.filterByTimestamp(newEventsDf, parameters)
 
-        if mode == "activity":
-            newEventsDf = self.filterByActivity(newEventsDf, parameters)
-        elif mode == "attribute":
-            newEventsDf = self.filterByAttribute(newEventsDf, parameters)
-        elif mode == "object":
-            newEventsDf = self.filterByObject(newEventsDf, parameters)
-        elif mode == "timestamp":
-            newEventsDf = self.filterByTimestamp(newEventsDf, parameters)
+            # reset index of events dataframe
+            newEventsDf.reset_index(inplace=True, drop=True)
 
-        # reset index of events dataframe
-        newEventsDf.reset_index(inplace=True, drop=True)
+            # if no new name given, create own
+            if newName == "":
+                newName = "FILTER(" + name + ")"
 
-        # if no new name given, create own
-        if newName == "":
-            newName = "FILTER(" + name + ")"
+            self.addEventObjectDf(newName, newEventsDf, objectsDf)
 
-        self.addEventObjectDf(newName, newEventsDf, objectsDf)
+            # align objects and events (remove unmentioned objects after filtering)
+            self.alignEventsObjects(newName)
 
-        # align objects and events (remove unmentioned objects after filtering)
-        self.alignEventsObjects(newName)
-
-        return True
+            return True
     
 
     # interleaved miner section start ----------------------------------------------------------------------
