@@ -13,7 +13,8 @@ import time
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pycelonis import get_celonis
 from transformationCenter import TransformationCenter
-from ocel_converter import OCEL_Model, convertToOcelModel
+from ocel_converter import convertToOcelModel
+from ocel_model import OCEL_Model
 
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 

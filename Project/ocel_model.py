@@ -14,17 +14,27 @@ from pandas import json_normalize
 
 
 # convert celonis activity table dataframe to pandas dataframe based on ocel events
-def convertCelonisActDfToEventDf(tableDf, caseColumn, activityColumn, timestampColumn):
+def convertCelonisActDfToEventDf(tableDf, caseColumn, activityColumn, timestampColumn, sortingColumn=""): 
     newTable = copy.deepcopy(tableDf)
-    columns = [("ocel:omap", "ocel:omap"), ("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")]
+    
+    # drop sorting columns
+    if sortingColumn != "":
+        newTable.drop(columns=[sortingColumn], inplace=True)
+
+    newTable[caseColumn] = newTable[caseColumn].apply(lambda x : [x])
+
+    columns={caseColumn:("ocel:omap", "ocel:omap"), activityColumn: ("ocel:activity", "ocel:activity"), timestampColumn: ("ocel:timestamp", "ocel:timestamp")}
     remainingColumns = newTable.drop([caseColumn, activityColumn, timestampColumn], axis="columns").columns
         
     # in case we don't have any attributes in vmap, add empty vmap
     for col in remainingColumns:
-        columns.append(("ocel:vmap", col))
+        columns[col] = ("ocel:vmap", col)
     
-    newTable[caseColumn] = newTable[caseColumn].apply(lambda x : [x])
-    newTable.columns = pd.MultiIndex.from_tuples(columns)
+    newTable.rename(columns=columns, inplace=True)
+    newTable.columns = pd.MultiIndex.from_tuples(newTable.columns)
+
+    # reorder columns
+    newTable = newTable[[("ocel:omap", "ocel:omap"), ("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")] + list(newTable.drop(columns=[("ocel:omap", "ocel:omap"), ("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")]).columns)]
     return newTable
 
 
@@ -37,14 +47,17 @@ def convertCelonisCaseDfToObjectDf(tableDf, caseColumn):
     newTable.index.rename(objType, inplace = True)
     newTable.drop(caseColumn, axis="columns", inplace=True)
     
-    columns = []
+    columns = {}
     
     for attr in newTable.columns:
-        columns.append(("ocel:ovmap", "attr"))
+        columns[attr] = ("ocel:ovmap", attr)
     
-    columns.append(("ocel:type", "ocel:type"))
-    newTable["ocel:type"] = objType
-    newTable.columns = pd.MultiIndex.from_tuples(columns)
+    newTable.rename(columns=columns, inplace=True)
+    newTable[("ocel:type", "ocel:type")] = objType
+    newTable.columns = pd.MultiIndex.from_tuples(newTable.columns)
+
+    # reorder columns
+    newTable = newTable[[("ocel:type", "ocel:type")] + list(newTable.drop(columns=[("ocel:type", "ocel:type")]).columns)]
     
     return newTable
 
@@ -187,6 +200,9 @@ class OCEL_Model:
     
     def getRelation(self):
         return self.obj_relation
+    
+    def addToRelation(self, objRelationships):
+        self.obj_relation = self.obj_relation.union(objRelationships)
     
     def getOcelNames(self):
         return self.ocels
@@ -358,38 +374,30 @@ class OCEL_Model:
         object_relation = self.getRelation()
 
         # keep track of all added objects
-        addedObjects = set()
+        allAddedObjects = set()
 
-        for ev_id1 in eventsDf1.index:
-            event1 = eventsDf1.loc[ev_id1]
-            activity1 = event1[("ocel:activity", "ocel:activity")]
-            objects1 = event1[("ocel:omap", "ocel:omap")]
+        for pair in activity_relation:
+            leftAct = pair[0]
+            rightAct = pair[1]
+            leftOccurences = eventsDf1[eventsDf1[("ocel:activity", "ocel:activity")] == leftAct].index
+            rightOccurences = eventsDf2[eventsDf2[("ocel:activity", "ocel:activity")] == rightAct].index
+            rightObjects = set()
+            for i in rightOccurences:
+                for obj in eventsDf2.loc[i][("ocel:omap", "ocel:omap")]:
+                    rightObjects.add(obj)
 
-            newObjects = set()
-
-            for ev_id2 in eventsDf2.index:
-                event2 = eventsDf2.loc[ev_id2]
-                activity2 = event2[("ocel:activity", "ocel:activity")]
-                objects2 = event2[("ocel:omap", "ocel:omap")]
-
-                if (activity1, activity2) in activity_relation:
-
-                    # only add those objects that are in the object relation
-                    relatedObjects = set()
-                    for obj1 in objects1:
-                        for obj2 in objects2:
-                            if (obj1, obj2) in object_relation:
-                                relatedObjects.add(obj2)
-
-                    newObjects = newObjects.union(relatedObjects)
-
-            # add new objects to new datafrage
-            newEventsDf.at[ev_id1, ("ocel:omap", "ocel:omap")] = list(newObjects.union(eventsDf1[("ocel:omap", "ocel:omap")].loc[ev_id1]))
-
-            addedObjects = addedObjects.union(newObjects)
+            for leftOcc in leftOccurences:
+                toBeAddedObj = set()
+                for leftObj in eventsDf1.loc[leftOcc][("ocel:omap", "ocel:omap")]:
+                    for rightObj in rightObjects:
+                        if (leftObj, rightObj) in object_relation:
+                            toBeAddedObj.add(rightObj)
+                            allAddedObjects.add(rightObj)
+                newEventsDf.at[leftOcc, ("ocel:omap", "ocel:omap")] = list(toBeAddedObj.union(newEventsDf.loc[leftOcc][("ocel:omap", "ocel:omap")]))
+             
 
         # add new objects from log2 to log1
-        toBeAddedObjects = list(addedObjects.difference(objectsDf1.index))
+        toBeAddedObjects = list(allAddedObjects.difference(objectsDf1.index))
         newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
 
         # if no new name given, create own

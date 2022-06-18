@@ -100,7 +100,7 @@ class FilterFrame(OperatorFrame):
                 attributeValueStr = str(mini) + ";" + str(maxi)
             else:
                 # get all attribute values and save them in input box comma separated
-                allAttributeValues = set(attributesDf[attributes[i]])
+                allAttributeValues = set(attributesDf[attributes[i]].dropna())
 
                 attributeValueStr = ""
                 for value in allAttributeValues:

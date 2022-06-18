@@ -80,10 +80,13 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         case_column = tables[table_name].case_column
         act_column = tables[table_name].activity_column
         time_column = tables[table_name].timestamp_column
+        sorting_column = tables[table_name].sorting_column
+        if not sorting_column:
+            sorting_column = ""
  
         print("Converting to OCEL-Based Dataframes")
         # convert tables to OCEL-based dataframes
-        eventsDf = convertCelonisActDfToEventDf(df, case_column, act_column, time_column)
+        eventsDf = convertCelonisActDfToEventDf(df, case_column, act_column, time_column, sorting_column)
         objectsDf = convertCelonisCaseDfToObjectDf(case_table, case_table_case_column)
         
         # add OCEL-based events and object dataframes to ocel_model
@@ -91,7 +94,6 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         # align objects and events dataframe so that there aren't objects in objectsDf not mentioned in any events and no objects in eventsDf not mentioned in objectsDf (conflicts are being handles by removing events/objects)
         ocel_model.alignEventsObjects(table_name)
         
-
 
     print("Generating object relationships...")
         
@@ -237,18 +239,19 @@ api = "MmRlZTU4M2MtNjg5NS00YTU4LTlhOWEtODQ1ZDAxYTUzNTcxOmNaUjhMUllkSUQ4Y0E2cG9uR
 data_pool = "OcelBigReduccedPool"
 data_model = "OcelBigReducedModel"
 
-data_pool = "multiOCEL"
-data_model = "ordersMngmnt"
-
 data_pool = "DemoPool"
 data_model = "DemoModel"
+
+data_pool = "BigTest"
+data_model = "BigModel"
+
 
 # ocel_model = convertToOcelModel(url, api, data_pool, data_model)
 
 # for development purposes
 def saveToPickle(url, api, data_pool, data_model):
     ocel_model = convertToOcelModel(url, api, data_pool, data_model)
-    with open('fileDf.pkl', 'wb') as file:
+    with open('fileBig.pkl', 'wb') as file:
         pickle.dump(ocel_model, file)
 
 # saveToPickle(url, api, data_pool, data_model)

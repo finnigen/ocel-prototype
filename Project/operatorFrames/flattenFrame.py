@@ -56,7 +56,7 @@ class FlattenFrame(OperatorFrame):
     def initObjectTypes(self):
         self.logSelectcomboBox2.clear()
         name = self.logSelectcomboBox1.currentText()
-        types = list(set(self.ocel_model.getObjectsDf(name)[("ocel:type", "ocel:type")]))
+        types = list(self.ocel_model.getObjectTypes(name))
         types.sort()
         for i in range(len(types)):
             self.logSelectcomboBox2.addItem("")
