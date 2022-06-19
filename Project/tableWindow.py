@@ -26,6 +26,7 @@ class TableWindow(QtWidgets.QMainWindow):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
+        MainWindow.setWindowTitle(self.name)
         MainWindow.resize(960, 540)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")

@@ -89,6 +89,9 @@ class OCEL_Model:
             shutil.rmtree(newPath)
         os.mkdir(newPath)
         
+        # reset index of events dataframe
+        eventsDf.reset_index(inplace=True, drop=True)
+
         eventsDf.to_pickle(os.path.join(newPath, "eventsDf.pkl"))
         objectsDf.to_pickle(os.path.join(newPath, "objectsDf.pkl"))            
         self.ocels.add(name)
@@ -687,131 +690,124 @@ class OCEL_Model:
     
 
     # interleaved miner section start ----------------------------------------------------------------------
-    def sortByTimeStamp(self, element):
-        return element[2][("ocel:timestamp", "ocel:timestamp")]
+        
+    def interleavedMiner(self, name1, name2, newName=""):
 
+        newEventsDf = self.getEventsDf(name1)
 
-    # calculates interleaved event relation of two logs, used as helper for interleaved miner
-    def interleavedRelation(self, eventsDf1, eventsDf2, obj1, obj2):
-        # calculate path from obj1 and obj2
-        path = []
-        for ev_id, event in eventsDf1.iterrows():
-            if obj1 in event[("ocel:omap", "ocel:omap")]:
-                path.append((1, ev_id, event))
+        newEventsDf1 = copy.deepcopy(newEventsDf)
+        newEventsDf2 = self.getEventsDf(name2)
 
-        for ev_id, event in eventsDf2.iterrows():
-            if obj2 in event[("ocel:omap", "ocel:omap")]:
-                path.append((2, ev_id, event))
+        objectsDf1 = self.getObjectsDf(name1)    
+        objectsDf2 = self.getObjectsDf(name2)    
 
-        path.sort(reverse=False, key=self.sortByTimeStamp)
+        object_relations = self.getRelation()
 
-        matchingEvents = set()
+        newEventsDf1[("log", "log")] = 1
+        newEventsDf2[("log", "log")] = 2
 
-        for i in range(len(path)-1):
-            if path[i][0] != path[i+1][0]:
-                matchingEvents.add((path[i][:2], path[i+1][:2]))
+        # concat both dataframes and order events based on timestamp (but keep track from which log events come)
+        tempDf = pd.concat([newEventsDf1, newEventsDf2])[[("ocel:omap", "ocel:omap"), ("ocel:timestamp", "ocel:timestamp"), ("log", "log")]]
+        tempDf = tempDf.sort_values(by=[("ocel:timestamp", "ocel:timestamp"), ("log", "log")])
 
-        # returns set of relation tuples. Each tuple contains two tuples, 
-        # first element of inner tuple indicates which log, second element indicates event id
-        return matchingEvents
+        # keep track of index in original logs
+        tempDf.reset_index(inplace=True)
+        tempDf[("index", "index")] = tempDf["index"].apply(lambda x: [x])
 
+        # group by timestamp since we want transition from all events in case they have same timestamp
+        tempDf = tempDf.groupby([("ocel:timestamp", "ocel:timestamp"), ("log", "log")])[[("ocel:omap", "ocel:omap"), ("index", "index")]].apply(sum)
 
-    # calculates non interleaved event relation of two logs, used as helper for non/interleaved miner
-    def nonInterleavedRelation(self, eventsDf1, eventsDf2, obj1, obj2):
-        # calculate path from obj1 and obj2
-        path = []
-        for ev_id, event in eventsDf1.iterrows():
-            if obj1 in event[("ocel:omap", "ocel:omap")]:
-                path.append((1, ev_id, event))
+        allAddedObjects = set()
 
-        for ev_id, event in eventsDf2.iterrows():
-            if obj2 in event[("ocel:omap", "ocel:omap")]:
-                path.append((2, ev_id, event))
+        # loop through tempDf and keep track of previous index
+        # in case we switch to log 2, we merge the objects from that into omap of event referred to in previous index
+        previousIndex = None
+        for index, row in tempDf.iterrows():
+            if previousIndex == None:
+                previousIndex = index
+            elif index[1] == 2:
+                if previousIndex[1] == 1:
+                    for ev_id in tempDf.loc[previousIndex][("index", "index")]:
+                        toBeAddedObjects = set()
+                        for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
+                            for obj2 in row[("ocel:omap", "ocel:omap")]:
+                                if (obj1, obj2) in object_relations:
+                                    toBeAddedObjects.add(obj2)
+                                    allAddedObjects.add(obj2)
+                        newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(toBeAddedObjects.union(newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]))
 
-        path.sort(reverse=False, key=self.sortByTimeStamp)
+            previousIndex = index
 
-        matchingEvents = set()
-
-        for i in range(len(path)-1):
-            if path[i][0] != path[i+1][0]:
-                if i+2 == len(path) or path[i+1][0] == path[i+2][0]:
-                    matchingEvents.add((path[i][:2], path[i+1][:2]))
-
-        # returns set of relation tuples. Each tuple contains two tuples, 
-        # first element of inner tuple indicates which log, second element indicates event id
-        return matchingEvents
-
-
-    # interleaved and non-interleaved miner, depending on interleavedMode flag value
-    def interleavedMiner(self, name1, name2, interleavedMode=True, newName=""):
-        # get logs
-        eventsDf1 = self.getEventsDf(name1)
-        objectsDf1 = self.getObjectsDf(name1)
-        eventsDf2 = self.getEventsDf(name2)
-        objectsDf2 = self.getObjectsDf(name2)
-
-        # start from log1 since we want to merge objects from log2 into log1
-        newEventsDf = copy.deepcopy(eventsDf1)
-        newObjectsDf = copy.deepcopy(objectsDf1)
-
-        object_relation = self.getRelation()
-
-        newObjEventPairs = set()
-
-        log1_objects = objectsDf1.index
-        log2_objects = objectsDf2.index
-
-
-        # restrict object relationship to objects in the logs
-        crt_prd = [(x,y) for x in log1_objects for y in log2_objects]
-        reduced_object_relation = set(crt_prd).intersection(object_relation)
-
-        interleavedDict = {}
-        for relation in reduced_object_relation:
-            if interleavedMode:
-                interleavedDict[relation] = self.interleavedRelation(eventsDf1, eventsDf2, relation[0], relation[1])
-            else:
-                interleavedDict[relation] = self.nonInterleavedRelation(eventsDf1, eventsDf2, relation[0], relation[1])
-
-
-        for ev_id1, event1 in eventsDf1.iterrows():
-            for obj1 in log1_objects:
-                for relation in reduced_object_relation:
-                    if relation[0] == obj1:
-                        obj2 = relation[1]
-                        for ev_id2, event2 in eventsDf2.iterrows():
-                            if obj2 in log2_objects:
-                                if ((1, ev_id1), (2, ev_id2)) in interleavedDict[(obj1, obj2)]:
-                                    newObjEventPairs.add((ev_id1, obj2, ev_id2))
-
-        # add new pairs to newLog
-        for pair in newObjEventPairs:
-            ev_id = pair[0]
-            obj = pair[1]
-            ev_id2 = pair[2]
-
-            # add new object to event omap, but avoid duplicates
-            objects = newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]
-            objects.append(obj)
-            newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(set(objects))
-
-            # fix vmap
-            for key, value in eventsDf2.loc[ev_id2]["ocel:vmap"].items():
-                if key not in newEventsDf.loc[ev_id]['ocel:vmap'].keys():
-                    newEventsDf[("ocel:vmap", key)] = np.nan
-                    newEventsDf.at[ev_id, ('ocel:vmap', key)] = value
-
-
-            # add new object to objects of log
-            mentionedObjects = set()
-            for obj in newEventsDf[("ocel:omap", "ocel:omap")]:
-                mentionedObjects = mentionedObjects.union(obj)
-            toBeAddedObjects = list(mentionedObjects.difference(newObjectsDf.index))
-            newObjectsDf = pd.concat([newObjectsDf, objectsDf2.loc[toBeAddedObjects]])
+        # add new objects from log2 to log1
+        toBeAddedObjects = list(allAddedObjects.difference(objectsDf1.index))
+        newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
 
         # if no new name given, create own
         if newName == "":
-            newName = "NON/INTERLEAVED(" + name1 + "," + name2 + ")"
+            newName = "INTERLEAVED_MINER(" + name1 + "," + name2 + ")"
+
+        self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
+        
+        return True
+    
+    
+    def nonInterleavedMiner(self, name1, name2, newName=""):
+
+        newEventsDf = self.getEventsDf(name1)
+
+        newEventsDf1 = copy.deepcopy(newEventsDf)
+        newEventsDf2 = self.getEventsDf(name2)
+
+        objectsDf1 = self.getObjectsDf(name1)    
+        objectsDf2 = self.getObjectsDf(name2)    
+
+        object_relations = self.getRelation()
+
+        newEventsDf1[("log", "log")] = 1
+        newEventsDf2[("log", "log")] = 2
+
+        # concat both dataframes and order events based on timestamp (but keep track from which log events come)
+        tempDf = pd.concat([newEventsDf1, newEventsDf2])[[("ocel:omap", "ocel:omap"), ("ocel:timestamp", "ocel:timestamp"), ("log", "log")]]
+        tempDf = tempDf.sort_values(by=[("ocel:timestamp", "ocel:timestamp"), ("log", "log")])
+
+        # keep track of index in original logs
+        tempDf.reset_index(inplace=True)
+        tempDf[("index", "index")] = tempDf["index"].apply(lambda x: [x])
+
+        # group by timestamp since we want transition from all events in case they have same timestamp
+        tempDf = tempDf.groupby([("ocel:timestamp", "ocel:timestamp"), ("log", "log")])[[("ocel:omap", "ocel:omap"), ("index", "index")]].apply(sum)
+
+        allAddedObjects = set()
+
+        # loop through tempDf and keep track of previous index
+        # in case we switch to log 2, we merge the objects from that into omap of event referred to in previous index
+        previousIndex = None
+        for i in range(1, len(tempDf)-1):
+            previousIndex = tempDf.index[i-1]
+            currentIndex = tempDf.index[i]
+            nextIndex = tempDf.index[i+1]
+
+            row = tempDf.loc[currentIndex]
+
+            if currentIndex[1] == 2:
+                if previousIndex[1] == 1 and nextIndex[1] == currentIndex[1]:
+                    for ev_id in tempDf.loc[previousIndex][("index", "index")]:
+                        toBeAddedObjects = set()
+                        for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
+                            for obj2 in row[("ocel:omap", "ocel:omap")]:
+                                if (obj1, obj2) in object_relations:
+                                    toBeAddedObjects.add(obj2)
+                                    allAddedObjects.add(obj2)
+                        newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(toBeAddedObjects.union(newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]))
+
+
+        # add new objects from log2 to log1
+        toBeAddedObjects = list(allAddedObjects.difference(objectsDf1.index))
+        newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
+
+        # if no new name given, create own
+        if newName == "":
+            newName = "NONINTERLEAVED_MINER(" + name1 + "," + name2 + ")"
 
         self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
 

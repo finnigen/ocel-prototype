@@ -48,7 +48,7 @@ class InterleavedMinerFrame(OperatorFrame):
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
 
-        return self.ocel_model.interleavedMiner(name1, name2, interleavedMode=True, newName=newName)
+        return self.ocel_model.interleavedMiner(name1, name2, newName=newName)
 
 
     def refresh(self):

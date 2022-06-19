@@ -48,7 +48,7 @@ class NonInterleavedMinerFrame(OperatorFrame):
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
 
-        return self.ocel_model.interleavedMiner(name1, name2, interleavedMode=False, newName=newName)
+        return self.ocel_model.nonInterleavedMiner(name1, name2, newName=newName)
 
     def refresh(self):
         # used to refresh comboboxes for selection of operator parameters
