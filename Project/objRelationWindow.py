@@ -2,84 +2,55 @@ from asyncio import events
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pickle
 from ocel_converter import OCEL_Model
-
+import pandas as pd
+from tableWindow import PandasTableModel
 
 class ObjectWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, formattedRows):
+    def __init__(self, objRelation):
         super().__init__()
-        self.formattedRows = formattedRows
+
+        df = pd.DataFrame(objRelation)
+        df[1] = df[1].apply(lambda x : [x])
+        df = pd.DataFrame(df.groupby(0)[1].apply(sum))
+        df.reset_index(inplace=True)
+        df.columns = ["Object", "Related Objects"]
+        self.df = df
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
+        MainWindow.setWindowTitle("Object Relationships")
         MainWindow.resize(960, 540)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.outerLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.outerLayout.setObjectName("outerLayout")
 
-        # objects table
-        self.objectTable = QtWidgets.QTableWidget(self.centralwidget)
-        self.objectTable.setObjectName("objectTable")
+        self.relationTable = QtWidgets.QTableView(self.centralwidget)
+        self.relationTable.setDragEnabled(False)
+        self.relationTable.setObjectName("relationTable")
 
-        # one row for every object
-        numRows = len(self.formattedRows) 
-        numColumns = 2
+        self.relationModel = PandasTableModel(self.df)
+        self.relationTable.setModel(self.relationModel)
 
-        self.objectTable.setColumnCount(numColumns)
-        self.objectTable.setRowCount(numRows)
+        self.relationTable.setSortingEnabled(True)
 
-        for i in range(numColumns):
-            item = QtWidgets.QTableWidgetItem()
-            self.objectTable.setHorizontalHeaderItem(i, item)
+        # fit table to size of window
+        self.relationTable.horizontalHeader().setStretchLastSection(True)
+        self.relationTable.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.relationTable.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.relationTable.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
 
-        for i in range(numRows):
-            for j in range(numColumns):
-                item = QtWidgets.QTableWidgetItem()
-                self.objectTable.setItem(i, j, item)
-
-        self.outerLayout.addWidget(self.objectTable, 0, 0, 1, 1)
-
+        self.outerLayout.addWidget(self.relationTable, 0, 0, 1, 1)
         
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-        # fit table to size of window
-        self.objectTable.horizontalHeader().setStretchLastSection(True)
-        self.objectTable.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        self.objectTable.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        self.objectTable.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.relationTable.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)
 
-        self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle("Object Relations")
-
-        # set column headers
-        item = self.objectTable.horizontalHeaderItem(0)
-        item.setText("Object")
-        item = self.objectTable.horizontalHeaderItem(1)
-        item.setText("Objects")
-
-        # reformat object relation
-        rows = self.formattedRows
-
-        for row in range(len(rows)):
-            item = self.objectTable.item(row, 0)
-            item.setText(list(rows.keys())[row])
-            item = self.objectTable.item(row, 1)
-            data = rows[list(rows.keys())[row]]
-            if data == set():
-                data = {}
-            item.setText(str(data))
-
-        # sort objects ascending
-        self.objectTable.setSortingEnabled(True)
-        self.objectTable.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)
-
 
 
 if __name__ == "__main__":
@@ -90,8 +61,9 @@ if __name__ == "__main__":
 #    with open('file.pkl', 'rb') as file:
         # Call load method to deserialze
 #        ocel_model = pickle.load(file)
-    formattedRows = {'order2': set(), 'package1': {'item1', 'order1', 'item2'}, 'item2': {'order1', 'package1'}, 'order1': {'item1', 'item2', 'package1'}, 'item1': {'order1', 'package1'}}
-    ui = ObjectWindow(formattedRows)
+#    formattedRows = {'order2': set(), 'package1': {'item1', 'order1', 'item2'}, 'item2': {'order1', 'package1'}, 'order1': {'item1', 'item2', 'package1'}, 'item1': {'order1', 'package1'}}
+    relations = set([(1,2),(2,3)])
+    ui = ObjectWindow(relations)
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

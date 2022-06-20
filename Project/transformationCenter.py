@@ -178,16 +178,17 @@ class TransformationCenter(QtWidgets.QWidget):
         # keep track of windows to view tables, and object relationships
         self.windows = {}
 
+        self.viewObjectRelationsButton.setText("View Object Relationships")
 
-        self.viewObjectRelationsButton.setText("Calculating Object Relationships...")
-        self.viewObjectRelationsButton.setEnabled(False)
-        self.formattedObjRows = {}
+#        self.viewObjectRelationsButton.setText("Calculating Object Relationships...")
+#        self.viewObjectRelationsButton.setEnabled(False)
+#        self.formattedObjRows = {}
         # create thread to reformat rows for object relationship view
-        self.worker = WorkerThread(self.ocel_model)
-        self.worker.reformatObjRelation.connect(self.reformattingComplete)
-        self.worker.finished.connect(self.worker.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.worker.start()
+#        self.worker = WorkerThread(self.ocel_model)
+#        self.worker.reformatObjRelation.connect(self.reformattingComplete)
+#        self.worker.finished.connect(self.worker.quit)
+#        self.worker.finished.connect(self.worker.deleteLater)
+#        self.worker.start()
 
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -386,7 +387,7 @@ class TransformationCenter(QtWidgets.QWidget):
     def viewObjectRelations(self):
         if "objRelationshipWindow" not in self.windows:
             newWindow = QtWidgets.QMainWindow()
-            ui = ObjectWindow(self.formattedObjRows)
+            ui = ObjectWindow(self.ocel_model.getRelation())
             ui.setupUi(newWindow)
             self.windows["objRelationshipWindow"] = newWindow
         self.windows["objRelationshipWindow"].show()
@@ -512,27 +513,27 @@ class TransformationCenter(QtWidgets.QWidget):
         self.operatorFrames.append(operatorFrame)
 
 
-    def reformattingComplete(self, rows):
-        self.formattedObjRows = rows
-        self.viewObjectRelationsButton.setText("View Object Relationships")
-        self.viewObjectRelationsButton.setEnabled(True)
+#    def reformattingComplete(self, rows):
+#        self.formattedObjRows = rows
+#        self.viewObjectRelationsButton.setText("View Object Relationships")
+#        self.viewObjectRelationsButton.setEnabled(True)
 
-class WorkerThread(QThread):
-    reformatObjRelation = pyqtSignal(dict)
-    def __init__(self, ocel_model):
-        super().__init__()
-        self.ocel_model = ocel_model
+#class WorkerThread(QThread):
+#    reformatObjRelation = pyqtSignal(dict)
+#    def __init__(self, ocel_model):
+#        super().__init__()
+#        self.ocel_model = ocel_model
 
-    def run(self):
-        obj_relations = self.ocel_model.getRelation()
-        all_objects = set()
-        for ocelName in self.ocel_model.getOcelNames():
-            all_objects = all_objects.union(self.ocel_model.getObjectsDf(ocelName).index)
-        all_objects = list(all_objects)
-        rows = {}
-        for obj in all_objects:
-            rows[obj] = set([b for (a,b) in obj_relations if a == obj])
-        self.reformatObjRelation.emit(rows)
+#    def run(self):
+#        obj_relations = self.ocel_model.getRelation()
+#        all_objects = set()
+#        for ocelName in self.ocel_model.getOcelNames():
+#            all_objects = all_objects.union(self.ocel_model.getObjectsDf(ocelName).index)
+#        all_objects = list(all_objects)
+#        rows = {}
+#        for obj in all_objects:
+#            rows[obj] = set([b for (a,b) in obj_relations if a == obj])
+#        self.reformatObjRelation.emit(rows)
 
 
 class ExportWorkerThread(QThread):

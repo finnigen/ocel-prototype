@@ -89,8 +89,8 @@ class OCEL_Model:
             shutil.rmtree(newPath)
         os.mkdir(newPath)
         
-        # reset index of events dataframe
-        eventsDf.reset_index(inplace=True, drop=True)
+        # reset index of events dataframe and sort on timestamp
+        eventsDf = eventsDf.sort_values(by=[("ocel:timestamp", "ocel:timestamp")]).reset_index(drop=True)
 
         eventsDf.to_pickle(os.path.join(newPath, "eventsDf.pkl"))
         objectsDf.to_pickle(os.path.join(newPath, "objectsDf.pkl"))            
@@ -758,8 +758,8 @@ class OCEL_Model:
         newEventsDf1 = copy.deepcopy(newEventsDf)
         newEventsDf2 = self.getEventsDf(name2)
 
-        objectsDf1 = self.getObjectsDf(name1)    
-        objectsDf2 = self.getObjectsDf(name2)    
+        objectsDf1 = self.getObjectsDf(name1) 
+        objectsDf2 = self.getObjectsDf(name2) 
 
         object_relations = self.getRelation()
 

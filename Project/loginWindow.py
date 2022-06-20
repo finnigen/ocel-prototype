@@ -183,12 +183,14 @@ class Ui_LoginWindow(object):
         self.initModelBox()
 
     def initModelBox(self):
+        self.conversionButton.setEnabled(False)
         self.dataModelComboBox.clear()
         pool_name = self.dataPoolComboBox.currentText()
         pool = self.celonis.pools.find(pool_name)
         for i in range(len(pool.datamodels)):
             self.dataModelComboBox.addItem("")
             self.dataModelComboBox.setItemText(i, pool.datamodels[i].name) 
+        self.conversionButton.setEnabled(True)
 
 
     def startConversion(self):

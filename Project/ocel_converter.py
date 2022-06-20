@@ -1,4 +1,5 @@
 import json
+from re import A
 import networkx as nx
 import ocel as ocel_lib
 import pickle
@@ -36,6 +37,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         
     tables = {}
     all_data = {}
+    case_table_case_column = {} # keep track of case table's case column
 
     print("Downloading data...")
     for conf in data_model.process_configurations:
@@ -72,9 +74,9 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         for key in activity_table_f_keys:
             if key in case_table_f_keys:
                 if tables[table_name].case_column == key["columns"][0][0]:
-                    case_table_case_column =  key["columns"][0][1]
+                    case_table_case_column[table_name] =  key["columns"][0][1]
                 else:
-                    case_table_case_column = key["columns"][0][0]
+                    case_table_case_column[table_name] = key["columns"][0][0]
         
         # save case, activity, timestamp column name of activity table
         case_column = tables[table_name].case_column
@@ -87,7 +89,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         print("Converting to OCEL-Based Dataframes")
         # convert tables to OCEL-based dataframes
         eventsDf = convertCelonisActDfToEventDf(df, case_column, act_column, time_column, sorting_column)
-        objectsDf = convertCelonisCaseDfToObjectDf(case_table, case_table_case_column)
+        objectsDf = convertCelonisCaseDfToObjectDf(case_table, case_table_case_column[table_name])
         
         # add OCEL-based events and object dataframes to ocel_model
         ocel_model.addEventObjectDf(table_name, eventsDf, objectsDf)
@@ -102,7 +104,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         all_data[table_name].columns = [table_name + column for column in all_data[table_name].columns]    
     
 
-    object_relations = {}
+#    object_relations = {}
 
     foreignKeys = data_model.foreign_keys
     all_tables = data_model.tables
@@ -118,27 +120,32 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
     print("Creating foreign key graph...")
     
     # create foreign key graph so we can find shortest path from one activity table to another
-    graph = {}
+    G = nx.DiGraph()
     for table in all_tables.names.keys():
-        connected_nodes = []
-        for dictionary in foreignKeys.find_keys_by_source_name(table):
-            connected_nodes.append(dictionary["target_table"])
-            for dictionary in foreignKeys.find_keys_by_target_name(table):
-                connected_nodes.append(dictionary["source_table"])
-            graph[table] = connected_nodes
+        G.add_node(table)
 
-    G = nx.Graph()
-    for i in graph:
-        G.add_node(i)
-        for j in graph[i]:
-            G.add_edge(i, j)
+    edgeAttr = {}
+    for dictionary in foreignKeys:
+        i = dictionary["source_table"]
+        j = dictionary["target_table"]
+        G.add_edge(i, j)
+        edgeAttr[(i, j)] = {"columns": dictionary["columns"][0]}
+        
+        # make symmetric since we can merge both ways
+        G.add_edge(j, i)
+        edgeAttr[(j, i)] = {"columns": (dictionary["columns"][0][1], dictionary["columns"][0][0])}
+        
+    nx.set_edge_attributes(G, edgeAttr)
 
-        foreignKeyGraph = G
+    foreignKeyGraph = G
 
 
     for pair in product:
-        table1 = pair[0]
-        table2 = pair[1]
+        ev_table1 = pair[0]
+        ev_table2 = pair[1]
+
+        table1 = tables[ev_table1].case_table.name
+        table2 = tables[ev_table2].case_table.name
         
         print("Object relations between: " + table1 + " and " + table2)
         
@@ -146,28 +153,17 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         path = nx.algorithms.shortest_paths.generic.shortest_path(foreignKeyGraph, source=table1, target=table2)
 
         print("   Calculating join path...")
-
-        potential_relations2 = foreignKeys.find_keys_by_source_name(path[0]) + foreignKeys.find_keys_by_target_name(path[0])
         
         # calculate merge path with table names and column names of these tables to join on (format: [{"leftTable" : lTable, "leftColumn: lColumn, rightTable": rtable, "rightColumn": rColumn}, ...])
         mergePath = []
-        for i in range(len(path)-1):
-            potential_relations1 = potential_relations2
-            potential_relations2 = foreignKeys.find_keys_by_source_name(path[i+1]) + foreignKeys.find_keys_by_target_name(path[i+1])
-            key_relation = {}
-            for relation in potential_relations1:
-                if relation in potential_relations2:
-                    key_relation = relation
-                    break
-            if key_relation == {}:
-                print("No Relation Found!")
-                break
-                
-            leftTable = key_relation["source_table"]
-            rightTable = key_relation["target_table"]
-            mergePath.append({"leftTable": leftTable, "leftColumn": leftTable + key_relation["columns"][0][0], 
-                                "rightTable": rightTable, "rightColumn": rightTable + key_relation["columns"][0][1]})
-        
+        for i in range(len(path) - 1):
+            leftTable = path[i]
+            rightTable = path[i+1]
+            columns = foreignKeyGraph[leftTable][rightTable]["columns"]
+            
+            mergePath.append({"leftTable": leftTable, "leftColumn": leftTable + columns[0], 
+                                "rightTable": rightTable, "rightColumn": rightTable + columns[1]})
+
         print("   Getting data...")
         
         # get data of other tables (so far we only downloaded case and activity table data)
@@ -184,8 +180,6 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         for d in mergePath:
             remainingColumns.add(d["leftColumn"])
             remainingColumns.add(d["rightColumn"])
-        remainingColumns.add(table1 + tables[table1].case_column)
-        remainingColumns.add(table2 + tables[table2].case_column)
 
         # perform pandas merge along merge path
         df = all_data[table1]
@@ -196,27 +190,37 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
             df.drop(list(set(df.columns).difference(remainingColumns)), axis=1, inplace=True)
             
         # we only want the two object columns, so we can drop rest
-        columns_to_keep = [table1 + tables[table1].case_column, table2 + tables[table2].case_column]
+        columns_to_keep = [table1 + case_table_case_column[ev_table1], table2 + case_table_case_column[ev_table2]]
         df = df[list(set(columns_to_keep).intersection(df.columns))]
         
         # reset index
         df.drop_duplicates(inplace=True)
         df.reset_index(drop=True, inplace=True)
         
-        object_relations[(table1, table2)] = df
-        object_relations[(table2, table1)] = df
+#        object_relations[(table1, table2)] = df
+#        object_relations[(table2, table1)] = df
+
+
+        total_relation = set()
+        for tup in df.to_records():
+            total_relation.add((tup[1], tup[2]))
+            total_relation.add((tup[2], tup[1]))
+        
+        ocel_model.addToRelation(total_relation)
+
 
     # add all object relationships in form of tuples to a set
-    total_relation = set()
-    for i in range(len(tables)):
-        for j in range(len(tables)):
-            if i != j:
-                df = object_relations[(list(tables.keys())[i], list(tables.keys())[j])]
-                for tup in df.to_records():
-                    total_relation.add((tup[1], tup[2]))
-                    total_relation.add((tup[2], tup[1]))
+#    total_relation = set()
+#    for i in range(len(tables)):
+#        for j in range(len(tables)):
+#            if i != j:
+#                df = object_relations[(list(tables.keys())[i], list(tables.keys())[j])]
+#                for tup in df.to_records():
+#                    total_relation.add((tup[1], tup[2]))
+#                    total_relation.add((tup[2], tup[1]))
 
-    ocel_model.setRelation(total_relation)
+#    ocel_model.setRelation(total_relation)
+         
                     
     return ocel_model
 
@@ -245,6 +249,8 @@ data_model = "DemoModel"
 # data_pool = "BigTest"
 # data_model = "BigModel"
 
+# data_pool = "SAPFixed"
+# data_model = "SAPo2c"
 
 # ocel_model = convertToOcelModel(url, api, data_pool, data_model)
 
