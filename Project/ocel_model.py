@@ -856,10 +856,14 @@ class OCEL_Model:
         # find object types related to event
         if compareEvent["activity"] == event[("ocel:activity", "ocel:activity")]:
             types = set()
-            for obj in event[("ocel:omap", "ocel:omap")]:
-                types.add(objectsDf.loc[obj][("ocel:type", "ocel:type")])
-            if "objectTypes" in compareEvent and compareEvent["objectTypes"].issubset(types):
+            if "objectTypes" not in compareEvent:
                 return True
+            else:
+                for obj in event[("ocel:omap", "ocel:omap")]:
+                    types.add(objectsDf.loc[obj][("ocel:type", "ocel:type")])
+
+                if compareEvent["objectTypes"].issubset(types):
+                    return True
         return False
 
     def directlySequence(self, name, newActivityName, sequence, time=timedelta.max, matchOnObjectTypes=set(), matchOnAttributes=set(), findAll=False):
@@ -867,7 +871,14 @@ class OCEL_Model:
         objectsDf = self.getObjectsDf(name)
 
         # drop all events that don't match any of the filter criteria (activity, object types)
-        filteredDf = eventsDf[self.matchingEvents(sequence, objectsDf, eventsDf)]
+        keys = set()
+        for dict in sequence:
+            keys = keys.union(dict.keys())
+        if "objectTypes" in keys:
+            filteredDf = eventsDf[self.matchingEvents(sequence, objectsDf, eventsDf)]
+        # in case no object type filter was specified, this is faster
+        else:
+            filteredDf = eventsDf[eventsDf[("ocel:activity", "ocel:activity")].isin([dict["activity"] for dict in sequence])]
 
         # find sequence of desired activities
         activitySequence = [ev["activity"] for ev in sequence]
@@ -954,7 +965,14 @@ class OCEL_Model:
         objectsDf = self.getObjectsDf(name)
 
         # drop all events that don't match any of the filter criteria (activity, object types)
-        filteredDf = eventsDf[self.matchingEvents(sequence, objectsDf, eventsDf)]
+        keys = set()
+        for dict in sequence:
+            keys = keys.union(dict.keys())
+        if "objectTypes" in keys:
+            filteredDf = eventsDf[self.matchingEvents(sequence, objectsDf, eventsDf)]
+        # in case no object type filter was specified, this is faster
+        else:
+            filteredDf = eventsDf[eventsDf[("ocel:activity", "ocel:activity")].isin([dict["activity"] for dict in sequence])]
 
         seqLength = len(sequence)
         startOfSeqDf = filteredDf[self.matchingEvents(sequence[0:1], objectsDf, filteredDf)]
