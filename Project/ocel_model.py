@@ -6,6 +6,7 @@ import os
 import shutil
 import copy
 import numpy as np
+from datetime import timedelta
 
 import pandas as pd
 # import matplotlib.pyplot as plt
@@ -810,5 +811,281 @@ class OCEL_Model:
             newName = "NONINTERLEAVED_MINER(" + name1 + "," + name2 + ")"
 
         self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
+
+        return True
+
+
+
+    
+# ------------------------- Event Recipe Operator -------------------------------------
+
+    def matchingEvents(self, sequence, objectsDf, eventsDf):
+        boolEvents = []
+        for index, ev in eventsDf.iterrows():
+            needNew = True
+            omap = ev[("ocel:omap", "ocel:omap")]
+            activity = ev[("ocel:activity", "ocel:activity")]
+
+            # find object types related to event
+            types = set()
+            for obj in omap:
+                types.add(objectsDf.loc[obj][("ocel:type", "ocel:type")])
+
+            # check if event matches filter criteria
+            for seqEv in sequence:
+                if seqEv["activity"] == activity:
+                    if "objectTypes" in seqEv:
+                        if seqEv["objectTypes"].issubset(types):
+                            boolEvents.append(True)
+                            needNew = False
+                            break
+                    else:
+                        boolEvents.append(True)
+                        needNew = False
+                        break
+
+            # if filter criteria not met, append False
+            if needNew:
+                boolEvents.append(False)
+
+        return boolEvents
+
+
+    def matchesSequenceEvent(self, sequence, i, objectsDf, event):
+        compareEvent = sequence[i]
+        # find object types related to event
+        if compareEvent["activity"] == event[("ocel:activity", "ocel:activity")]:
+            types = set()
+            for obj in event[("ocel:omap", "ocel:omap")]:
+                types.add(objectsDf.loc[obj][("ocel:type", "ocel:type")])
+            if "objectTypes" in compareEvent and compareEvent["objectTypes"].issubset(types):
+                return True
+        return False
+
+    def directlySequence(self, name, newActivityName, sequence, time=timedelta.max, matchOnObjectTypes=set(), matchOnAttributes=set(), findAll=False):
+        eventsDf = self.getEventsDf(name)
+        objectsDf = self.getObjectsDf(name)
+
+        # drop all events that don't match any of the filter criteria (activity, object types)
+        filteredDf = eventsDf[self.matchingEvents(sequence, objectsDf, eventsDf)]
+
+        # find sequence of desired activities
+        activitySequence = [ev["activity"] for ev in sequence]
+        seqLength = len(activitySequence)
+        seqFilter = True
+        for i in range(seqLength):
+            act = activitySequence[i]
+            seqFilter &= pd.DataFrame(filteredDf[("ocel:activity", "ocel:activity")]).shift(-i).eq(act).any(1) 
+
+        # startOfSeqDf contains first events of each potential sequence occurence (need to filter further)
+        startOfSeqIndexes = list(filteredDf[seqFilter].index)
+
+        # filter based on passed time (and directly follows relation) and object relations
+        toDrop = []
+        for startIndex in startOfSeqIndexes:
+            if startIndex in toDrop:
+                continue
+            startTime = filteredDf.loc[startIndex][("ocel:timestamp", "ocel:timestamp")]
+            endIndex = filteredDf.loc[startIndex:].index[seqLength-1]
+            endTime = filteredDf.loc[endIndex][("ocel:timestamp", "ocel:timestamp")]
+            if endTime - startTime > time:
+                toDrop.append(startIndex)
+                continue
+
+            # because of directly follows relation, last index of sequence has to be exactly greater by length of seq
+            if endIndex - startIndex != seqLength-1:
+                toDrop.append(startIndex)
+                continue
+
+            # check for matching objects in sequence
+            usedEvents = []
+            objects = set(filteredDf.loc[startIndex][("ocel:omap", "ocel:omap")])
+            for i in range(1, seqLength):
+                index = filteredDf.loc[startIndex:].index[i]
+
+                # in case matchOnAttributes specified, we drop startIndex if we encounter event with unmatching attribute values
+                if matchOnAttributes != set():
+                    for attr in matchOnAttributes:
+                        if filteredDf.loc[index][("ocel:vmap", attr)] != filteredDf.loc[startIndex][("ocel:vmap", attr)]:
+                            toDrop.append(startIndex)
+                            break
+
+                usedEvents.append(index)
+                # use intersection since we want matching events
+                objects = objects.intersection(filteredDf.loc[index][("ocel:omap", "ocel:omap")])
+            types = set(objectsDf.loc[list(objects)][("ocel:type", "ocel:type")])
+            if not matchOnObjectTypes.issubset(types):
+                toDrop.append(startIndex)
+            # in case we don't want to find all occurences of the sequence, but instead only the first one, we can exclude already used startIndexes
+            elif not findAll:
+                for index in usedEvents:
+                    if index in startOfSeqIndexes:
+                        toDrop.append(index)
+
+        for index in toDrop:
+            startOfSeqIndexes.remove(index)
+
+        newEventsDf = copy.deepcopy(eventsDf)
+
+        # group events together and remove old ones    
+        for startIndex in startOfSeqIndexes:
+            objects = set(eventsDf.loc[startIndex][("ocel:omap", "ocel:omap")])
+            for i in range(1, seqLength):
+                objects = objects.union(eventsDf.loc[startIndex+i][("ocel:omap", "ocel:omap")])
+
+            if startIndex in newEventsDf.index:
+                newEventsDf.at[startIndex, ("ocel:omap", "ocel:omap")] = list(objects)
+                newEventsDf.at[startIndex, ("ocel:activity", "ocel:activity")] = newActivityName
+
+        # drop remaining events (that aren't beginning of a sequence)
+        for startIndex in startOfSeqIndexes:
+            for i in range(1, seqLength):
+                if startIndex+i not in startOfSeqIndexes:
+                    newEventsDf.drop(startIndex+i, inplace=True)
+
+        newEventsDf = newEventsDf.sort_values(by=[("ocel:timestamp", "ocel:timestamp")]).reset_index(drop=True)
+
+        return newEventsDf
+
+
+    # only works for direcly follows relation!
+    def eventuallySequence(self, name, newActivityName, sequence, time=timedelta.max, matchOnObjectTypes=set(), matchOnAttributes=set(), findAll=False):
+        eventsDf = self.getEventsDf(name)
+        objectsDf = self.getObjectsDf(name)
+
+        # drop all events that don't match any of the filter criteria (activity, object types)
+        filteredDf = eventsDf[self.matchingEvents(sequence, objectsDf, eventsDf)]
+
+        seqLength = len(sequence)
+        startOfSeqDf = filteredDf[self.matchingEvents(sequence[0:1], objectsDf, filteredDf)]
+
+        allEvents = set()
+        groupedEvents = []
+        for startIndex, firstEvent in startOfSeqDf.iterrows():
+            if startIndex in allEvents:
+                continue
+            startTime = firstEvent[("ocel:timestamp", "ocel:timestamp")]
+            endTime = startTime + time
+            lastIndex = startIndex
+            objects = set(firstEvent[("ocel:omap", "ocel:omap")])
+            groupEvents = [startIndex]
+            minimumIndex = 1
+            # only consider subset of dataframe that fits into desired timeframe
+            filteredSliceDf = copy.deepcopy(filteredDf[(filteredDf[("ocel:timestamp", "ocel:timestamp")] <= endTime) & (filteredDf[("ocel:timestamp", "ocel:timestamp")] >= startTime)])
+            # in case attributes to match on are given, only consider subset of dataframe with same values as firstEvent in sequence
+            if matchOnAttributes != set():
+                for attr in matchOnAttributes:
+                    filteredSliceDf = filteredSliceDf[filteredSliceDf[("ocel:vmap", attr)] == firstEvent[("ocel:vmap", attr)]]
+
+
+            # in case of matching object types, only consider subset where intersection of omap in firstEvent is not empty
+            if matchOnObjectTypes != set():
+                filteredSliceDf[("intersect", "intersect")] = filteredSliceDf[("ocel:omap", "ocel:omap")].apply(lambda row: set(firstEvent[("ocel:omap", "ocel:omap")]).intersection(row))
+                filteredSliceDf[("intersect", "intersect")] = filteredSliceDf[("intersect", "intersect")].apply(len)
+                filteredSliceDf = filteredSliceDf[filteredSliceDf[("intersect", "intersect")] > 0]
+
+            # we don't want to try finding the pattern more times than theoretical possible sequences exists
+            maxLength = 1
+            for i in range(seqLength): 
+                # start multiplying from back since might be 0 ?
+                maxLength *= len(filteredSliceDf[filteredSliceDf[("ocel:activity", "ocel:activity")] == sequence[seqLength-i-1]["activity"]])
+            for n in range(maxLength):
+                for i in range(minimumIndex, seqLength):
+                    if filteredSliceDf.index[-1] == lastIndex:
+                        break
+                    nextIndex = filteredSliceDf.loc[lastIndex:].index[1]
+                    for index, event in filteredSliceDf.loc[nextIndex:].iterrows():
+                        if index in allEvents:
+                            continue
+                        # check that not too much time has passed
+                        if event[("ocel:timestamp", "ocel:timestamp")] - firstEvent[("ocel:timestamp", "ocel:timestamp")] <= time:
+                            # find first event that matches filter criteria for next event in sequence
+                            if self.matchesSequenceEvent(sequence, i, objectsDf, event):
+                                # we only care about matching objects if parameter was passed
+                                if matchOnObjectTypes == set():
+                                    groupEvents.append(index)
+                                    lastIndex = index
+                                    break
+                                else:
+                                    # check that event has matching object type(s)
+                                    tempObjects = objects.intersection(event[("ocel:omap", "ocel:omap")])
+                                    types = set(objectsDf.loc[list(tempObjects)][("ocel:type", "ocel:type")])
+                                    if matchOnObjectTypes.issubset(types):
+                                        objects = tempObjects
+                                        groupEvents.append(index)
+                                        lastIndex = index
+                                        break
+                if len(groupEvents) == seqLength:
+                    groupedEvents.append(groupEvents)
+                    # in case we want to find all sequences of pattern (reusing events allowed), we continue searching
+                    if findAll:
+                        minimumIndex = len(groupEvents) - 1
+                        lastIndex = groupEvents[-1]
+                        groupEvents = groupEvents[:-1]
+                        objects = set(firstEvent[("ocel:omap", "ocel:omap")])
+                        for ev in groupEvents:
+                            objects = objects.intersection(filteredDf.loc[ev][("ocel:omap", "ocel:omap")])
+                    else:
+                        allEvents = allEvents.union(groupEvents)
+                        break
+
+                elif len(groupEvents) == 1:
+                    break
+                # in case we didn't find desired pattern with correct object relationships, we can look for 
+                # another variation of same pattern by choosing a different event at an earlier stage in path
+                else:
+                    minimumIndex = len(groupEvents) - 1
+                    lastIndex = groupEvents[-1]
+                    groupEvents = groupEvents[:-1]
+                    objects = set(firstEvent[("ocel:omap", "ocel:omap")])
+                    for ev in groupEvents:
+                        objects = objects.intersection(filteredDf.loc[ev][("ocel:omap", "ocel:omap")])
+
+        newEventsDf = copy.deepcopy(eventsDf)
+
+        # group events together and remove old ones    
+        for events in groupedEvents:
+            objects = set()
+            for ev in events:
+                objects = objects.union(eventsDf.loc[ev][("ocel:omap", "ocel:omap")])
+            newEventsDf.at[events[0], ("ocel:omap", "ocel:omap")] = list(objects)
+            newEventsDf.at[events[0], ("ocel:activity", "ocel:activity")] = newActivityName
+
+        # drop all events that aren't the beginning of a sequence
+        firstOcc = set()
+        otherOcc = set()
+        for events in groupedEvents:
+            firstOcc.add(events[0])
+            otherOcc = otherOcc.union(events[1:])
+        toDrop = list(otherOcc.difference(firstOcc))
+        newEventsDf.drop(toDrop, inplace=True)
+
+        newEventsDf = newEventsDf.sort_values(by=[("ocel:timestamp", "ocel:timestamp")]).reset_index(drop=True)
+
+        return newEventsDf
+
+
+    # newActivityName: name of activity of new event
+    # sequence: list of event filters [{"activity": "pack item", "objectTypes": set(["CASE_ITEMS"])}, ...]
+    # time: allowed time that may pass between first and last event of sequence
+    # matchOnObjectTypes: set of object types. If specified, events will only be matched if they have at least one matching object of 
+    # all specified types in all events. E.g. set(["items"]) means that all events in sequence need to mention same item
+    # findAll: specifies whether we should only look for 1st occurrence of pattern or search for all. In findAll case, "reusing" events is allowed
+    # directly: specifies whether events have to be directly followed by each other. Else other events may occur inbetween
+    # newName: name of new OCEL
+    def eventRecipe(self, name, newActivityName, sequence, time=timedelta.max, matchOnObjectTypes=set(), matchOnAttribuets=set(), findAll=False, directly=True, newName=""):
+        if directly:
+            eventsDf = self.directlySequence(name, newActivityName, sequence, time, matchOnObjectTypes, matchOnAttribuets, findAll)
+        else:
+            eventsDf = self.eventuallySequence(name, newActivityName, sequence, time, matchOnObjectTypes, matchOnAttribuets, findAll)
+
+        objectsDf = self.getObjectsDf(name)
+
+        # if no new name given, create own
+        if newName == "":
+            newName = "EVENT_RECIPE(" + name + ")"
+
+        self.addEventObjectDf(newName, eventsDf, objectsDf)
+        self.alignEventsObjects(newName)
 
         return True

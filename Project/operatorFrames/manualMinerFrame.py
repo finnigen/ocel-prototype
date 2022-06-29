@@ -117,14 +117,17 @@ class ManualMinerFrame(OperatorFrame):
         activities2 = list(activities2)
         activities2.sort()
 
-        for tup in self.activityComboBoxes:
+        for num in range(len(self.activityComboBoxes)):
+            tup = self.activityComboBoxes[num]
             for i in range(len(activities1)):
                 tup[0].addItem("")
                 tup[0].setItemText(i, activities1[i])
+            tup[0].setCurrentIndex(num)
 
             for i in range(len(activities2)):
                 tup[1].addItem("")
                 tup[1].setItemText(i, activities2[i])
+            tup[1].setCurrentIndex(num)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
