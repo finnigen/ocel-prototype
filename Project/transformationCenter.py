@@ -20,6 +20,8 @@ from operatorFrames.filterFrame import FilterFrame
 from operatorFrames.flattenFrame import FlattenFrame
 from operatorFrames.concatFrame import ConcatFrame
 from operatorFrames.aggregateFrame import AggregateFrame
+from operatorFrames.eventRecipeFrame import EventRecipeFrame
+
 
 from ocel_model import *
 
@@ -155,6 +157,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Concatenate Event Log", description, ConcatFrame)
         description = "Merge objects of one log from duplicate events into its first occurence."
         self.initOperatorPage("Aggregate Event Log", description, AggregateFrame)
+        description = "Specify sequence of low-level events and turn them into one high-level event."
+        self.initOperatorPage("Event Recipe", description, EventRecipeFrame)
 
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)

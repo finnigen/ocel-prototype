@@ -40,7 +40,7 @@ class FilterFrame(OperatorFrame):
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
         self.innerRightLayout.addWidget(self.parameterLabel, 4, 0)
 
-        self.operatorSelectorLabel_1.setText("Select first event log:")
+        self.operatorSelectorLabel_1.setText("Select event log:")
         self.operatorSelectorLabel_2.setText("Select based on what you want to filter:")
         self.parameterLabel.setText("Specify filter criteria")
 
