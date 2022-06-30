@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from ocel_converter import convertToOcelModel, OCEL_Model
 from operatorFrames.operatorFrame import OperatorFrame
-import datetime
+from datetime import timedelta
 
 class EventRecipeFrame(OperatorFrame):
  
@@ -54,7 +54,7 @@ class EventRecipeFrame(OperatorFrame):
         self.timedeltaCheckbox.setChecked(False)
         self.timedeltaCheckLabel = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
         self.timedeltaCheckLabel.setFont(font)
-        self.timedeltaCheckLabel.setText("Max time between 1st and last event")
+        self.timedeltaCheckLabel.setText("Max time between 1st and last event (in hours)")
         self.timedeltaCheckText = QtWidgets.QLineEdit(self.outerScrollAreaWidgetContents)
 
         self.matchObjectTypesCheckbox = QtWidgets.QCheckBox(self.outerScrollAreaWidgetContents)
@@ -79,12 +79,15 @@ class EventRecipeFrame(OperatorFrame):
         self.attributeFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.attributeFrameLayout = QtWidgets.QGridLayout(self.attributeFrame)
 
+        self.findAllCheckbox = QtWidgets.QCheckBox(self.outerScrollAreaWidgetContents)
+        self.findAllCheckbox.setChecked(False)
+        self.findAllLabel = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
+        self.findAllLabel.setFont(font)
+        self.findAllLabel.setText("Find all occurences of seq (reusing events allowed))")
 
         # add all labels, buttons etc to right layout
         self.outerScrollGridLayout.addWidget(self.operatorSelectorLabel_1, 2, 0)
         self.outerScrollGridLayout.addWidget(self.logSelectcomboBox1, 2, 1)
-        self.outerScrollGridLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
-        self.outerScrollGridLayout.addWidget(self.logSelectcomboBox2, 3, 1)
         self.outerScrollGridLayout.addWidget(self.directlyFollowsLabel, 4, 0)
         self.outerScrollGridLayout.addWidget(self.directlyFollowsCheckbox, 4, 1)
         self.outerScrollGridLayout.addWidget(self.newActivityNameLabel, 5, 0)
@@ -100,17 +103,23 @@ class EventRecipeFrame(OperatorFrame):
         self.outerScrollGridLayout.addWidget(self.matchAttributesCheckbox, 9, 1)
         self.outerScrollGridLayout.addWidget(self.attributeFrame, 10, 0)
 
+        self.outerScrollGridLayout.addWidget(self.findAllLabel, 11, 0)
+        self.outerScrollGridLayout.addWidget(self.findAllCheckbox, 11, 1)
 
-        self.outerScrollGridLayout.addWidget(self.parameterLabel, 11, 0)
+        self.outerScrollGridLayout.addWidget(self.operatorSelectorLabel_2, 12, 0)
+        self.outerScrollGridLayout.addWidget(self.logSelectcomboBox2, 12, 1)
+
+        self.outerScrollGridLayout.addWidget(self.parameterLabel, 13, 0)
 
 
         self.operatorSelectorLabel_1.setText("Select event log:")
         self.operatorSelectorLabel_2.setText("Select number of events in desired sequence:")
         self.parameterLabel.setText("Specify event filters for each event in sequence")
 
-        # scroll area for parameter selection
+        # scroll area for sequence selection
         self.scrollArea = QtWidgets.QScrollArea(self.outerScrollAreaWidgetContents)
         self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setMinimumHeight(200)
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.outerScrollGridLayout.addWidget(self.scrollArea, 15, 0, 1, 2)
@@ -118,6 +127,7 @@ class EventRecipeFrame(OperatorFrame):
         self.refresh()
 
     def initAttributeSelection(self):
+        self.attrCheckboxLabels = []
         if self.matchAttributesCheckbox.isChecked():
             logName = self.logSelectcomboBox1.currentText()
             attributes = list(self.ocel_model.getEventAttributes(logName))
@@ -128,6 +138,7 @@ class EventRecipeFrame(OperatorFrame):
                 checkbox.setChecked(False)
                 label = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
                 label.setText(attr)
+                self.attrCheckboxLabels.append((checkbox, label))
                 self.attributeFrameLayout.addWidget(checkbox, i, 0)
                 self.attributeFrameLayout.addWidget(label, i, 1)    
         else:
@@ -135,6 +146,7 @@ class EventRecipeFrame(OperatorFrame):
 
 
     def initObjectTypeSelection(self):
+        self.objTypeCheckboxLabels = []
         if self.matchObjectTypesCheckbox.isChecked():
             logName = self.logSelectcomboBox1.currentText()
             objectTypes = list(self.ocel_model.getObjectTypes(logName))
@@ -143,12 +155,15 @@ class EventRecipeFrame(OperatorFrame):
                 objType = objectTypes[i]
                 checkbox = QtWidgets.QCheckBox(self.objectTypeFrame)
                 checkbox.setChecked(False)
+                
                 label = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
                 label.setText(objType)
+                self.objTypeCheckboxLabels.append((checkbox, label))
                 self.objectTypeFrameLayout.addWidget(checkbox, i, 0)
                 self.objectTypeFrameLayout.addWidget(label, i, 1)    
         else:
             self.reset(self.objectTypeFrameLayout)
+
 
     def initSequenceSelection(self):
         self.reset(self.scrollGridLayout)
@@ -187,7 +202,7 @@ class EventRecipeFrame(OperatorFrame):
                 label = QtWidgets.QLabel(seqFrame)
                 label.setText(objectTypes[j])
                 checkbox = QtWidgets.QCheckBox(seqFrame)
-                checkbox.setChecked(True)
+                checkbox.setChecked(False)
                 seqFrameLayout.addWidget(label, j, 2, QtCore.Qt.AlignCenter)
                 seqFrameLayout.addWidget(checkbox, j, 3, QtCore.Qt.AlignCenter)
                 # save activity and checkbox so we can check state later
@@ -208,13 +223,52 @@ class EventRecipeFrame(OperatorFrame):
         # returns new log that is created by applying given operator with selected parameters + name
         # this is used for the "add to logs" and "export" button in the main window
         
+        # name of log
         name = self.logSelectcomboBox1.currentText()
 
+        # new activity name
+        newActivityName = self.newActivityNameText.text()
+        if not newActivityName:
+            newActivityName = "newActivity"
+
+        # sequence of event filters
+        sequence = []
         for leftActivityComboBox, objectBoxes in self.seqBoxes:
-            pass          
+            objectTypes = set()
+            for label, checkbox in objectBoxes:
+                if checkbox.isChecked():
+                    objectTypes.add(label.text())
+            event = {"activity" : leftActivityComboBox.currentText()}
+            if objectTypes != set():
+                event["objectTypes"] = objectTypes
+            sequence.append(event)
+        
+        # time
+        time = timedelta.max
+        if self.timedeltaCheckbox.isChecked():
+            time = timedelta(hours=(float(self.timedeltaCheckText.text())))
 
+        # matchOnObjectTypes set
+        matchOnObjectTypes = set()
+        if self.matchObjectTypesCheckbox.isChecked():
+            for checkbox, label in self.objTypeCheckboxLabels:
+                if checkbox.isChecked():
+                    matchOnObjectTypes.add(label.text())
+        
+        # matchOnAttributes set
+        matchOnAttributes = set()
+        if self.matchAttributesCheckbox.isChecked():
+            for checkbox, label in self.attrCheckboxLabels:
+                if checkbox.isChecked():
+                    matchOnAttributes.add(label.text())
 
-        # return self.ocel_model.eventRecipe(name, parameters, mode, newName=newName)
+        # findAll parameter
+        findAll = self.findAllCheckbox.isChecked()
+
+        # directly parameter
+        directly = self.directlyFollowsCheckbox.isChecked()
+
+        return self.ocel_model.eventRecipe(name, newActivityName, sequence, time, matchOnObjectTypes, matchOnAttributes, findAll, directly, newName)
 
 
     def refresh(self):

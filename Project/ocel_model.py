@@ -93,8 +93,8 @@ class OCEL_Model:
         # reset index of events dataframe and sort on timestamp
         eventsDf = eventsDf.sort_values(by=[("ocel:timestamp", "ocel:timestamp")]).reset_index(drop=True)
         
-        # drop duplicates
-        objectsDf.drop_duplicates(inplace=True)
+        # drop duplicate objects
+        objectsDf = objectsDf[~objectsDf.index.duplicated(keep='first')]
         
         eventsDf.to_pickle(os.path.join(newPath, "eventsDf.pkl"))
         objectsDf.to_pickle(os.path.join(newPath, "objectsDf.pkl"))            
@@ -118,7 +118,7 @@ class OCEL_Model:
         if not os.path.exists(newPath):
             os.mkdir(newPath)
         
-        objectsDf.drop_duplicates(inplace=True)
+        objectsDf = objectsDf[~objectsDf.index.duplicated(keep='first')]
         
         objectsDf.to_pickle(os.path.join(newPath, "objectsDf.pkl"))
 
@@ -130,6 +130,7 @@ class OCEL_Model:
         # remove objects from events that aren't mentioned in objectsDf
         eventsDf = self.getEventsDf(name)
         objectsDf = self.getObjectsDf(name)
+        objectsDf = objectsDf[~objectsDf.index.duplicated(keep='first')]
         objects = set(objectsDf.index)
         
         # remove objects from events (and delete events without objects)
@@ -152,9 +153,7 @@ class OCEL_Model:
             mentionedObjects = mentionedObjects.union(obj)
         toRemovedObjects = objects.difference(mentionedObjects)
         objectsDf.drop(index=toRemovedObjects, inplace=True)
-        
-        objectsDf.drop_duplicates(inplace=True)
-        
+                
         self.setEventsDf(name, eventsDf)
         self.setObjectsDf(name, objectsDf)
         
@@ -197,13 +196,13 @@ class OCEL_Model:
     def getEventAttributes(self, name):
         eventsDf = self.getEventsDf(name)
         if "ocel:vmap" in [tup[0] for tup in eventsDf.columns]:
-            return [attr for attr in eventsDf["ocel:vmap"].columns]
+            return set([attr for attr in eventsDf["ocel:vmap"].columns])
         return set()
     
     def getObjectAttributes(self, name):
         objectsDf = self.getObjectsDf(name)
         if "ocel:ovmap" in [tup[0] for tup in objectsDf.columns]:
-            return [attr for attr in objectsDf["ocel:ovmap"].columns]
+            return set([attr for attr in objectsDf["ocel:ovmap"].columns])
         return set()
         
     def setRelation(self, relation):
@@ -821,6 +820,8 @@ class OCEL_Model:
 
         return True
 
+
+
     
 # ------------------------- Event Recipe Operator -------------------------------------
 
@@ -904,9 +905,11 @@ class OCEL_Model:
             startTime = filteredDf.loc[startIndex][("ocel:timestamp", "ocel:timestamp")]
             endIndex = filteredDf.loc[startIndex:].index[seqLength-1]
             endTime = filteredDf.loc[endIndex][("ocel:timestamp", "ocel:timestamp")]
-            if endTime - startTime > time:
-                toDrop.append(startIndex)
-                continue
+            # in case of default parameter, don't check
+            if timedelta.max != time:
+                if endTime - startTime > time:
+                    toDrop.append(startIndex)
+                    continue
                 
             # because of directly follows relation, last index of sequence has to be exactly greater by length of seq
             if endIndex - startIndex != seqLength-1:
@@ -991,26 +994,31 @@ class OCEL_Model:
         for startIndex, firstEvent in startOfSeqDf.iterrows():
             if startIndex in allEvents:
                 continue
-            startTime = firstEvent[("ocel:timestamp", "ocel:timestamp")]
-            endTime = startTime + time
             lastIndex = startIndex
             objects = set(firstEvent[("ocel:omap", "ocel:omap")])
             groupEvents = [startIndex]
             minimumIndex = 1
+
+            # create copy of df to work on
+            filteredSliceDf = copy.deepcopy(filteredDf)
             # only consider subset of dataframe that fits into desired timeframe
-            filteredSliceDf = copy.deepcopy(filteredDf[(filteredDf[("ocel:timestamp", "ocel:timestamp")] <= endTime) & (filteredDf[("ocel:timestamp", "ocel:timestamp")] >= startTime)])
+            # but only if time is not the default parameter
+            if time != timedelta.max:
+                startTime = firstEvent[("ocel:timestamp", "ocel:timestamp")]
+                endTime = startTime + time
+                filteredSliceDf = filteredSliceDf[(filteredSliceDf[("ocel:timestamp", "ocel:timestamp")] <= endTime) & (filteredSliceDf[("ocel:timestamp", "ocel:timestamp")] >= startTime)]
             # in case attributes to match on are given, only consider subset of dataframe with same values as firstEvent in sequence
             if matchOnAttributes != set():
                 for attr in matchOnAttributes:
                     filteredSliceDf = filteredSliceDf[filteredSliceDf[("ocel:vmap", attr)] == firstEvent[("ocel:vmap", attr)]]
 
-            
+
             # in case of matching object types, only consider subset where intersection of omap in firstEvent is not empty
             if matchOnObjectTypes != set():
                 filteredSliceDf[("intersect", "intersect")] = filteredSliceDf[("ocel:omap", "ocel:omap")].apply(lambda row: set(firstEvent[("ocel:omap", "ocel:omap")]).intersection(row))
                 filteredSliceDf[("intersect", "intersect")] = filteredSliceDf[("intersect", "intersect")].apply(len)
                 filteredSliceDf = filteredSliceDf[filteredSliceDf[("intersect", "intersect")] > 0]
-            
+
             # we don't want to try finding the pattern more times than theoretical possible sequences exists
             maxLength = 1
             for i in range(seqLength): 
@@ -1024,24 +1032,22 @@ class OCEL_Model:
                     for index, event in filteredSliceDf.loc[nextIndex:].iterrows():
                         if index in allEvents:
                             continue
-                        # check that not too much time has passed
-                        if event[("ocel:timestamp", "ocel:timestamp")] - firstEvent[("ocel:timestamp", "ocel:timestamp")] <= time:
-                            # find first event that matches filter criteria for next event in sequence
-                            if self.matchesSequenceEvent(sequence, i, objectsDf, event):
-                                # we only care about matching objects if parameter was passed
-                                if matchOnObjectTypes == set():
+                        # find first event that matches filter criteria for next event in sequence
+                        if self.matchesSequenceEvent(sequence, i, objectsDf, event):
+                            # we only care about matching objects if parameter was passed
+                            if matchOnObjectTypes == set():
+                                groupEvents.append(index)
+                                lastIndex = index
+                                break
+                            else:
+                                # check that event has matching object type(s)
+                                tempObjects = objects.intersection(event[("ocel:omap", "ocel:omap")])
+                                types = set(objectsDf.loc[list(tempObjects)][("ocel:type", "ocel:type")])
+                                if matchOnObjectTypes.issubset(types):
+                                    objects = tempObjects
                                     groupEvents.append(index)
                                     lastIndex = index
                                     break
-                                else:
-                                    # check that event has matching object type(s)
-                                    tempObjects = objects.intersection(event[("ocel:omap", "ocel:omap")])
-                                    types = set(objectsDf.loc[list(tempObjects)][("ocel:type", "ocel:type")])
-                                    if matchOnObjectTypes.issubset(types):
-                                        objects = tempObjects
-                                        groupEvents.append(index)
-                                        lastIndex = index
-                                        break
                 if len(groupEvents) == seqLength:
                     groupedEvents.append(groupEvents)
                     # in case we want to find all sequences of pattern (reusing events allowed), we continue searching
@@ -1055,7 +1061,7 @@ class OCEL_Model:
                     else:
                         allEvents = allEvents.union(groupEvents)
                         break
-                    
+
                 elif len(groupEvents) == 1:
                     break
                 # in case we didn't find desired pattern with correct object relationships, we can look for 
@@ -1066,8 +1072,8 @@ class OCEL_Model:
                     groupEvents = groupEvents[:-1]
                     objects = set(firstEvent[("ocel:omap", "ocel:omap")])
                     for ev in groupEvents:
-                        objects = objects.intersection(filteredDf.loc[ev][("ocel:omap", "ocel:omap")])
-
+                        objects = objects.intersection(filteredDf.loc[ev][("ocel:omap", "ocel:omap")])                        
+                        
         newEventsDf = copy.deepcopy(eventsDf)
         
         # create new event (based on attributes of last occuring event in sequence) and remove old ones    
@@ -1101,11 +1107,11 @@ class OCEL_Model:
     # findAll: specifies whether we should only look for 1st occurrence of pattern or search for all. In findAll case, "reusing" events is allowed
     # directly: specifies whether events have to be directly followed by each other. Else other events may occur inbetween
     # newName: name of new OCEL
-    def eventRecipe(self, name, newActivityName, sequence, time=timedelta.max, matchOnObjectTypes=set(), matchOnAttribuets=set(), findAll=False, directly=True, newName=""):
+    def eventRecipe(self, name, newActivityName, sequence, time=timedelta.max, matchOnObjectTypes=set(), matchOnAttributes=set(), findAll=False, directly=True, newName=""):
         if directly:
-            eventsDf = self.directlySequence(name, newActivityName, sequence, time, matchOnObjectTypes, matchOnAttribuets, findAll)
+            eventsDf = self.directlySequence(name, newActivityName, sequence, time, matchOnObjectTypes, matchOnAttributes, findAll)
         else:
-            eventsDf = self.eventuallySequence(name, newActivityName, sequence, time, matchOnObjectTypes, matchOnAttribuets, findAll)
+            eventsDf = self.eventuallySequence(name, newActivityName, sequence, time, matchOnObjectTypes, matchOnAttributes, findAll)
         
         objectsDf = self.getObjectsDf(name)
             
