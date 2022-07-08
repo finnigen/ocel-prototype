@@ -45,8 +45,12 @@ class TableWindow(QtWidgets.QMainWindow):
         self.objectTable = QtWidgets.QTableView(self.centralwidget)
         self.objectTable.setObjectName("objectTable")
 
-        self.objectsModel = PandasTableModel(self.objectsDf)
-        self.objectTable.setModel(self.objectsModel)
+        _model = PandasTableModel(self.objectsDf)
+        # enable custom numerical sorting
+        filter_model = SortFilterProxyModel()
+        filter_model.setSourceModel(_model)
+
+        self.objectTable.setModel(filter_model)
 
         self.outerLayout.addWidget(self.objectTable, 4, 0, 1, 1)
 
@@ -64,8 +68,13 @@ class TableWindow(QtWidgets.QMainWindow):
         self.eventTable.setObjectName("eventTable")
         self.outerLayout.addWidget(self.eventTable, 1, 0, 1, 1)
 
+        _model = PandasTableModel(self.eventsDf)
+        # enable custom numerical sorting
+        filter_model = SortFilterProxyModel()
+        filter_model.setSourceModel(_model)
+
         self.eventsModel = PandasTableModel(self.eventsDf)
-        self.eventTable.setModel(self.eventsModel)
+        self.eventTable.setModel(filter_model)
 
         self.objectsLabel.setText("Objects")
         self.objectTable.setSortingEnabled(True)
@@ -98,6 +107,22 @@ class TableWindow(QtWidgets.QMainWindow):
 
 
 
+# we need this class for correct numerical sorting
+class SortFilterProxyModel(QtCore.QSortFilterProxyModel):
+
+    def lessThan(self, left_index, right_index):
+
+        left_var = left_index.data(QtCore.Qt.EditRole)
+        right_var = right_index.data(QtCore.Qt.EditRole)
+
+        try:
+            return float(left_var) < float(right_var)
+        except (ValueError, TypeError):
+            pass
+        return left_var < right_var
+
+
+
 class PandasTableModel(QtGui.QStandardItemModel):
     def __init__(self, data, parent=None):
         QtGui.QStandardItemModel.__init__(self, parent)
@@ -119,6 +144,7 @@ class PandasTableModel(QtGui.QStandardItemModel):
         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
             return self._data.index[x]
         return None
+
 
 
 if __name__ == "__main__":
