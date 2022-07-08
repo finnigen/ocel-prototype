@@ -201,7 +201,7 @@ def upload_to_celonis(oct, data_pool, data_model):
 
 def cli(ocelPath, url, api, dataPool, dataModel, selected_object_types, allowed_transitions):
     try:
-        print("\n\Starting export")
+        print("\nStarting export")
         log_path = ocelPath
         log = ocel.import_log(log_path)
 

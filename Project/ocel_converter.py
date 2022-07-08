@@ -1,10 +1,7 @@
 import json
-from re import A
 import networkx as nx
 import ocel as ocel_lib
 import pickle
-import os
-import shutil
 
 import pandas as pd
 # import matplotlib.pyplot as plt

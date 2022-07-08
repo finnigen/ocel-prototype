@@ -1,5 +1,3 @@
-from asyncio import events
-from operator import is_
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import pandas as pd

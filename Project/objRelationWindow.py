@@ -1,7 +1,6 @@
 from asyncio import events
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pickle
-from ocel_converter import OCEL_Model
 import pandas as pd
 from tableWindow import PandasTableModel
 

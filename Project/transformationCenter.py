@@ -1,16 +1,7 @@
-# -*- coding: utf-8 -*-
 
-from ast import Name
-from ctypes import alignment
-from os import supports_bytes_environ
-from re import S
-
-from numpy import inner
-from ocel_converter import convertToOcelModel, OCEL_Model
 from operatorFrames.matchMinerFrame import MatchMinerFrame
 from operatorFrames.interleavedMinerFrame import InterleavedMinerFrame
 from operatorFrames.nonInterleavedMinerFrame import NonInterleavedMinerFrame
-from operators import manualMiner, matchMiner
 import pickle
 from tableWindow import TableWindow
 from objRelationWindow import ObjectWindow
@@ -23,7 +14,6 @@ from operatorFrames.eventRecipeFrame import EventRecipeFrame
 
 from ocel_model import *
 
-import json
 import ocel as ocel_lib
 from exportDialogBox import ExportDialog
 from toCelonis import cli
@@ -179,6 +169,7 @@ class TransformationCenter(QtWidgets.QWidget):
     def initSideBar(self):
 
         self.ocelSideBarFrames = {}
+        
         self.ocelSideBarExportButtons = {}
         self.ocelSideBarDeleteButtons = {}
         self.ocelSideBarViewButtons = {}

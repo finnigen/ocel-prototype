@@ -1,8 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from ocel_converter import convertToOcelModel, OCEL_Model
 from operatorFrames.operatorFrame import OperatorFrame
-from operators import matchMiner
 
 class MatchMinerFrame(OperatorFrame):
  
