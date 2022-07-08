@@ -21,9 +21,7 @@ from operatorFrames.concatFrame import ConcatFrame
 from operatorFrames.aggregateFrame import AggregateFrame
 from operatorFrames.eventRecipeFrame import EventRecipeFrame
 
-
 from ocel_model import *
-
 
 import json
 import ocel as ocel_lib
@@ -173,19 +171,14 @@ class TransformationCenter(QtWidgets.QWidget):
         MainWindow.setWindowTitle("Transformation Center")
 
         # populate widgets with data from ocel_model (list of ocels...)
-        self.retranslateUi(MainWindow)
+        self.initSideBar()
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
-    def retranslateUi(self, MainWindow):
-        # right hand side operator view
+    def initSideBar(self):
 
-        self.refreshSelection()
-
-        # start for side scroll area
         self.ocelSideBarFrames = {}
-        
         self.ocelSideBarExportButtons = {}
         self.ocelSideBarDeleteButtons = {}
         self.ocelSideBarViewButtons = {}
@@ -232,9 +225,6 @@ class TransformationCenter(QtWidgets.QWidget):
             innerLayout.addWidget(self.ocelSideBarDeleteButtons[currName])
 
         self.sidebarScrollVerticalLayout.setSpacing(20)
-
-        # end for side scroll area
-
 
 
     def addToLogs(self, pageNum):
