@@ -645,6 +645,16 @@ class OCEL_Model:
         return eventsDf
 
 
+    def filterByObjectType(self, eventsDf, objectsDf, objectTypes):
+        objectTypes = set(objectTypes)
+
+        # get objects with specified object types
+        allowedObjects = set(objectsDf[objectsDf[("ocel:type", "ocel:type")].isin(objectTypes)].index)
+
+        return self.filterByObject(eventsDf, allowedObjects)
+
+
+
     # timestamps parameter: (start_datetime, end_datetime)
     def filterByTimestamp(self, eventsDf, timestamps):
 
@@ -667,7 +677,6 @@ class OCEL_Model:
             return self.filterObjectAttributes(name, parameters, newName)
         
         else:
-            
             # get logs
             eventsDf = self.getEventsDf(name)
             objectsDf = self.getObjectsDf(name)    
@@ -678,6 +687,8 @@ class OCEL_Model:
                 newEventsDf = self.filterByActivity(newEventsDf, parameters)
             elif mode == "object":
                 newEventsDf = self.filterByObject(newEventsDf, parameters)
+            elif mode == "objectType":
+                newEventsDf = self.filterByObjectType(newEventsDf, objectsDf, parameters)
             elif mode == "timestamp":
                 newEventsDf = self.filterByTimestamp(newEventsDf, parameters)
 

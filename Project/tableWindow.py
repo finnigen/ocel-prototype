@@ -94,8 +94,8 @@ class TableWindow(QtWidgets.QMainWindow):
         self.objectTable.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
 
         # sort on timestamp
-        self.eventTable.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)
         self.eventTable.sortByColumn(3, QtCore.Qt.SortOrder.AscendingOrder)
+        self.eventTable.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)
         self.objectTable.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -104,7 +104,6 @@ class TableWindow(QtWidgets.QMainWindow):
         MainWindow.setStatusBar(self.statusbar)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
 
 
 # we need this class for correct numerical sorting
@@ -120,7 +119,6 @@ class SortFilterProxyModel(QtCore.QSortFilterProxyModel):
         except (ValueError, TypeError):
             pass
         return left_var < right_var
-
 
 
 class PandasTableModel(QtGui.QStandardItemModel):

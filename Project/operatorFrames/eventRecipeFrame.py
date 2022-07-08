@@ -168,6 +168,10 @@ class EventRecipeFrame(OperatorFrame):
     def initSequenceSelection(self):
         self.reset(self.scrollGridLayout)
 
+        # uncheck other filters
+        self.matchAttributesCheckbox.setChecked(False)
+        self.matchObjectTypesCheckbox.setChecked(False)
+
         self.seqBoxes = []
         seqLength = int(self.logSelectcomboBox2.currentText())     
 
@@ -217,6 +221,7 @@ class EventRecipeFrame(OperatorFrame):
         # add frame/layout/scrollArea for parameter selections and just clear this...
         for i in reversed(range(layout.count())): 
             layout.itemAt(i).widget().deleteLater()
+        
 
 
     def getNewLog(self, newName):

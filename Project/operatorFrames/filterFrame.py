@@ -65,6 +65,8 @@ class FilterFrame(OperatorFrame):
             self.initActivities()
         elif mode == "object":
             self.initObjects()
+        elif mode == "objectType":
+            self.initObjectTypes()
         elif mode == "eventAttribute" or mode == "objectAttribute":
             self.initAttributes(mode)
 
@@ -171,6 +173,31 @@ class FilterFrame(OperatorFrame):
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
+
+    def initObjectTypes(self):
+        logName = self.logSelectcomboBox1.currentText()
+        objectsDf = self.ocel_model.getObjectsDf(logName)
+        objectTypes = list(set(objectsDf[("ocel:type", "ocel:type")]))
+        objectTypes.sort()
+
+        myFont=QtGui.QFont()
+        myFont.setBold(True)
+
+        self.boxes = []
+        for i in range(len(objectTypes)):
+            # objectType
+            label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+            label.setText(objectTypes[i])
+            checkbox = QtWidgets.QCheckBox(self.scrollAreaWidgetContents)
+            checkbox.setChecked(True)
+            self.scrollGridLayout.addWidget(label, i, 1, QtCore.Qt.AlignCenter)
+            self.scrollGridLayout.addWidget(checkbox, i, 2, QtCore.Qt.AlignCenter)
+            # save activity and checkbox so we can check state later
+            self.boxes.append((label, checkbox))
+
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+
     def initTimestamps(self):
         self.startDate = QtWidgets.QDateTimeEdit(self.scrollAreaWidgetContents)
         self.endDate = QtWidgets.QDateTimeEdit(self.scrollAreaWidgetContents)
@@ -196,7 +223,7 @@ class FilterFrame(OperatorFrame):
         mode = self.logSelectcomboBox2.currentText()
 
         parameters = ""
-        if mode == "activity" or mode == "object":
+        if mode == "activity" or mode == "object" or mode == "objectType":
             parameters = set()
             for label, checkbox in self.boxes:
                 if checkbox.isChecked():
@@ -228,7 +255,7 @@ class FilterFrame(OperatorFrame):
             self.logSelectcomboBox1.addItem("")
             self.logSelectcomboBox1.setItemText(i, names[i])
 
-        modes = ["activity", "eventAttribute", "objectAttribute", "object", "timestamp"]
+        modes = ["activity", "eventAttribute", "objectAttribute", "object", "objectType", "timestamp"]
         for i in range(len(modes)):
             self.logSelectcomboBox2.addItem("")
             self.logSelectcomboBox2.setItemText(i, modes[i])

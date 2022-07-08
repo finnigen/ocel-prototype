@@ -184,17 +184,6 @@ class TransformationCenter(QtWidgets.QWidget):
 
         self.viewObjectRelationsButton.setText("View Object Relationships")
 
-#        self.viewObjectRelationsButton.setText("Calculating Object Relationships...")
-#        self.viewObjectRelationsButton.setEnabled(False)
-#        self.formattedObjRows = {}
-        # create thread to reformat rows for object relationship view
-#        self.worker = WorkerThread(self.ocel_model)
-#        self.worker.reformatObjRelation.connect(self.reformattingComplete)
-#        self.worker.finished.connect(self.worker.quit)
-#        self.worker.finished.connect(self.worker.deleteLater)
-#        self.worker.start()
-
-
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
@@ -251,6 +240,9 @@ class TransformationCenter(QtWidgets.QWidget):
             self.ocelSideBarViewButtons[currName].setText("View")
             self.ocelSideBarExportButtons[currName].setText("Export")
             self.ocelSideBarDeleteButtons[currName].setText("Delete")
+            self.ocelSideBarDeleteButtons[currName].setToolTip("Delete this log from collection")
+            self.ocelSideBarExportButtons[currName].setToolTip("Export this log to ocel file and connect to Celonis")
+            self.ocelSideBarViewButtons[currName].setToolTip("View events and objects of this log")
             sidebarOCELTitle.setText(currName)
             sidebarOCELTitle.setMaximumWidth(350)
             sidebarOCELTitle.setWordWrap(True)
@@ -373,9 +365,6 @@ class TransformationCenter(QtWidgets.QWidget):
         innerLayout.addWidget(self.ocelSideBarDeleteButtons[name])
 
         self.ocelSideBarFrames[name].show()
-
-        # update height of scroll area
-     #   self.OCEL_list_frame.setMinimumSize(QtCore.QSize(0, 150 * len(self.ocel_model.ocels)))
 
         # end for side scroll area
 
@@ -507,38 +496,8 @@ class TransformationCenter(QtWidgets.QWidget):
         innerStackedLayout.addWidget(operatorAddButton)
         operatorAddButton.setText("Add to event logs")
 
-    #    operatorExportButton = QtWidgets.QPushButton(operatorPage)
-    #    operatorExportButton.setObjectName("operatorExportButton")
-    #    operatorExportButton.clicked.connect(lambda checked, x=pageNum: self.export("Placeholder_" + str(x) ))
-    #    innerStackedLayout.addWidget(operatorExportButton)
-    #    operatorExportButton.setText("Export")
-
         self.stackedWidget.addWidget(operatorPage)
         self.operatorFrames.append(operatorFrame)
-
-
-#    def reformattingComplete(self, rows):
-#        self.formattedObjRows = rows
-#        self.viewObjectRelationsButton.setText("View Object Relationships")
-#        self.viewObjectRelationsButton.setEnabled(True)
-
-#class WorkerThread(QThread):
-#    reformatObjRelation = pyqtSignal(dict)
-#    def __init__(self, ocel_model):
-#        super().__init__()
-#        self.ocel_model = ocel_model
-
-#    def run(self):
-#        obj_relations = self.ocel_model.getRelation()
-#        all_objects = set()
-#        for ocelName in self.ocel_model.getOcelNames():
-#            all_objects = all_objects.union(self.ocel_model.getObjectsDf(ocelName).index)
-#        all_objects = list(all_objects)
-#        rows = {}
-#        for obj in all_objects:
-#            rows[obj] = set([b for (a,b) in obj_relations if a == obj])
-#        self.reformatObjRelation.emit(rows)
-
 
 class ExportWorkerThread(QThread):
     exportDone = pyqtSignal(str, bool)
