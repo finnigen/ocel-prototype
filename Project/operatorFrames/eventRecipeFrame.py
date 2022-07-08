@@ -11,13 +11,14 @@ class EventRecipeFrame(OperatorFrame):
 
         self.outerScrollArea = QtWidgets.QScrollArea(self.operatorFrame)
         self.outerScrollArea.setWidgetResizable(True)
+
         self.outerScrollAreaWidgetContents = QtWidgets.QWidget()
         self.outerScrollGridLayout = QtWidgets.QGridLayout(self.outerScrollAreaWidgetContents)
         self.outerScrollArea.setWidget(self.outerScrollAreaWidgetContents)
         self.innerRightLayout.addWidget(self.outerScrollArea, 6, 0, 1, 2)
 
         font = QtGui.QFont()
-        font.setPointSize(16)
+        font.setPointSize(15)
         self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
         self.operatorSelectorLabel_1.setEnabled(True)
         self.operatorSelectorLabel_1.setFont(font)
@@ -43,7 +44,7 @@ class EventRecipeFrame(OperatorFrame):
         self.directlyFollowsCheckbox.setChecked(True)
         self.directlyFollowsLabel = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
         self.directlyFollowsLabel.setFont(font)
-        self.directlyFollowsLabel.setText("Events in directly follows relation")
+        self.directlyFollowsLabel.setText("Events in directly follows relation (else: eventually)")
 
         self.newActivityNameLabel = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
         self.newActivityNameLabel.setFont(font)
@@ -86,30 +87,36 @@ class EventRecipeFrame(OperatorFrame):
         self.findAllLabel.setText("Find all occurences of seq (reusing events allowed))")
 
         # add all labels, buttons etc to right layout
-        self.outerScrollGridLayout.addWidget(self.operatorSelectorLabel_1, 2, 0)
-        self.outerScrollGridLayout.addWidget(self.logSelectcomboBox1, 2, 1)
-        self.outerScrollGridLayout.addWidget(self.directlyFollowsLabel, 4, 0)
-        self.outerScrollGridLayout.addWidget(self.directlyFollowsCheckbox, 4, 1)
-        self.outerScrollGridLayout.addWidget(self.newActivityNameLabel, 5, 0)
-        self.outerScrollGridLayout.addWidget(self.newActivityNameText, 5, 1)
-        self.outerScrollGridLayout.addWidget(self.timedeltaCheckLabel, 6, 0)
-        self.outerScrollGridLayout.addWidget(self.timedeltaCheckText, 6, 1)
-        self.outerScrollGridLayout.addWidget(self.timedeltaCheckbox, 6, 2)
-        self.outerScrollGridLayout.addWidget(self.matchObjectTypesLabel, 7, 0)
-        self.outerScrollGridLayout.addWidget(self.matchObjectTypesCheckbox, 7, 1)
-        self.outerScrollGridLayout.addWidget(self.objectTypeFrame, 8, 0)
+        self.outerScrollGridLayout.addWidget(self.operatorSelectorLabel_1, 2, 0, 1, 2)
+        self.outerScrollGridLayout.addWidget(self.logSelectcomboBox1, 2, 2, 1, 2)
+
+        self.outerScrollGridLayout.addWidget(self.newActivityNameLabel, 5, 0, 1, 2)
+        self.outerScrollGridLayout.addWidget(self.newActivityNameText, 5, 2, 1, 2)
+        self.outerScrollGridLayout.addWidget(self.timedeltaCheckLabel, 6, 1, 1, 2)
+        self.outerScrollGridLayout.addWidget(self.timedeltaCheckText, 6, 2, 1, 1)
+        self.outerScrollGridLayout.addWidget(self.timedeltaCheckbox, 6, 0, 1, 1)
+
+        self.outerScrollGridLayout.addWidget(self.matchObjectTypesLabel, 7, 1)
+        self.outerScrollGridLayout.addWidget(self.matchObjectTypesCheckbox, 7, 0)
+        self.outerScrollGridLayout.addWidget(self.objectTypeFrame, 7, 2, 1, 2)
         
-        self.outerScrollGridLayout.addWidget(self.matchAttributesLabel, 9, 0)
-        self.outerScrollGridLayout.addWidget(self.matchAttributesCheckbox, 9, 1)
-        self.outerScrollGridLayout.addWidget(self.attributeFrame, 10, 0)
+        self.outerScrollGridLayout.addWidget(self.matchAttributesLabel, 9, 1)
+        self.outerScrollGridLayout.addWidget(self.matchAttributesCheckbox, 9, 0)
+        self.outerScrollGridLayout.addWidget(self.attributeFrame, 9, 2, 1, 2)
 
-        self.outerScrollGridLayout.addWidget(self.findAllLabel, 11, 0)
-        self.outerScrollGridLayout.addWidget(self.findAllCheckbox, 11, 1)
+        self.outerScrollGridLayout.addWidget(self.findAllLabel, 10, 1)
+        self.outerScrollGridLayout.addWidget(self.findAllCheckbox, 10, 0)
 
-        self.outerScrollGridLayout.addWidget(self.operatorSelectorLabel_2, 12, 0)
-        self.outerScrollGridLayout.addWidget(self.logSelectcomboBox2, 12, 1)
+        self.outerScrollGridLayout.addWidget(self.directlyFollowsLabel, 11, 1)
+        self.outerScrollGridLayout.addWidget(self.directlyFollowsCheckbox, 11, 0)
 
-        self.outerScrollGridLayout.addWidget(self.parameterLabel, 13, 0)
+        # spacing line
+        self.outerScrollGridLayout.addWidget(QtWidgets.QLabel(self.outerScrollAreaWidgetContents), 12, 0)
+
+        self.outerScrollGridLayout.addWidget(self.operatorSelectorLabel_2, 13, 0, 1, 2)
+        self.outerScrollGridLayout.addWidget(self.logSelectcomboBox2, 13, 2, 1, 2)
+
+        self.outerScrollGridLayout.addWidget(self.parameterLabel, 14, 0, 1, 4)
 
 
         self.operatorSelectorLabel_1.setText("Select event log:")
@@ -122,7 +129,7 @@ class EventRecipeFrame(OperatorFrame):
         self.scrollArea.setMinimumHeight(200)
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
-        self.outerScrollGridLayout.addWidget(self.scrollArea, 15, 0, 1, 2)
+        self.outerScrollGridLayout.addWidget(self.scrollArea, 15, 0, 1, 4)
         
         self.refresh()
 

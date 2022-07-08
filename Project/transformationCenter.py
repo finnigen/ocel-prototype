@@ -207,14 +207,11 @@ class TransformationCenter(QtWidgets.QWidget):
             self.ocelSideBarFrames[currName] = QtWidgets.QFrame(self.OCEL_list_frame)
             self.innerVerticalLayout.addWidget(self.ocelSideBarFrames[currName])
         
-        #    height = i*120+60
-        #    self.ocelSideBarFrames[currName].setGeometry(QtCore.QRect(40, height, 280, 100))
             self.ocelSideBarFrames[currName].setFrameShape(QtWidgets.QFrame.StyledPanel)
             self.ocelSideBarFrames[currName].setFrameShadow(QtWidgets.QFrame.Raised)
             self.ocelSideBarFrames[currName].setObjectName("OcelNameFrame_" + str(currName))
 
             sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[currName])
-        #    sidebarOCELTitle.setGeometry(QtCore.QRect(60, 10, 181, 21))
             font = QtGui.QFont()
             font.setPointSize(13)
             font.setBold(True)
@@ -223,13 +220,10 @@ class TransformationCenter(QtWidgets.QWidget):
             sidebarOCELTitle.setObjectName("sidebarTitlelabel")
             sidebarOCELTitle.setAlignment(QtCore.Qt.AlignCenter)
             self.ocelSideBarViewButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-        #    self.ocelSideBarViewButtons[currName].setGeometry(QtCore.QRect(10, 50, 81, 25))
             self.ocelSideBarViewButtons[currName].setObjectName("sidebarPushButtonView")
             self.ocelSideBarExportButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-        #    self.ocelSideBarExportButtons[currName].setGeometry(QtCore.QRect(100, 50, 81, 25))
             self.ocelSideBarExportButtons[currName].setObjectName("sidebarPushButtonExport")
             self.ocelSideBarDeleteButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-        #    self.ocelSideBarDeleteButtons[currName].setGeometry(QtCore.QRect(190, 50, 81, 25))
             self.ocelSideBarDeleteButtons[currName].setObjectName("sidebarPushButtonDelete")
 
             self.ocelSideBarDeleteButtons[currName].clicked.connect(lambda checked, x=currName: self.removeFromLogs(x))
