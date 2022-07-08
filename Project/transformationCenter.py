@@ -45,29 +45,23 @@ class TransformationCenter(QtWidgets.QWidget):
         self.api = api
 
     def setupUi(self, MainWindow):
-
-        MainWindow.setObjectName("MainWindow")
+        
         MainWindow.resize(1300, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
-        self.gridLayout.setObjectName("gridLayout")
 
         # most outer layout
         self.rightFrame = QtWidgets.QFrame(self.centralwidget)
         self.rightFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.rightFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.rightFrame.setObjectName("rightFrame")
 
         self.rightGridLayout = QtWidgets.QGridLayout(self.rightFrame)
-        self.rightGridLayout.setObjectName("rightGridLayout")
         self.gridLayout.addWidget(self.rightFrame, 0, 1, 2, 2)
 
         # start of code for side scroll area
         self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.OCEL_list_scrollArea.setMinimumWidth(360)
         self.leftGridLayout = QtWidgets.QGridLayout(self.OCEL_list_scrollArea)
-        self.leftGridLayout.setObjectName("leftGridLayout")
         self.gridLayout.addWidget(self.OCEL_list_scrollArea, 0, 0, 1, 1)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -75,24 +69,19 @@ class TransformationCenter(QtWidgets.QWidget):
         sizePolicy.setHeightForWidth(self.OCEL_list_scrollArea.sizePolicy().hasHeightForWidth())
         self.OCEL_list_scrollArea.setSizePolicy(sizePolicy)
         self.OCEL_list_scrollArea.setWidgetResizable(True)
-        self.OCEL_list_scrollArea.setObjectName("OCEL_list_scrollArea")
 
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout.setObjectName("verticalLayout")
 
         self.OCEL_list_frame = QtWidgets.QFrame(self.scrollAreaWidgetContents)
         self.OCEL_list_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.OCEL_list_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.OCEL_list_frame.setObjectName("OCEL_list_frame")
         self.sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
         font = QtGui.QFont()
         font.setPointSize(18)
         font.setBold(True)
         font.setWeight(75)
         self.sidebarTitlelabel.setFont(font)
-        self.sidebarTitlelabel.setObjectName("sidebarTitlelabel")
 
         self.verticalLayout.addWidget(self.OCEL_list_frame)
 
@@ -100,7 +89,6 @@ class TransformationCenter(QtWidgets.QWidget):
 
         # set inner layout of left sidebar
         self.innerVerticalLayout = QtWidgets.QVBoxLayout(self.OCEL_list_frame)
-        self.innerVerticalLayout.setObjectName("innerVerticalLayout")
         self.innerVerticalLayout.addWidget(self.sidebarTitlelabel)
         # end of code for side scroll area
         self.innerVerticalLayout.setAlignment(QtCore.Qt.AlignVCenter)
@@ -108,14 +96,11 @@ class TransformationCenter(QtWidgets.QWidget):
 
         # stacked widget for multiple different views
         self.stackedWidget = QtWidgets.QStackedWidget(self.rightFrame)
-        self.stackedWidget.setObjectName("stackedWidget")
         self.rightGridLayout.addWidget(self.stackedWidget, 0, 0, 1, 2)
 
         self.operatorSelectorPage = QtWidgets.QWidget()
-        self.operatorSelectorPage.setObjectName("operatorSelectorPage")
 
         self.operatorOverviewStackedLayout = QtWidgets.QGridLayout(self.operatorSelectorPage)
-        self.operatorOverviewStackedLayout.setObjectName("operatorOverviewStackedLayout")
 
         self.stackedWidget.addWidget(self.operatorSelectorPage)
 
@@ -125,7 +110,6 @@ class TransformationCenter(QtWidgets.QWidget):
         font.setBold(True)
         font.setWeight(75)
         self.operatorSelectorTitle.setFont(font)
-        self.operatorSelectorTitle.setObjectName("operatorSelectorTitle")
         self.operatorSelectorTitle.setText("Select an Operator")
         self.operatorOverviewStackedLayout.addWidget(self.operatorSelectorTitle, 0, 0, 1, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
         self.operatorOverviewStackedLayout.setAlignment(QtCore.Qt.AlignCenter)
@@ -162,17 +146,14 @@ class TransformationCenter(QtWidgets.QWidget):
 
         # button for viewing object relationships
         self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
-        self.viewObjectRelationsButton.setObjectName("viewObjectRelationsButton")
         self.gridLayout.addWidget(self.viewObjectRelationsButton, 1, 0, 1, 1)
 
         # general properties
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1052, 22))
-        self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
 
         self.retranslateUi(MainWindow)
@@ -209,7 +190,6 @@ class TransformationCenter(QtWidgets.QWidget):
         
             self.ocelSideBarFrames[currName].setFrameShape(QtWidgets.QFrame.StyledPanel)
             self.ocelSideBarFrames[currName].setFrameShadow(QtWidgets.QFrame.Raised)
-            self.ocelSideBarFrames[currName].setObjectName("OcelNameFrame_" + str(currName))
 
             sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[currName])
             font = QtGui.QFont()
@@ -217,14 +197,10 @@ class TransformationCenter(QtWidgets.QWidget):
             font.setBold(True)
             font.setWeight(75)
             sidebarOCELTitle.setFont(font)
-            sidebarOCELTitle.setObjectName("sidebarTitlelabel")
             sidebarOCELTitle.setAlignment(QtCore.Qt.AlignCenter)
             self.ocelSideBarViewButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-            self.ocelSideBarViewButtons[currName].setObjectName("sidebarPushButtonView")
             self.ocelSideBarExportButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-            self.ocelSideBarExportButtons[currName].setObjectName("sidebarPushButtonExport")
             self.ocelSideBarDeleteButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-            self.ocelSideBarDeleteButtons[currName].setObjectName("sidebarPushButtonDelete")
 
             self.ocelSideBarDeleteButtons[currName].clicked.connect(lambda checked, x=currName: self.removeFromLogs(x))
             self.ocelSideBarExportButtons[currName].clicked.connect(lambda checked, x=currName: self.export(x))
@@ -242,7 +218,6 @@ class TransformationCenter(QtWidgets.QWidget):
             sidebarOCELTitle.setWordWrap(True)
 
             innerLayout = QtWidgets.QGridLayout(self.ocelSideBarFrames[currName])
-            innerLayout.setObjectName("innerLayout")
             innerLayout.addWidget(sidebarOCELTitle)
             innerLayout.addWidget(self.ocelSideBarViewButtons[currName])
             innerLayout.addWidget(self.ocelSideBarExportButtons[currName])
@@ -314,30 +289,19 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarFrames[name] = QtWidgets.QFrame(self.OCEL_list_frame)
         self.innerVerticalLayout.addWidget(self.ocelSideBarFrames[name])
 
-    #    height = i*120+60
-    #    self.ocelSideBarFrames[name].setGeometry(QtCore.QRect(40, height, 280, 100))
         self.ocelSideBarFrames[name].setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.ocelSideBarFrames[name].setFrameShadow(QtWidgets.QFrame.Raised)
-        self.ocelSideBarFrames[name].setObjectName("OcelNameFrame_" + str(name))
 
         sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[name])
-    #    sidebarOCELTitle.setGeometry(QtCore.QRect(60, 10, 181, 21))
         font = QtGui.QFont()
         font.setPointSize(13)
         font.setBold(True)
         font.setWeight(75)
         sidebarOCELTitle.setFont(font)
-        sidebarOCELTitle.setObjectName("sidebarTitlelabel")
         sidebarOCELTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.ocelSideBarViewButtons[name] = QtWidgets.QPushButton(self.ocelSideBarFrames[name])
-    #    self.ocelSideBarViewButtons[name].setGeometry(QtCore.QRect(10, 50, 81, 25))
-        self.ocelSideBarViewButtons[name].setObjectName("sidebarPushButtonView")
         self.ocelSideBarExportButtons[name] = QtWidgets.QPushButton(self.ocelSideBarFrames[name])
-    #    self.ocelSideBarExportButtons[name].setGeometry(QtCore.QRect(100, 50, 81, 25))
-        self.ocelSideBarExportButtons[name].setObjectName("sidebarPushButtonExport")
         self.ocelSideBarDeleteButtons[name] = QtWidgets.QPushButton(self.ocelSideBarFrames[name])
-    #    self.ocelSideBarDeleteButtons[name].setGeometry(QtCore.QRect(190, 50, 81, 25))
-        self.ocelSideBarDeleteButtons[name].setObjectName("sidebarPushButtonDelete")
 
         self.ocelSideBarDeleteButtons[name].clicked.connect(lambda: self.removeFromLogs(name))
         self.ocelSideBarExportButtons[name].clicked.connect(lambda checked, x=name: self.export(x))
@@ -352,7 +316,6 @@ class TransformationCenter(QtWidgets.QWidget):
         sidebarOCELTitle.setWordWrap(True)
 
         innerLayout = QtWidgets.QGridLayout(self.ocelSideBarFrames[name])
-        innerLayout.setObjectName("innerLayout")
         innerLayout.addWidget(sidebarOCELTitle)
         innerLayout.addWidget(self.ocelSideBarViewButtons[name])
         innerLayout.addWidget(self.ocelSideBarExportButtons[name])
@@ -432,13 +395,10 @@ class TransformationCenter(QtWidgets.QWidget):
 
     def initOperatorPage(self, minerTitle, minerDescription, minerFrameClass):
         operatorPage = QtWidgets.QWidget()
-        operatorPage.setObjectName("operatorPage")
         innerStackedLayout = QtWidgets.QGridLayout(operatorPage)
-        innerStackedLayout.setObjectName("innerStackedLayout")
 
         # button to go back t overview page
         goBackButton = QtWidgets.QPushButton(operatorPage)
-        goBackButton.setObjectName("goBackButton")
         goBackButton.clicked.connect(lambda: self.switchPage(0, toOverview=True ))
         innerStackedLayout.addWidget(goBackButton)
         goBackButton.setText("Go back to overview of operators")
@@ -470,6 +430,7 @@ class TransformationCenter(QtWidgets.QWidget):
         font.setPointSize(15)
         minerDescriptionLabel.setFont(font)
         minerDescriptionLabel.setText(minerDescription)
+
         # miner button on overview page
         minerButton = QtWidgets.QPushButton(minerFrame)
         minerButton.clicked.connect(lambda checked, x=pageNum: self.switchPage(x))
@@ -485,7 +446,6 @@ class TransformationCenter(QtWidgets.QWidget):
 
         # export and add-to-logs buttons on operator page
         operatorAddButton = QtWidgets.QPushButton(operatorPage)
-        operatorAddButton.setObjectName("operatorAddButton")
         operatorAddButton.clicked.connect(lambda checked, x=pageNum: self.addToLogs(x))
         innerStackedLayout.addWidget(operatorAddButton)
         operatorAddButton.setText("Add to event logs")

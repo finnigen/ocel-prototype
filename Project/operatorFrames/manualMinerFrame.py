@@ -15,17 +15,13 @@ class ManualMinerFrame(OperatorFrame):
         font = QtGui.QFont()
         font.setPointSize(16)
         self.operatorSelectorLabel_1.setFont(font)
-        self.operatorSelectorLabel_1.setObjectName("operatorSelectorLabel_1")
         self.operatorSelectorLabel_3 = QtWidgets.QLabel(self.operatorFrame)
         self.operatorSelectorLabel_3.setEnabled(True)
         self.operatorSelectorLabel_3.setFont(font)
-        self.operatorSelectorLabel_3.setObjectName("operatorSelectorLabel_3")
         
         self.logSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
-        self.logSelectcomboBox1.setObjectName("logSelectcomboBox1")
 
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
-        self.logSelectcomboBox2.setObjectName("logSelectcomboBox2")
 
         self.logSelectcomboBox1.activated.connect(self.initCounter)
         self.logSelectcomboBox2.activated.connect(self.initCounter)
