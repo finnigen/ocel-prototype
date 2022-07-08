@@ -16,9 +16,6 @@ class OperatorFrame(QtWidgets.QFrame):
         self.setLayout(self.layout)
 
         self.operatorFrame = QtWidgets.QFrame(self.parent)
-    #    self.rightGridLayout.addWidget(self.operatorFrame, 0, 0, 1, 2)
-
-    #    self.operatorFrame.setGeometry(QtCore.QRect(20, 20, 751, 511))
         self.operatorFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.operatorFrame.setFrameShadow(QtWidgets.QFrame.Raised)
 

@@ -9,22 +9,20 @@ class AggregateFrame(OperatorFrame):
     def __init__(self, parent, ocel_model, title, description):
         super().__init__(parent, ocel_model, title, description)
 
-        self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_1.setEnabled(True)
+        self.logSelectionLabel1 = QtWidgets.QLabel(self.operatorFrame)
+        self.logSelectionLabel1.setEnabled(True)
         font = QtGui.QFont()
         font.setPointSize(16)
-        self.operatorSelectorLabel_1.setFont(font)
-        self.operatorSelectorLabel_1.setObjectName("operatorSelectorLabel_1")
+        self.logSelectionLabel1.setFont(font)
         
         self.logSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
-        self.logSelectcomboBox1.setObjectName("logSelectcomboBox1")
 
 
         # add all labels, buttons etc to right layout
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_1, 2, 0)
+        self.innerRightLayout.addWidget(self.logSelectionLabel1, 2, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox1, 2, 1)
 
-        self.operatorSelectorLabel_1.setText("Select event log:")
+        self.logSelectionLabel1.setText("Select event log:")
 
         self.refresh()
  

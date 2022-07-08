@@ -19,20 +19,16 @@ class EventRecipeFrame(OperatorFrame):
 
         font = QtGui.QFont()
         font.setPointSize(15)
-        self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
-        self.operatorSelectorLabel_1.setEnabled(True)
-        self.operatorSelectorLabel_1.setFont(font)
-        self.operatorSelectorLabel_1.setObjectName("operatorSelectorLabel_1")
+        self.logSelectionLabel1 = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
+        self.logSelectionLabel1.setEnabled(True)
+        self.logSelectionLabel1.setFont(font)
         self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
         self.operatorSelectorLabel_2.setEnabled(True)
         self.operatorSelectorLabel_2.setFont(font)
-        self.operatorSelectorLabel_2.setObjectName("operatorSelectorLabel_2")
 
         self.logSelectcomboBox1 = QtWidgets.QComboBox(self.outerScrollAreaWidgetContents)
-        self.logSelectcomboBox1.setObjectName("logSelectcomboBox1")
 
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.outerScrollAreaWidgetContents)
-        self.logSelectcomboBox2.setObjectName("logSelectcomboBox2")
 
         self.parameterLabel = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
         self.parameterLabel.setFont(font)
@@ -87,7 +83,7 @@ class EventRecipeFrame(OperatorFrame):
         self.findAllLabel.setText("Find all occurences of seq (reusing events allowed))")
 
         # add all labels, buttons etc to right layout
-        self.outerScrollGridLayout.addWidget(self.operatorSelectorLabel_1, 2, 0, 1, 2)
+        self.outerScrollGridLayout.addWidget(self.logSelectionLabel1, 2, 0, 1, 2)
         self.outerScrollGridLayout.addWidget(self.logSelectcomboBox1, 2, 2, 1, 2)
 
         self.outerScrollGridLayout.addWidget(self.newActivityNameLabel, 5, 0, 1, 2)
@@ -119,7 +115,7 @@ class EventRecipeFrame(OperatorFrame):
         self.outerScrollGridLayout.addWidget(self.parameterLabel, 14, 0, 1, 4)
 
 
-        self.operatorSelectorLabel_1.setText("Select event log:")
+        self.logSelectionLabel1.setText("Select event log:")
         self.operatorSelectorLabel_2.setText("Select number of events in desired sequence:")
         self.parameterLabel.setText("Specify event filters for each event in sequence")
 

@@ -7,7 +7,6 @@ from re import S
 
 from numpy import inner
 from ocel_converter import convertToOcelModel, OCEL_Model
-# from operatorFrames.operatorFrame import OperatorFrame
 from operatorFrames.matchMinerFrame import MatchMinerFrame
 from operatorFrames.interleavedMinerFrame import InterleavedMinerFrame
 from operatorFrames.nonInterleavedMinerFrame import NonInterleavedMinerFrame
@@ -46,84 +45,99 @@ class TransformationCenter(QtWidgets.QWidget):
 
     def setupUi(self, MainWindow):
         
+        # define main widget, most outer layout and saize
         MainWindow.resize(1300, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
 
-        # most outer layout
+        # define rightFrame and layout for operator area
         self.rightFrame = QtWidgets.QFrame(self.centralwidget)
         self.rightFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.rightFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-
         self.rightGridLayout = QtWidgets.QGridLayout(self.rightFrame)
+        # add rightFrame to most outer layout
         self.gridLayout.addWidget(self.rightFrame, 0, 1, 2, 2)
 
-        # start of code for side scroll area
-        self.OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.OCEL_list_scrollArea.setMinimumWidth(360)
-        self.leftGridLayout = QtWidgets.QGridLayout(self.OCEL_list_scrollArea)
-        self.gridLayout.addWidget(self.OCEL_list_scrollArea, 0, 0, 1, 1)
+        ################## start of code for sidebar
+        # define scroll area for list of OCELs + associated layout
+        OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
+        OCEL_list_scrollArea.setMinimumWidth(360)
+        self.leftGridLayout = QtWidgets.QGridLayout(OCEL_list_scrollArea)
+
+        # set sizePolicy so that resizing works better
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.OCEL_list_scrollArea.sizePolicy().hasHeightForWidth())
-        self.OCEL_list_scrollArea.setSizePolicy(sizePolicy)
-        self.OCEL_list_scrollArea.setWidgetResizable(True)
+        sizePolicy.setHeightForWidth(OCEL_list_scrollArea.sizePolicy().hasHeightForWidth())
+        OCEL_list_scrollArea.setSizePolicy(sizePolicy)
+        OCEL_list_scrollArea.setWidgetResizable(True)
 
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        # add scroll area to most outer layout
+        self.gridLayout.addWidget(OCEL_list_scrollArea, 0, 0, 1, 1)
 
-        self.OCEL_list_frame = QtWidgets.QFrame(self.scrollAreaWidgetContents)
-        self.OCEL_list_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.OCEL_list_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
+        # define content widget for scroll area of sidebar and apply vertical layout
+        self.OCEL_list_frame = QtWidgets.QWidget()
+        self.sidebarScrollVerticalLayout = QtWidgets.QVBoxLayout(self.OCEL_list_frame)
+
+        # add title to sidebar (adjust font first)
+        sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
         font = QtGui.QFont()
         font.setPointSize(18)
         font.setBold(True)
         font.setWeight(75)
-        self.sidebarTitlelabel.setFont(font)
+        sidebarTitlelabel.setFont(font)
+        sidebarTitlelabel.setText("Object-centric event logs")
 
-        self.verticalLayout.addWidget(self.OCEL_list_frame)
-
-        self.OCEL_list_scrollArea.setWidget(self.scrollAreaWidgetContents)
+        OCEL_list_scrollArea.setWidget(self.OCEL_list_frame)
 
         # set inner layout of left sidebar
-        self.innerVerticalLayout = QtWidgets.QVBoxLayout(self.OCEL_list_frame)
-        self.innerVerticalLayout.addWidget(self.sidebarTitlelabel)
-        # end of code for side scroll area
-        self.innerVerticalLayout.setAlignment(QtCore.Qt.AlignVCenter)
-        self.sidebarTitlelabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.sidebarScrollVerticalLayout.addWidget(sidebarTitlelabel)
 
-        # stacked widget for multiple different views
-        self.stackedWidget = QtWidgets.QStackedWidget(self.rightFrame)
-        self.rightGridLayout.addWidget(self.stackedWidget, 0, 0, 1, 2)
+        # adjust alignment for scroll area
+        self.sidebarScrollVerticalLayout.setAlignment(QtCore.Qt.AlignVCenter)
+        sidebarTitlelabel.setAlignment(QtCore.Qt.AlignCenter)
 
+        # button for viewing object relationships (below and not part of scrollArea)
+        viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
+        self.gridLayout.addWidget(viewObjectRelationsButton, 1, 0, 1, 1)
+        viewObjectRelationsButton.setText("View Object Relationships")
+        viewObjectRelationsButton.clicked.connect(self.viewObjectRelations)
+
+        # keep track of opened windows to view tables or object relationships so that we don't have to re-apply transformation from data to PyQt Table
+        self.windows = {}
+
+        ################## end of code for sidebar
+
+
+        ################## start of code for right-hand operator section
+
+        # stacked widget for multiple different views (e.g. operators overview, specific operator page...)
+        self.operatorSectionStackedWidget = QtWidgets.QStackedWidget(self.rightFrame)
+        self.rightGridLayout.addWidget(self.operatorSectionStackedWidget, 0, 0, 1, 2)
+
+        # define operator overview/selector page and add layout
         self.operatorSelectorPage = QtWidgets.QWidget()
-
-        self.operatorOverviewStackedLayout = QtWidgets.QGridLayout(self.operatorSelectorPage)
-
-        self.stackedWidget.addWidget(self.operatorSelectorPage)
-
-        self.operatorSelectorTitle = QtWidgets.QLabel(self.operatorSelectorPage)
-        font = QtGui.QFont()
-        font.setPointSize(25)
-        font.setBold(True)
-        font.setWeight(75)
-        self.operatorSelectorTitle.setFont(font)
-        self.operatorSelectorTitle.setText("Select an Operator")
-        self.operatorOverviewStackedLayout.addWidget(self.operatorSelectorTitle, 0, 0, 1, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
-        self.operatorOverviewStackedLayout.setAlignment(QtCore.Qt.AlignCenter)
-        self.operatorOverviewStackedLayout.setSpacing(40)
+        self.operatorSelectorLayout = QtWidgets.QGridLayout(self.operatorSelectorPage)
+        self.operatorSectionStackedWidget.addWidget(self.operatorSelectorPage)
+        # add title with right font to operator overview page
+        operatorSelectorTitle = QtWidgets.QLabel(self.operatorSelectorPage)
+        operatorSelectorTitle.setFont(font)
+        operatorSelectorTitle.setText("Select an Operator")
+        self.operatorSelectorLayout.addWidget(operatorSelectorTitle, 0, 0, 1, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
+        self.operatorSelectorLayout.setAlignment(QtCore.Qt.AlignCenter)
+        self.operatorSelectorLayout.setSpacing(40)
 
         # scrollarea for operators on overview page
-        self.scrollArea = QtWidgets.QScrollArea(self.operatorSelectorPage)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
-        self.scrollGridLayout.setAlignment(QtCore.Qt.AlignCenter)
-        self.scrollGridLayout.setSpacing(40)
-        self.operatorOverviewStackedLayout.addWidget(self.scrollArea)
+        operatorSelectionScrollArea = QtWidgets.QScrollArea(self.operatorSelectorPage)
+        operatorSelectionScrollArea.setWidgetResizable(True)
+        self.operatorSelectorScrollAreaWidgetContents = QtWidgets.QWidget()
+        self.operatorSelectorScrollGridLayout = QtWidgets.QGridLayout(self.operatorSelectorScrollAreaWidgetContents)
+        self.operatorSelectorScrollGridLayout.setAlignment(QtCore.Qt.AlignCenter)
+        self.operatorSelectorScrollGridLayout.setSpacing(40)
+        self.operatorSelectorLayout.addWidget(operatorSelectionScrollArea)
         self.operatorFrames = []
+        operatorSelectionScrollArea.setWidget(self.operatorSelectorScrollAreaWidgetContents)
+
         # we need to initialize a page for every supported operator
         description = "Merge events across logs based on matching attribute(s)."
         self.initOperatorPage("Match Miner", description, MatchMinerFrame)
@@ -144,9 +158,10 @@ class TransformationCenter(QtWidgets.QWidget):
         description = "Specify sequence of low-level events and turn them into one high-level event."
         self.initOperatorPage("Event Recipe", description, EventRecipeFrame)
 
-        # button for viewing object relationships
-        self.viewObjectRelationsButton = QtWidgets.QPushButton(self.centralwidget)
-        self.gridLayout.addWidget(self.viewObjectRelationsButton, 1, 0, 1, 1)
+        # set current page for stacked widget in the beginning to the operator selector page
+        self.operatorSectionStackedWidget.setCurrentIndex(0)
+
+        ################## end of code for right-hand operator section
 
         # general properties
         MainWindow.setCentralWidget(self.centralwidget)
@@ -155,22 +170,15 @@ class TransformationCenter(QtWidgets.QWidget):
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1052, 22))
         MainWindow.setMenuBar(self.menubar)
+        MainWindow.setWindowTitle("Transformation Center")
 
+        # populate widgets with data from ocel_model (list of ocels...)
         self.retranslateUi(MainWindow)
-
-        # set current page for stacked widget
-        self.stackedWidget.setCurrentIndex(0)
-        # keep track of windows to view tables, and object relationships
-        self.windows = {}
-
-        self.viewObjectRelationsButton.setText("View Object Relationships")
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle("Transformation Center")
-
         # right hand side operator view
 
         self.refreshSelection()
@@ -186,7 +194,7 @@ class TransformationCenter(QtWidgets.QWidget):
         for i in range(len(ocel_names)):
             currName = ocel_names[i]
             self.ocelSideBarFrames[currName] = QtWidgets.QFrame(self.OCEL_list_frame)
-            self.innerVerticalLayout.addWidget(self.ocelSideBarFrames[currName])
+            self.sidebarScrollVerticalLayout.addWidget(self.ocelSideBarFrames[currName])
         
             self.ocelSideBarFrames[currName].setFrameShape(QtWidgets.QFrame.StyledPanel)
             self.ocelSideBarFrames[currName].setFrameShadow(QtWidgets.QFrame.Raised)
@@ -223,15 +231,10 @@ class TransformationCenter(QtWidgets.QWidget):
             innerLayout.addWidget(self.ocelSideBarExportButtons[currName])
             innerLayout.addWidget(self.ocelSideBarDeleteButtons[currName])
 
-        self.innerVerticalLayout.setSpacing(20)
+        self.sidebarScrollVerticalLayout.setSpacing(20)
 
-        self.sidebarTitlelabel.setText("Object-centric event logs")
-    #    self.sidebarTitlelabel.setAlignment(QtCore.Qt.AlignTop)
         # end for side scroll area
 
-        # button for viewing object relationships
-        self.viewObjectRelationsButton.setText("View Object Relationships")
-        self.viewObjectRelationsButton.clicked.connect(self.viewObjectRelations)
 
 
     def addToLogs(self, pageNum):
@@ -268,17 +271,17 @@ class TransformationCenter(QtWidgets.QWidget):
         del self.ocelSideBarFrames[name]
         if name in self.windows:
             del self.windows[name]
-        self.refreshSelection(returnToOperatorOverviewPage=False)
+        self.refreshSelection(returnToOperatorSelectorPage=False)
 
 
-    def refreshSelection(self, name="", returnToOperatorOverviewPage=True):
+    def refreshSelection(self, name="", returnToOperatorSelectorPage=True):
 
         for i in self.operatorFrames:
             i.refresh()
         
         # go back to operator overview page
-        if returnToOperatorOverviewPage:
-            self.stackedWidget.setCurrentIndex(0)
+        if returnToOperatorSelectorPage:
+            self.operatorSectionStackedWidget.setCurrentIndex(0)
 
         # only add new log to sidebar if we just applied some operator
         if name == "":
@@ -287,7 +290,7 @@ class TransformationCenter(QtWidgets.QWidget):
         # start for side scroll area
         i = len(self.ocel_model.ocels) - 1
         self.ocelSideBarFrames[name] = QtWidgets.QFrame(self.OCEL_list_frame)
-        self.innerVerticalLayout.addWidget(self.ocelSideBarFrames[name])
+        self.sidebarScrollVerticalLayout.addWidget(self.ocelSideBarFrames[name])
 
         self.ocelSideBarFrames[name].setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.ocelSideBarFrames[name].setFrameShadow(QtWidgets.QFrame.Raised)
@@ -387,17 +390,17 @@ class TransformationCenter(QtWidgets.QWidget):
 
     def switchPage(self, pageNum, toOverview=False):
         if toOverview:
-            self.stackedWidget.setCurrentIndex(0)
+            self.operatorSectionStackedWidget.setCurrentIndex(0)
             return
         self.operatorFrames[pageNum].refresh()  
-        self.stackedWidget.setCurrentIndex(pageNum+1) # +1 since the 0th page is the operator overview page
+        self.operatorSectionStackedWidget.setCurrentIndex(pageNum+1) # +1 since the 0th page is the operator overview page
 
 
     def initOperatorPage(self, minerTitle, minerDescription, minerFrameClass):
         operatorPage = QtWidgets.QWidget()
         innerStackedLayout = QtWidgets.QGridLayout(operatorPage)
 
-        # button to go back t overview page
+        # button to go back to overview page
         goBackButton = QtWidgets.QPushButton(operatorPage)
         goBackButton.clicked.connect(lambda: self.switchPage(0, toOverview=True ))
         innerStackedLayout.addWidget(goBackButton)
@@ -411,7 +414,7 @@ class TransformationCenter(QtWidgets.QWidget):
 
         # create frame on overview page for miner as well
         # frame on over view page
-        minerFrame = QtWidgets.QFrame(self.scrollAreaWidgetContents)
+        minerFrame = QtWidgets.QFrame(self.operatorSelectorScrollAreaWidgetContents)
         minerFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         minerFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         minerFrameLayout = QtWidgets.QGridLayout(minerFrame)
@@ -440,9 +443,8 @@ class TransformationCenter(QtWidgets.QWidget):
         minerFrameLayout.addWidget(minerDescriptionLabel)
         minerFrameLayout.addWidget(minerButton)
 
-        self.scrollGridLayout.addWidget(minerFrame)
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-       # self.operatorOverviewStackedLayout.addWidget(minerFrame)
+        self.operatorSelectorScrollGridLayout.addWidget(minerFrame)
+       # self.operatorSelectorLayout.addWidget(minerFrame)
 
         # export and add-to-logs buttons on operator page
         operatorAddButton = QtWidgets.QPushButton(operatorPage)
@@ -450,7 +452,7 @@ class TransformationCenter(QtWidgets.QWidget):
         innerStackedLayout.addWidget(operatorAddButton)
         operatorAddButton.setText("Add to event logs")
 
-        self.stackedWidget.addWidget(operatorPage)
+        self.operatorSectionStackedWidget.addWidget(operatorPage)
         self.operatorFrames.append(operatorFrame)
 
 class ExportWorkerThread(QThread):
@@ -501,7 +503,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
 
                 # 'fileBig.pkl'
-    with open('fileBig.pkl', 'rb') as file:
+    with open('fileDf.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

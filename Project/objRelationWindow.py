@@ -18,17 +18,13 @@ class ObjectWindow(QtWidgets.QMainWindow):
         self.df = df
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowTitle("Object Relationships")
         MainWindow.resize(960, 540)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
         self.outerLayout = QtWidgets.QGridLayout(self.centralwidget)
-        self.outerLayout.setObjectName("outerLayout")
 
         self.relationTable = QtWidgets.QTableView(self.centralwidget)
         self.relationTable.setDragEnabled(False)
-        self.relationTable.setObjectName("relationTable")
 
         self.relationModel = PandasTableModel(self.df)
         self.relationTable.setModel(self.relationModel)
@@ -45,7 +41,6 @@ class ObjectWindow(QtWidgets.QMainWindow):
         
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.relationTable.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)

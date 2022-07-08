@@ -25,13 +25,10 @@ class TableWindow(QtWidgets.QMainWindow):
 
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowTitle(self.name)
         MainWindow.resize(960, 540)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
         self.outerLayout = QtWidgets.QGridLayout(self.centralwidget)
-        self.outerLayout.setObjectName("outerLayout")
 
         # objects table
         self.objectsLabel = QtWidgets.QLabel(self.centralwidget)
@@ -39,11 +36,9 @@ class TableWindow(QtWidgets.QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.objectsLabel.setFont(font)
-        self.objectsLabel.setObjectName("objectsLabel")
 
         self.outerLayout.addWidget(self.objectsLabel, 3, 0, 1, 1, QtCore.Qt.AlignHCenter)
         self.objectTable = QtWidgets.QTableView(self.centralwidget)
-        self.objectTable.setObjectName("objectTable")
 
         _model = PandasTableModel(self.objectsDf)
         # enable custom numerical sorting
@@ -60,12 +55,10 @@ class TableWindow(QtWidgets.QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.eventsLabel.setFont(font)
-        self.eventsLabel.setObjectName("eventsLabel")
         self.outerLayout.addWidget(self.eventsLabel, 0, 0, 1, 1, QtCore.Qt.AlignHCenter)
 
         self.eventTable = QtWidgets.QTableView(self.centralwidget)
         self.eventTable.setDragEnabled(False)
-        self.eventTable.setObjectName("eventTable")
         self.outerLayout.addWidget(self.eventTable, 1, 0, 1, 1)
 
         _model = PandasTableModel(self.eventsDf)
@@ -100,11 +93,10 @@ class TableWindow(QtWidgets.QMainWindow):
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+    
 
 # we need this class for correct numerical sorting
 class SortFilterProxyModel(QtCore.QSortFilterProxyModel):

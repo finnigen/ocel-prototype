@@ -10,33 +10,29 @@ class InterleavedMinerFrame(OperatorFrame):
         super().__init__(parent, ocel_model, title, description)
 
 
-        self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_1.setEnabled(True)
+        self.logSelectionLabel1 = QtWidgets.QLabel(self.operatorFrame)
+        self.logSelectionLabel1.setEnabled(True)
         font = QtGui.QFont()
         font.setPointSize(16)
-        self.operatorSelectorLabel_1.setFont(font)
-        self.operatorSelectorLabel_1.setObjectName("operatorSelectorLabel_1")
+        self.logSelectionLabel1.setFont(font)
         
         self.logSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
-        self.logSelectcomboBox1.setObjectName("logSelectcomboBox1")
 
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
-        self.logSelectcomboBox2.setObjectName("logSelectcomboBox2")
 
-        self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_2.setEnabled(True)
+        self.logSelectionLabel2 = QtWidgets.QLabel(self.operatorFrame)
+        self.logSelectionLabel2.setEnabled(True)
 
-        self.operatorSelectorLabel_2.setFont(font)
-        self.operatorSelectorLabel_2.setObjectName("operatorSelectorLabel_2")
+        self.logSelectionLabel2.setFont(font)
 
         # add all labels, buttons etc to right layout
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_1, 2, 0)
+        self.innerRightLayout.addWidget(self.logSelectionLabel1, 2, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox1, 2, 1)
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
+        self.innerRightLayout.addWidget(self.logSelectionLabel2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
 
-        self.operatorSelectorLabel_1.setText("Select first event log:")
-        self.operatorSelectorLabel_2.setText("Select second event log:")
+        self.logSelectionLabel1.setText("Select first event log:")
+        self.logSelectionLabel2.setText("Select second event log:")
 
         self.refresh()
  

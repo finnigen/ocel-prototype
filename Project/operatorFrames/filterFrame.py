@@ -12,20 +12,16 @@ class FilterFrame(OperatorFrame):
 
         font = QtGui.QFont()
         font.setPointSize(16)
-        self.operatorSelectorLabel_1 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_1.setEnabled(True)
-        self.operatorSelectorLabel_1.setFont(font)
-        self.operatorSelectorLabel_1.setObjectName("operatorSelectorLabel_1")
+        self.logSelectionLabel1 = QtWidgets.QLabel(self.operatorFrame)
+        self.logSelectionLabel1.setEnabled(True)
+        self.logSelectionLabel1.setFont(font)
         self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.operatorFrame)
         self.operatorSelectorLabel_2.setEnabled(True)
         self.operatorSelectorLabel_2.setFont(font)
-        self.operatorSelectorLabel_2.setObjectName("operatorSelectorLabel_2")
 
         self.logSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
-        self.logSelectcomboBox1.setObjectName("logSelectcomboBox1")
 
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
-        self.logSelectcomboBox2.setObjectName("logSelectcomboBox2")
 
         self.parameterLabel = QtWidgets.QLabel(self.operatorFrame)
         self.parameterLabel.setFont(font)
@@ -34,13 +30,13 @@ class FilterFrame(OperatorFrame):
         self.logSelectcomboBox2.activated.connect(self.initFilterParameterSelection)
 
         # add all labels, buttons etc to right layout
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_1, 2, 0)
+        self.innerRightLayout.addWidget(self.logSelectionLabel1, 2, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox1, 2, 1)
         self.innerRightLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
         self.innerRightLayout.addWidget(self.parameterLabel, 4, 0)
 
-        self.operatorSelectorLabel_1.setText("Select event log:")
+        self.logSelectionLabel1.setText("Select event log:")
         self.operatorSelectorLabel_2.setText("Select based on what you want to filter:")
         self.parameterLabel.setText("Specify filter criteria")
 
