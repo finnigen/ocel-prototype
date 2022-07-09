@@ -317,10 +317,10 @@ class TransformationCenter(QtWidgets.QWidget):
         dialog = ExportDialog(filePath, self.url, self.api)
         if dialog.exec():
             parameters = dialog.getInputs()
+            # parameters of shape (datapool, datamode, objectTypes, transitions)
             
             # if no objects selected, don't export
             if len(parameters[2]) == 0:
-                print(parameters[2])
                 return
 
             self.ocelSideBarDeleteButtons[name].setEnabled(False)

@@ -12,93 +12,103 @@ from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
 class Ui_LoginWindow(object):
     def setupUi(self, LoginWindow):
-        LoginWindow.resize(775, 503)
-        self.centralwidget = QtWidgets.QWidget(LoginWindow)
-        self.formLayout = QtWidgets.QFormLayout(self.centralwidget)
-        self.celonisTokenText = QtWidgets.QLineEdit(self.centralwidget)
-        self.formLayout.setWidget(12, QtWidgets.QFormLayout.FieldRole, self.celonisTokenText)
-        self.celonisURLText = QtWidgets.QLineEdit(self.centralwidget)
-        self.formLayout.setWidget(10, QtWidgets.QFormLayout.FieldRole, self.celonisURLText)
-        self.celonisURLLabel = QtWidgets.QLabel(self.centralwidget)
+
+        ################## define global fonts
+        # big font
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        font.setBold(True)
+        font.setWeight(75)
+        self.bigFont = font
+        # middle font
         font = QtGui.QFont()
         font.setPointSize(16)
-        font.setBold(False)
-        font.setWeight(50)
-        self.celonisURLLabel.setFont(font)
+        self.middleFont = font
+        
+        # size and central widget
+        LoginWindow.resize(700, 400)
+        self.centralwidget = QtWidgets.QWidget(LoginWindow)
+        self.formLayout = QtWidgets.QFormLayout(self.centralwidget)
+
+        # celonis url text and label
+        self.celonisURLText = QtWidgets.QLineEdit(self.centralwidget)
+        self.formLayout.setWidget(10, QtWidgets.QFormLayout.FieldRole, self.celonisURLText)
+
+        self.celonisURLLabel = QtWidgets.QLabel(self.centralwidget)
+        self.celonisURLLabel.setFont(self.middleFont)
         self.celonisURLLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.formLayout.setWidget(8, QtWidgets.QFormLayout.FieldRole, self.celonisURLLabel)
+        
+        # celonis token text and label
+        self.celonisTokenText = QtWidgets.QLineEdit(self.centralwidget)
+        self.formLayout.setWidget(12, QtWidgets.QFormLayout.FieldRole, self.celonisTokenText)
+        
         self.celonisTokenLabel = QtWidgets.QLabel(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.celonisTokenLabel.sizePolicy().hasHeightForWidth())
         self.celonisTokenLabel.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.celonisTokenLabel.setFont(font)
+        self.celonisTokenLabel.setFont(self.middleFont)
         self.celonisTokenLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.formLayout.setWidget(11, QtWidgets.QFormLayout.FieldRole, self.celonisTokenLabel)
+        # login button and label
         self.loginButton = QtWidgets.QPushButton(self.centralwidget)
+        self.loginButton.setFont(self.middleFont)
         self.formLayout.setWidget(16, QtWidgets.QFormLayout.FieldRole, self.loginButton)
+        
         self.loginLabel = QtWidgets.QLabel(self.centralwidget)
-        font = QtGui.QFont()
-        font.setPointSize(24)
-        font.setBold(True)
-        font.setWeight(75)
-        self.loginLabel.setFont(font)
+        self.loginLabel.setFont(self.bigFont)
         self.loginLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.loginLabel.setScaledContents(False)
         self.loginLabel.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
         self.formLayout.setWidget(5, QtWidgets.QFormLayout.FieldRole, self.loginLabel)
+        # separator line
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.formLayout.setWidget(19, QtWidgets.QFormLayout.FieldRole, self.line)
+        # data pool label and combobox
         self.dataPoolLabel = QtWidgets.QLabel(self.centralwidget)
         self.dataPoolLabel.setEnabled(False)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.dataPoolLabel.setFont(font)
+        self.dataPoolLabel.setFont(self.middleFont)
         self.dataPoolLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.formLayout.setWidget(20, QtWidgets.QFormLayout.FieldRole, self.dataPoolLabel)
+        
         self.dataPoolComboBox = QtWidgets.QComboBox(self.centralwidget)
         self.dataPoolComboBox.setEnabled(False)
         self.formLayout.setWidget(21, QtWidgets.QFormLayout.FieldRole, self.dataPoolComboBox)
+        # data model label and combobox
         self.dataModelLabel = QtWidgets.QLabel(self.centralwidget)
         self.dataModelLabel.setEnabled(False)
-        self.dataModelLabel.setFont(font)
+        self.dataModelLabel.setFont(self.middleFont)
         self.dataModelLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.formLayout.setWidget(22, QtWidgets.QFormLayout.FieldRole, self.dataModelLabel)
+        
         self.dataModelComboBox = QtWidgets.QComboBox(self.centralwidget)
         self.dataModelComboBox.setEnabled(False)
         self.formLayout.setWidget(23, QtWidgets.QFormLayout.FieldRole, self.dataModelComboBox)
+        # set conversion button
         self.conversionButton = QtWidgets.QPushButton(self.centralwidget)
         self.conversionButton.setEnabled(False)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.conversionButton.sizePolicy().hasHeightForWidth())
         self.conversionButton.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
-        self.conversionButton.setFont(font)
+        self.conversionButton.setFont(self.middleFont)
         self.formLayout.setWidget(25, QtWidgets.QFormLayout.FieldRole, self.conversionButton)
+        # set spacer
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.formLayout.setItem(24, QtWidgets.QFormLayout.FieldRole, spacerItem)
+        
+        # set central widget of window
         LoginWindow.setCentralWidget(self.centralwidget)
 
+        # connect buttons to functions
         self.loginButton.clicked.connect(self.login)
         self.dataPoolComboBox.activated.connect(self.initModelBox)
         self.conversionButton.clicked.connect(self.startConversion)
 
+        # waiti label
         self.waitLabel = QtWidgets.QLabel(self.centralwidget)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        font.setBold(False)
-        font.setWeight(50)
-        self.waitLabel.setFont(font)
+        self.waitLabel.setFont(self.middleFont)
         self.waitLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.formLayout.setWidget(27, QtWidgets.QFormLayout.FieldRole, self.waitLabel)  
 
@@ -128,7 +138,7 @@ class Ui_LoginWindow(object):
         self.url = self.celonisURLText.text()
         self.token = self.celonisTokenText.text()
 
-        # for development
+        ########################### only for development
 
         # my personal acc
         self.url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
@@ -138,6 +148,7 @@ class Ui_LoginWindow(object):
         self.url = "https://students-pads.eu-1.celonis.cloud"
         self.token = "MmRlZTU4M2MtNjg5NS00YTU4LTlhOWEtODQ1ZDAxYTUzNTcxOmNaUjhMUllkSUQ4Y0E2cG9uRERkSWJSY2FtdVp0NkxLTVhuTm92TGk0Q0Fi"
 
+        ###########################
 
         try:
             self.celonis = get_celonis(self.url, self.token, key_type="USER_KEY")
@@ -146,6 +157,7 @@ class Ui_LoginWindow(object):
             return
         self.initRest()
     
+
     def initRest(self):
         self.dataPoolComboBox.clear()
         self.dataPoolLabel.setEnabled(True)
@@ -153,6 +165,8 @@ class Ui_LoginWindow(object):
         self.dataModelLabel.setEnabled(True)
         self.dataModelComboBox.setEnabled(True)
         self.conversionButton.setEnabled(True)
+
+        # list all data pools in combobox
         for i in range(len(self.celonis.pools)):
             self.dataPoolComboBox.addItem("")
             self.dataPoolComboBox.setItemText(i, self.celonis.pools[i].name)
@@ -163,6 +177,8 @@ class Ui_LoginWindow(object):
         self.dataModelComboBox.clear()
         pool_name = self.dataPoolComboBox.currentText()
         pool = self.celonis.pools.find(pool_name)
+
+        # list all data models in combobox
         for i in range(len(pool.datamodels)):
             self.dataModelComboBox.addItem("")
             self.dataModelComboBox.setItemText(i, pool.datamodels[i].name) 
@@ -184,6 +200,7 @@ class Ui_LoginWindow(object):
         model_name = self.dataModelComboBox.currentText()
         data_model = pool.datamodels.find(model_name)
 
+        # start loading gif
         self.spinner.start()
         self.spinnerLabel.show()
 
@@ -195,12 +212,13 @@ class Ui_LoginWindow(object):
         self.worker.start()
 
     def conversionComplete(self, ocel_model):
-        # open new window
+        # open new window of transformation center
         self.newWindow = QtWidgets.QMainWindow()
         ui = TransformationCenter(ocel_model, self.url, self.token)
         ui.setupUi(self.newWindow)
         self.newWindow.show()
 
+        # reset visuals
         self.conversionButton.setEnabled(True)
         self.dataPoolComboBox.setEnabled(True)
         self.dataModelComboBox.setEnabled(True)

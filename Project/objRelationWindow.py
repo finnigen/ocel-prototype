@@ -9,6 +9,7 @@ class ObjectWindow(QtWidgets.QMainWindow):
     def __init__(self, objRelation):
         super().__init__()
 
+        # group object relations by object to bring data into right format
         df = pd.DataFrame(objRelation)
         df[1] = df[1].apply(lambda x : [x])
         df = pd.DataFrame(df.groupby(0)[1].apply(sum))
