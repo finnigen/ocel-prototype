@@ -46,6 +46,24 @@ class TransformationCenter(QtWidgets.QWidget):
         # add rightFrame to most outer layout
         self.gridLayout.addWidget(self.rightFrame, 0, 1, 2, 2)
 
+        ################## define global fonts
+        # title font
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        font.setPointSize(18)
+        self.titleFont = font
+        # middle font
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.middleFont = font
+        # standard font
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        font.setPointSize(13)
+        self.standardFont = font
+
         ################## start of code for sidebar
         # define scroll area for list of OCELs + associated layout
         OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
@@ -69,11 +87,7 @@ class TransformationCenter(QtWidgets.QWidget):
 
         # add title to sidebar (adjust font first)
         sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
-        font = QtGui.QFont()
-        font.setPointSize(18)
-        font.setBold(True)
-        font.setWeight(75)
-        sidebarTitlelabel.setFont(font)
+        sidebarTitlelabel.setFont(self.titleFont)
         sidebarTitlelabel.setText("Object-centric event logs")
 
         OCEL_list_scrollArea.setWidget(self.OCEL_list_frame)
@@ -91,8 +105,8 @@ class TransformationCenter(QtWidgets.QWidget):
         viewObjectRelationsButton.setText("View Object Relationships")
         viewObjectRelationsButton.clicked.connect(self.viewObjectRelations)
 
-        # keep track of opened windows to view tables or object relationships so that we don't have to re-apply transformation from data to PyQt Table
-        self.windows = {}
+        # keep track of opened openedWindows to view tables or object relationships so that we don't have to re-apply transformation from data to PyQt Table
+        self.openedWindows = {}
 
         ################## end of code for sidebar
 
@@ -109,7 +123,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.operatorSectionStackedWidget.addWidget(self.operatorSelectorPage)
         # add title with right font to operator overview page
         operatorSelectorTitle = QtWidgets.QLabel(self.operatorSelectorPage)
-        operatorSelectorTitle.setFont(font)
+        operatorSelectorTitle.setFont(self.titleFont)
         operatorSelectorTitle.setText("Select an Operator")
         self.operatorSelectorLayout.addWidget(operatorSelectorTitle, 0, 0, 1, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
         self.operatorSelectorLayout.setAlignment(QtCore.Qt.AlignCenter)
@@ -168,52 +182,18 @@ class TransformationCenter(QtWidgets.QWidget):
 
     def initSideBar(self):
 
+        # initialize collection of sidebar elements
         self.ocelSideBarFrames = {}
-        
         self.ocelSideBarExportButtons = {}
         self.ocelSideBarDeleteButtons = {}
         self.ocelSideBarViewButtons = {}
 
         ocel_names = list(self.ocel_model.getOcelNames())
-        for i in range(len(ocel_names)):
-            currName = ocel_names[i]
-            self.ocelSideBarFrames[currName] = QtWidgets.QFrame(self.OCEL_list_frame)
-            self.sidebarScrollVerticalLayout.addWidget(self.ocelSideBarFrames[currName])
-        
-            self.ocelSideBarFrames[currName].setFrameShape(QtWidgets.QFrame.StyledPanel)
-            self.ocelSideBarFrames[currName].setFrameShadow(QtWidgets.QFrame.Raised)
+        ocel_names.sort()
 
-            sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[currName])
-            font = QtGui.QFont()
-            font.setPointSize(13)
-            font.setBold(True)
-            font.setWeight(75)
-            sidebarOCELTitle.setFont(font)
-            sidebarOCELTitle.setAlignment(QtCore.Qt.AlignCenter)
-            self.ocelSideBarViewButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-            self.ocelSideBarExportButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-            self.ocelSideBarDeleteButtons[currName] = QtWidgets.QPushButton(self.ocelSideBarFrames[currName])
-
-            self.ocelSideBarDeleteButtons[currName].clicked.connect(lambda checked, x=currName: self.removeFromLogs(x))
-            self.ocelSideBarExportButtons[currName].clicked.connect(lambda checked, x=currName: self.export(x))
-            self.ocelSideBarViewButtons[currName].clicked.connect(lambda checked, x=currName: self.show_table_window(x))
-
-
-            self.ocelSideBarViewButtons[currName].setText("View")
-            self.ocelSideBarExportButtons[currName].setText("Export")
-            self.ocelSideBarDeleteButtons[currName].setText("Delete")
-            self.ocelSideBarDeleteButtons[currName].setToolTip("Delete this log from collection")
-            self.ocelSideBarExportButtons[currName].setToolTip("Export this log to ocel file and connect to Celonis")
-            self.ocelSideBarViewButtons[currName].setToolTip("View events and objects of this log")
-            sidebarOCELTitle.setText(currName)
-            sidebarOCELTitle.setMaximumWidth(350)
-            sidebarOCELTitle.setWordWrap(True)
-
-            innerLayout = QtWidgets.QGridLayout(self.ocelSideBarFrames[currName])
-            innerLayout.addWidget(sidebarOCELTitle)
-            innerLayout.addWidget(self.ocelSideBarViewButtons[currName])
-            innerLayout.addWidget(self.ocelSideBarExportButtons[currName])
-            innerLayout.addWidget(self.ocelSideBarDeleteButtons[currName])
+        # for every OCEL: add frame to sidebar with export, delete, and view buttons
+        for name in ocel_names:
+            self.addOcelFrameToSidebar(name)
 
         self.sidebarScrollVerticalLayout.setSpacing(20)
 
@@ -244,57 +224,40 @@ class TransformationCenter(QtWidgets.QWidget):
 
 
     def removeFromLogs(self, name):
-        if len(self.ocel_model.ocels) == 1:
+        if len(self.ocel_model.getOcelNames()) == 1:
             print("Can't delete last log")
             return
         self.ocel_model.removeOCEL(name)
         self.ocelSideBarFrames[name].setParent(None)
         del self.ocelSideBarFrames[name]
-        if name in self.windows:
-            del self.windows[name]
+        if name in self.openedWindows:
+            del self.openedWindows[name]
         self.refreshSelection(returnToOperatorSelectorPage=False)
 
+    def addOcelFrameToSidebar(self, name):
+        # add frame and delete/view/export button for an OCEL to the sidebar
 
-    def refreshSelection(self, name="", returnToOperatorSelectorPage=True):
-
-        for i in self.operatorFrames:
-            i.refresh()
-        
-        # go back to operator overview page
-        if returnToOperatorSelectorPage:
-            self.operatorSectionStackedWidget.setCurrentIndex(0)
-
-        # only add new log to sidebar if we just applied some operator
-        if name == "":
-            return
-
-        # start for side scroll area
-        i = len(self.ocel_model.ocels) - 1
         self.ocelSideBarFrames[name] = QtWidgets.QFrame(self.OCEL_list_frame)
         self.sidebarScrollVerticalLayout.addWidget(self.ocelSideBarFrames[name])
-
+    
         self.ocelSideBarFrames[name].setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.ocelSideBarFrames[name].setFrameShadow(QtWidgets.QFrame.Raised)
 
         sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[name])
-        font = QtGui.QFont()
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        sidebarOCELTitle.setFont(font)
+        sidebarOCELTitle.setFont(self.standardFont)
         sidebarOCELTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.ocelSideBarViewButtons[name] = QtWidgets.QPushButton(self.ocelSideBarFrames[name])
         self.ocelSideBarExportButtons[name] = QtWidgets.QPushButton(self.ocelSideBarFrames[name])
         self.ocelSideBarDeleteButtons[name] = QtWidgets.QPushButton(self.ocelSideBarFrames[name])
 
-        self.ocelSideBarDeleteButtons[name].clicked.connect(lambda: self.removeFromLogs(name))
+        self.ocelSideBarDeleteButtons[name].clicked.connect(lambda checked, x=name: self.removeFromLogs(x))
         self.ocelSideBarExportButtons[name].clicked.connect(lambda checked, x=name: self.export(x))
         self.ocelSideBarViewButtons[name].clicked.connect(lambda checked, x=name: self.show_table_window(x))
-
 
         self.ocelSideBarViewButtons[name].setText("View")
         self.ocelSideBarExportButtons[name].setText("Export")
         self.ocelSideBarDeleteButtons[name].setText("Delete")
+
         sidebarOCELTitle.setText(name)
         sidebarOCELTitle.setMaximumWidth(350)
         sidebarOCELTitle.setWordWrap(True)
@@ -305,26 +268,42 @@ class TransformationCenter(QtWidgets.QWidget):
         innerLayout.addWidget(self.ocelSideBarExportButtons[name])
         innerLayout.addWidget(self.ocelSideBarDeleteButtons[name])
 
-        self.ocelSideBarFrames[name].show()
 
-        # end for side scroll area
+    def refreshSelection(self, name="", returnToOperatorSelectorPage=True):
+        # is called after applying an operator
+        # adds new OCEL to sidebar and refreshes parameters / standard view
+
+        # refresh selection of all operators to account for new log
+        for i in self.operatorFrames:
+            i.refresh()
+        
+        # go back to operator overview page (after applying operator)
+        if returnToOperatorSelectorPage:
+            self.operatorSectionStackedWidget.setCurrentIndex(0)
+
+        # only add new log to sidebar if we just applied some operator (e.g. in case we delete, we don't want to add anything)
+        if name == "":
+            return
+
+        self.addOcelFrameToSidebar(name)
+
 
     def show_table_window(self, name):
-        if name not in self.windows:
+        if name not in self.openedWindows:
             newWindow = QtWidgets.QMainWindow()
             ui = TableWindow(self.ocel_model, name)
             ui.setupUi(newWindow)
-            self.windows[name] = newWindow
-        self.windows[name].show()
+            self.openedWindows[name] = newWindow
+        self.openedWindows[name].show()
 
 
     def viewObjectRelations(self):
-        if "objRelationshipWindow" not in self.windows:
+        if "objRelationshipWindow" not in self.openedWindows:
             newWindow = QtWidgets.QMainWindow()
             ui = ObjectWindow(self.ocel_model.getRelation())
             ui.setupUi(newWindow)
-            self.windows["objRelationshipWindow"] = newWindow
-        self.windows["objRelationshipWindow"].show()
+            self.openedWindows["objRelationshipWindow"] = newWindow
+        self.openedWindows["objRelationshipWindow"].show()
 
 
     def export(self, name):
@@ -368,12 +347,11 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarDeleteButtons[name].setEnabled(True)
 
 
-
     def switchPage(self, pageNum, toOverview=False):
         if toOverview:
             self.operatorSectionStackedWidget.setCurrentIndex(0)
             return
-        self.operatorFrames[pageNum].refresh()  
+        self.operatorFrames[pageNum].refresh()
         self.operatorSectionStackedWidget.setCurrentIndex(pageNum+1) # +1 since the 0th page is the operator overview page
 
 
@@ -402,17 +380,11 @@ class TransformationCenter(QtWidgets.QWidget):
         minerFrameLayout.setSpacing(20)
         # miner title on overview page
         minerTitleLabel = QtWidgets.QLabel(minerFrame)
-        font = QtGui.QFont()
-        font.setPointSize(18)
-        font.setBold(True)
-        font.setWeight(75)
-        minerTitleLabel.setFont(font)
+        minerTitleLabel.setFont(self.titleFont)
         minerTitleLabel.setText(minerTitle)
         # miner description on overview page
         minerDescriptionLabel = QtWidgets.QLabel(minerFrame)
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        minerDescriptionLabel.setFont(font)
+        minerDescriptionLabel.setFont(self.middleFont)
         minerDescriptionLabel.setText(minerDescription)
 
         # miner button on overview page
@@ -462,6 +434,8 @@ class ExportWorkerThread(QThread):
             self.exportDone.emit(self.name, True)
         except:
             self.exportDone.emit(self.name, False)
+
+
 
 
 if __name__ == "__main__":
