@@ -1,9 +1,9 @@
 
+import pickle
+from tableWindow import TableWindow
 from operatorFrames.matchMinerFrame import MatchMinerFrame
 from operatorFrames.interleavedMinerFrame import InterleavedMinerFrame
 from operatorFrames.nonInterleavedMinerFrame import NonInterleavedMinerFrame
-import pickle
-from tableWindow import TableWindow
 from objRelationWindow import ObjectWindow
 from operatorFrames.manualMinerFrame import ManualMinerFrame
 from operatorFrames.filterFrame import FilterFrame
