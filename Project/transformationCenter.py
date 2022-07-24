@@ -65,6 +65,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.standardFont = font
 
         ################## start of code for sidebar
+        
         # define scroll area for list of OCELs + associated layout
         OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         OCEL_list_scrollArea.setMinimumWidth(360)
@@ -397,7 +398,6 @@ class TransformationCenter(QtWidgets.QWidget):
         minerFrameLayout.addWidget(minerButton)
 
         self.operatorSelectorScrollGridLayout.addWidget(minerFrame)
-       # self.operatorSelectorLayout.addWidget(minerFrame)
 
         # export and add-to-logs buttons on operator page
         operatorAddButton = QtWidgets.QPushButton(operatorPage)
@@ -458,7 +458,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
 
                 # 'fileBig.pkl'
-    with open('fileDf.pkl', 'rb') as file:
+    with open('fileBig.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

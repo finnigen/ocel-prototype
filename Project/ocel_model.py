@@ -479,7 +479,7 @@ class OCEL_Model:
         newEventsDf.drop(toBeRemovedRows, inplace=True)
         
         # reset index of events dataframe
-        eventsDf.reset_index(inplace=True, drop=True)
+        newEventsDf.reset_index(inplace=True, drop=True)
         
         # if no new name given, create own
         if newName == "":
