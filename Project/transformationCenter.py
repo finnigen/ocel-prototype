@@ -146,23 +146,23 @@ class TransformationCenter(QtWidgets.QWidget):
         operatorSelectionScrollArea.setWidget(self.operatorSelectorScrollAreaWidgetContents)
 
         # we need to initialize a page for every supported operator
-        description = "Merge events across logs based on matching attribute(s)."
+        description = "Merge objects across logs based on matching attribute values."
         self.initOperatorPage("Match Miner", description, MatchMinerFrame)
-        description = "Merge events across logs based on manual matching of activities of logs."
+        description = "Merge objects across logs based on manual matchings of activities of the logs."
         self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
-        description = "Merge events across logs based on interleaved interactions between events."
+        description = "Merge objects across logs based on interleaving timestamps of events in the logs."
         self.initOperatorPage("Interleaved Miner", description, InterleavedMinerFrame)
-        description = "Merge events across logs based on non-interleaved interactions between events."
+        description = "Merge objects across logs based on interleaving timestamps of events in the logs (non-interleaved)."
         self.initOperatorPage("Non-Interleaved Miner", description, NonInterleavedMinerFrame)
-        description = "Filter event log based on activities, attributes, objects or timestamps."
+        description = "Filter event log based on activities, attributes, objects, object types, or timestamps."
         self.initOperatorPage("Filter Event Log", description, FilterFrame)
-        description = "Map all events to one object type based on relationships."
+        description = "Map all events to objects of one object type based on object relationships."
         self.initOperatorPage("Flatten Event Log", description, FlattenFrame)
-        description = "Merge all events of two logs into one without merging any objects."
+        description = "Merge all events of two logs into one without merging any objects or events."
         self.initOperatorPage("Concatenate Event Log", description, ConcatFrame)
-        description = "Merge objects of one log from duplicate events into its first occurence."
+        description = "Aggregate events with matching activity names and timestamps. Objects of the matching events are merged into first occurence."
         self.initOperatorPage("Aggregate Event Log", description, AggregateFrame)
-        description = "Specify sequence of low-level events and turn them into one high-level event. asdoi dsaodsaoi dsajoida dsaoijdsa oij oijdaoijdsa"
+        description = "Specify sequence of low-level events and turn them into one high-level event. Besides sequence of activity, specify sequence based on objects, types, attribute values, object relations, and more"
         self.initOperatorPage("Event Recipe", description, EventRecipeFrame)
 
         # set current page for stacked widget in the beginning to the operator selector page
@@ -401,6 +401,7 @@ class TransformationCenter(QtWidgets.QWidget):
         minerButton = QtWidgets.QPushButton(minerFrame)
         minerButton.clicked.connect(lambda checked, x=pageNum: self.switchPage(x))
         minerButton.setText("Apply Operator")
+
         # layout
         minerFrameLayout.addWidget(minerTitleLabel)
         minerFrameLayout.addWidget(minerDescriptionLabel)
@@ -413,6 +414,8 @@ class TransformationCenter(QtWidgets.QWidget):
         operatorAddButton.clicked.connect(lambda checked, x=pageNum: self.addToLogs(x))
         innerStackedLayout.addWidget(operatorAddButton)
         operatorAddButton.setText("Add to event logs")
+        operatorAddButton.setToolTip("Apply " + minerTitle + " with specified parameters and add output to list of logs")  
+
 
         self.operatorSectionStackedWidget.addWidget(operatorPage)
         self.operatorFrames.append(operatorFrame)

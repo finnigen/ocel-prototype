@@ -6,25 +6,12 @@ class FlattenFrame(OperatorFrame):
     def __init__(self, parent, ocel_model, title, description):
         super().__init__(parent, ocel_model, title, description)
 
-
-        self.logSelectionLabel1 = QtWidgets.QLabel(self.operatorFrame)
-        self.logSelectionLabel1.setEnabled(True)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.logSelectionLabel1.setFont(font)
-        
-        self.logSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
-
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
 
         self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_2.setEnabled(True)
-
-        self.operatorSelectorLabel_2.setFont(font)
+        self.operatorSelectorLabel_2.setFont(self.normalFont)
 
         # add all labels, buttons etc to right layout
-        self.innerRightLayout.addWidget(self.logSelectionLabel1, 2, 0)
-        self.innerRightLayout.addWidget(self.logSelectcomboBox1, 2, 1)
         self.innerRightLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
 

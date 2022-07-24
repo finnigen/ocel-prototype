@@ -33,15 +33,25 @@ class OperatorFrame(QtWidgets.QFrame):
         self.operatorDescriptionLabel.setEnabled(True)
         font = QtGui.QFont()
         font.setPointSize(16)
-        self.operatorDescriptionLabel.setFont(font)
+        self.normalFont = font
+        self.operatorDescriptionLabel.setFont(self.normalFont)
     #    self.operatorDescriptionLabel.setMinimumWidth(750)
         self.operatorDescriptionLabel.setWordWrap(True)
 
 
+        # combobox and label to select (1st) log that we want to apply operator too
+        self.logSelectionLabel1 = QtWidgets.QLabel(self.operatorFrame)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.logSelectionLabel1.setFont(self.normalFont)
+        self.logSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
+        self.innerRightLayout.addWidget(self.logSelectionLabel1, 2, 0)
+        self.innerRightLayout.addWidget(self.logSelectcomboBox1, 2, 1)
+
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.operatorTitleLabel, 0, 0, 1, 0, QtCore.Qt.AlignCenter)
         self.innerRightLayout.addWidget(self.operatorDescriptionLabel, 1, 0, 1, 0) #, QtCore.Qt.AlignHCenter)
-    #    self.innerRightLayout.setAlignment(QtCore.Qt.AlignCenter)
+        self.innerRightLayout.setAlignment(QtCore.Qt.AlignVCenter)
         self.innerRightLayout.setSpacing(30)
 
         self.layout.addWidget(self.operatorFrame)

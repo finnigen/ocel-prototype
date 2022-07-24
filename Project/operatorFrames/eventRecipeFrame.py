@@ -18,14 +18,8 @@ class EventRecipeFrame(OperatorFrame):
 
         font = QtGui.QFont()
         font.setPointSize(15)
-        self.logSelectionLabel1 = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
-        self.logSelectionLabel1.setEnabled(True)
-        self.logSelectionLabel1.setFont(font)
         self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
-        self.operatorSelectorLabel_2.setEnabled(True)
         self.operatorSelectorLabel_2.setFont(font)
-
-        self.logSelectcomboBox1 = QtWidgets.QComboBox(self.outerScrollAreaWidgetContents)
 
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.outerScrollAreaWidgetContents)
 
@@ -82,8 +76,6 @@ class EventRecipeFrame(OperatorFrame):
         self.findAllLabel.setText("Find all occurences of seq (reusing events allowed))")
 
         # add all labels, buttons etc to right layout
-        self.outerScrollGridLayout.addWidget(self.logSelectionLabel1, 2, 0, 1, 2)
-        self.outerScrollGridLayout.addWidget(self.logSelectcomboBox1, 2, 2, 1, 2)
 
         self.outerScrollGridLayout.addWidget(self.newActivityNameLabel, 5, 0, 1, 2)
         self.outerScrollGridLayout.addWidget(self.newActivityNameText, 5, 2, 1, 2)
