@@ -6,14 +6,14 @@ class FlattenFrame(OperatorFrame):
     def __init__(self, parent, ocel_model, title, description):
         super().__init__(parent, ocel_model, title, description)
 
-        self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
+        self.objectTypeComboBox = QtWidgets.QComboBox(self.operatorFrame)
 
         self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.operatorFrame)
         self.operatorSelectorLabel_2.setFont(self.normalFont)
 
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
-        self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
+        self.innerRightLayout.addWidget(self.objectTypeComboBox, 3, 1)
 
         self.logSelectionLabel1.setText("Select first event log:")
         self.operatorSelectorLabel_2.setText("Select object type:")
@@ -28,19 +28,19 @@ class FlattenFrame(OperatorFrame):
         # this is used for the "add to logs" and "export" button in the main window
         
         name = self.logSelectcomboBox1.currentText()
-        objectType = self.logSelectcomboBox2.currentText()
+        objectType = self.objectTypeComboBox.currentText()
 
         return self.ocel_model.flatten(name, objectType, newName=newName)
 
 
     def initObjectTypes(self):
-        self.logSelectcomboBox2.clear()
+        self.objectTypeComboBox.clear()
         name = self.logSelectcomboBox1.currentText()
         types = list(self.ocel_model.getObjectTypes(name))
         types.sort()
         for i in range(len(types)):
-            self.logSelectcomboBox2.addItem("")
-            self.logSelectcomboBox2.setItemText(i, types[i])
+            self.objectTypeComboBox.addItem("")
+            self.objectTypeComboBox.setItemText(i, types[i])
 
 
 
@@ -48,7 +48,7 @@ class FlattenFrame(OperatorFrame):
         # used to refresh comboboxes for selection of operator parameters
 
         self.logSelectcomboBox1.clear()
-        self.logSelectcomboBox2.clear()
+        self.objectTypeComboBox.clear()
 
         names = list(self.ocel_model.getOcelNames())
         names.sort()

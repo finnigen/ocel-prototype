@@ -21,13 +21,13 @@ class EventRecipeFrame(OperatorFrame):
         self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
         self.operatorSelectorLabel_2.setFont(font)
 
-        self.logSelectcomboBox2 = QtWidgets.QComboBox(self.outerScrollAreaWidgetContents)
+        self.seqLengthComboBox = QtWidgets.QComboBox(self.outerScrollAreaWidgetContents)
 
         self.parameterLabel = QtWidgets.QLabel(self.outerScrollAreaWidgetContents)
         self.parameterLabel.setFont(font)
 
         self.logSelectcomboBox1.activated.connect(self.initSequenceSelection)
-        self.logSelectcomboBox2.activated.connect(self.initSequenceSelection)
+        self.seqLengthComboBox.activated.connect(self.initSequenceSelection)
 
         self.directlyFollowsCheckbox = QtWidgets.QCheckBox(self.outerScrollAreaWidgetContents)
         self.directlyFollowsCheckbox.setChecked(True)
@@ -101,7 +101,7 @@ class EventRecipeFrame(OperatorFrame):
         self.outerScrollGridLayout.addWidget(QtWidgets.QLabel(self.outerScrollAreaWidgetContents), 12, 0)
 
         self.outerScrollGridLayout.addWidget(self.operatorSelectorLabel_2, 13, 0, 1, 2)
-        self.outerScrollGridLayout.addWidget(self.logSelectcomboBox2, 13, 2, 1, 2)
+        self.outerScrollGridLayout.addWidget(self.seqLengthComboBox, 13, 2, 1, 2)
 
         self.outerScrollGridLayout.addWidget(self.parameterLabel, 14, 0, 1, 4)
 
@@ -167,7 +167,7 @@ class EventRecipeFrame(OperatorFrame):
         self.matchObjectTypesCheckbox.setChecked(False)
 
         self.seqBoxes = []
-        seqLength = int(self.logSelectcomboBox2.currentText())     
+        seqLength = int(self.seqLengthComboBox.currentText())     
 
         logName = self.logSelectcomboBox1.currentText()
         activities = list(set(self.ocel_model.getEventsDf(logName)[("ocel:activity", "ocel:activity")]))
@@ -274,7 +274,7 @@ class EventRecipeFrame(OperatorFrame):
         # used to refresh comboboxes for selection of operator parameters
 
         self.logSelectcomboBox1.clear()
-        self.logSelectcomboBox2.clear()
+        self.seqLengthComboBox.clear()
 
         names = list(self.ocel_model.getOcelNames())
         names.sort()
@@ -284,7 +284,7 @@ class EventRecipeFrame(OperatorFrame):
             self.logSelectcomboBox1.setItemText(i, names[i])
 
         for i in range(5):
-            self.logSelectcomboBox2.addItem("")
-            self.logSelectcomboBox2.setItemText(i, str(i+1))
+            self.seqLengthComboBox.addItem("")
+            self.seqLengthComboBox.setItemText(i, str(i+1))
         
         self.initSequenceSelection()

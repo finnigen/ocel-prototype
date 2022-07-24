@@ -11,17 +11,17 @@ class FilterFrame(OperatorFrame):
         self.operatorSelectorLabel_2 = QtWidgets.QLabel(self.operatorFrame)
         self.operatorSelectorLabel_2.setFont(self.normalFont)
 
-        self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
+        self.modeSelectionComboBox = QtWidgets.QComboBox(self.operatorFrame)
 
         self.parameterLabel = QtWidgets.QLabel(self.operatorFrame)
         self.parameterLabel.setFont(self.normalFont)
 
         self.logSelectcomboBox1.activated.connect(self.initFilterParameterSelection)
-        self.logSelectcomboBox2.activated.connect(self.initFilterParameterSelection)
+        self.modeSelectionComboBox.activated.connect(self.initFilterParameterSelection)
 
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
-        self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
+        self.innerRightLayout.addWidget(self.modeSelectionComboBox, 3, 1)
         self.innerRightLayout.addWidget(self.parameterLabel, 4, 0)
 
         self.logSelectionLabel1.setText("Select event log:")
@@ -42,7 +42,7 @@ class FilterFrame(OperatorFrame):
         # clear other things added for other parameters
         self.resetParameters()
 
-        mode = self.logSelectcomboBox2.currentText()
+        mode = self.modeSelectionComboBox.currentText()
         if mode == "timestamp":
             self.initTimestamps()
         elif mode == "activity":
@@ -204,7 +204,7 @@ class FilterFrame(OperatorFrame):
         
         name = self.logSelectcomboBox1.currentText()
         
-        mode = self.logSelectcomboBox2.currentText()
+        mode = self.modeSelectionComboBox.currentText()
 
         parameters = ""
         if mode == "activity" or mode == "object" or mode == "objectType":
@@ -230,7 +230,7 @@ class FilterFrame(OperatorFrame):
         # used to refresh comboboxes for selection of operator parameters
 
         self.logSelectcomboBox1.clear()
-        self.logSelectcomboBox2.clear()
+        self.modeSelectionComboBox.clear()
 
         names = list(self.ocel_model.getOcelNames())
         names.sort()
@@ -241,7 +241,7 @@ class FilterFrame(OperatorFrame):
 
         modes = ["activity", "eventAttribute", "objectAttribute", "object", "objectType", "timestamp"]
         for i in range(len(modes)):
-            self.logSelectcomboBox2.addItem("")
-            self.logSelectcomboBox2.setItemText(i, modes[i])
+            self.modeSelectionComboBox.addItem("")
+            self.modeSelectionComboBox.setItemText(i, modes[i])
         
         self.initFilterParameterSelection()
