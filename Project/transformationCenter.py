@@ -72,6 +72,7 @@ class TransformationCenter(QtWidgets.QWidget):
         # define scroll area for list of OCELs + associated layout
         OCEL_list_scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         OCEL_list_scrollArea.setMinimumWidth(360)
+        OCEL_list_scrollArea.setMaximumWidth(460)
         self.leftGridLayout = QtWidgets.QGridLayout(OCEL_list_scrollArea)
 
         # set sizePolicy so that resizing works better

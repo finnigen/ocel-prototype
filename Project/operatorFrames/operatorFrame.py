@@ -19,7 +19,6 @@ class OperatorFrame(QtWidgets.QFrame):
         self.operatorFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.operatorFrame.setFrameShadow(QtWidgets.QFrame.Raised)
 
-
         # set inner layout of right area
         self.innerRightLayout = QtWidgets.QGridLayout(self.operatorFrame)
 
@@ -35,12 +34,14 @@ class OperatorFrame(QtWidgets.QFrame):
         font = QtGui.QFont()
         font.setPointSize(16)
         self.operatorDescriptionLabel.setFont(font)
-#        self.operatorDescriptionLabel.setWordWrap(True)
+    #    self.operatorDescriptionLabel.setMinimumWidth(750)
+        self.operatorDescriptionLabel.setWordWrap(True)
+
 
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.operatorTitleLabel, 0, 0, 1, 0, QtCore.Qt.AlignCenter)
-        self.innerRightLayout.addWidget(self.operatorDescriptionLabel, 1, 0, 1, 0, QtCore.Qt.AlignCenter)
-        self.innerRightLayout.setAlignment(QtCore.Qt.AlignCenter)
+        self.innerRightLayout.addWidget(self.operatorDescriptionLabel, 1, 0, 1, 0) #, QtCore.Qt.AlignHCenter)
+    #    self.innerRightLayout.setAlignment(QtCore.Qt.AlignCenter)
         self.innerRightLayout.setSpacing(30)
 
         self.layout.addWidget(self.operatorFrame)
