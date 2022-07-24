@@ -11,6 +11,8 @@ from operatorFrames.flattenFrame import FlattenFrame
 from operatorFrames.concatFrame import ConcatFrame
 from operatorFrames.aggregateFrame import AggregateFrame
 from operatorFrames.eventRecipeFrame import EventRecipeFrame
+from operatorFrames.unionFrame import UnionFrame
+
 
 from ocel_model import *
 
@@ -146,13 +148,15 @@ class TransformationCenter(QtWidgets.QWidget):
         operatorSelectionScrollArea.setWidget(self.operatorSelectorScrollAreaWidgetContents)
 
         # we need to initialize a page for every supported operator
-        description = "Merge objects across logs based on matching attribute values."
+        description = "Merge objects across logs based on matching attribute values and object relationships."
         self.initOperatorPage("Match Miner", description, MatchMinerFrame)
-        description = "Merge objects across logs based on manual matchings of activities of the logs."
+        description = "Merge objects across logs based on manual matchings of activities and object relationships of the logs."
         self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
-        description = "Merge objects across logs based on interleaving timestamps of events in the logs."
+        description = "Merge objects across logs based on matching activity names, timestamps, and object relationships."
+        self.initOperatorPage("Union", description, UnionFrame)
+        description = "Merge objects across logs based on interleaving timestamps of events in the two logs as well as object relationships."
         self.initOperatorPage("Interleaved Miner", description, InterleavedMinerFrame)
-        description = "Merge objects across logs based on interleaving timestamps of events in the logs (non-interleaved)."
+        description = "Merge objects across logs based on interleaving timestamps of events in the two logs (non-interleaved) as well as object relationships."
         self.initOperatorPage("Non-Interleaved Miner", description, NonInterleavedMinerFrame)
         description = "Filter event log based on activities, attributes, objects, object types, or timestamps."
         self.initOperatorPage("Filter Event Log", description, FilterFrame)

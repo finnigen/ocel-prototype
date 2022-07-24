@@ -503,6 +503,32 @@ class OCEL_Model:
         return True
     
     
+    # union operator (merge objects of events with same activty / timestamp)
+    def union(self, name1, name2, newName=""):
+
+        eventsDf1 = self.getEventsDf(name1)
+        objectsDf1 = self.getObjectsDf(name1)
+        eventsDf2 = self.getEventsDf(name2)
+        objectsDf2 = self.getObjectsDf(name2)
+
+        newEventsDf = copy.deepcopy(eventsDf1)
+
+        # merge based on matching activity names and timestamps
+        eventsDf1.reset_index(inplace=True)
+        df = pd.merge(eventsDf1, eventsDf2, on=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")]).groupby("index")[[("ocel:omap_x", "ocel:omap_x"), ("ocel:omap_y", "ocel:omap_y")]].apply(sum)
+        df["merged"] = df[("ocel:omap_x", "ocel:omap_x")] + df[("ocel:omap_y", "ocel:omap_y")]
+        df = df["merged"].apply(lambda x : list(set(x)))
+        newEventsDf[("ocel:omap", "ocel:omap")] = df
+        
+        if newName == "":
+            newName = "UNION(" + name1 + "," + name2 + ")"
+
+        self.addEventObjectDf(newName, newEventsDf, pd.concat([objectsDf1, objectsDf2]))
+        self.alignEventsObjects(newName)
+        
+        return True
+
+
     # flattening operator that transforms all events to one object notion
     def flatten(self, name, objectType, newName=""):
 
