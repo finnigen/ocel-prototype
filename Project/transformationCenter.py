@@ -34,7 +34,10 @@ class TransformationCenter(QtWidgets.QWidget):
     def setupUi(self, MainWindow):
         
         # define main widget, most outer layout and saize
-        MainWindow.resize(1300, 700)
+        MainWindow.resize(1250, 700)
+        MainWindow.setMinimumWidth(1250)
+
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
 
@@ -158,7 +161,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Concatenate Event Log", description, ConcatFrame)
         description = "Merge objects of one log from duplicate events into its first occurence."
         self.initOperatorPage("Aggregate Event Log", description, AggregateFrame)
-        description = "Specify sequence of low-level events and turn them into one high-level event."
+        description = "Specify sequence of low-level events and turn them into one high-level event. asdoi dsaodsaoi dsajoida dsaoijdsa oij oijdaoijdsa"
         self.initOperatorPage("Event Recipe", description, EventRecipeFrame)
 
         # set current page for stacked widget in the beginning to the operator selector page
@@ -377,6 +380,10 @@ class TransformationCenter(QtWidgets.QWidget):
         minerFrame = QtWidgets.QFrame(self.operatorSelectorScrollAreaWidgetContents)
         minerFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         minerFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        minerFrame.setSizePolicy(sizePolicy)
+        minerFrame.setMaximumWidth(1000)
+
         minerFrameLayout = QtWidgets.QGridLayout(minerFrame)
         minerFrameLayout.setSpacing(20)
         # miner title on overview page
@@ -387,6 +394,7 @@ class TransformationCenter(QtWidgets.QWidget):
         minerDescriptionLabel = QtWidgets.QLabel(minerFrame)
         minerDescriptionLabel.setFont(self.middleFont)
         minerDescriptionLabel.setText(minerDescription)
+        minerDescriptionLabel.setWordWrap(True)
 
         # miner button on overview page
         minerButton = QtWidgets.QPushButton(minerFrame)
