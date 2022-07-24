@@ -6,16 +6,10 @@ from tableWindow import PandasTableModel
 
 class ObjectWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, objRelation):
+    def __init__(self, objRelationDf):
         super().__init__()
-
-        # group object relations by object to bring data into right format
-        df = pd.DataFrame(objRelation)
-        df[1] = df[1].apply(lambda x : [x])
-        df = pd.DataFrame(df.groupby(0)[1].apply(sum))
-        df.reset_index(inplace=True)
-        df.columns = ["Object", "Related Objects"]
-        self.df = df
+        self.df = pd.DataFrame(objRelationDf.items())
+        self.df.columns = ["Objects", "Related Objects"]
 
     def setupUi(self, MainWindow):
         MainWindow.setWindowTitle("Object Relationships")

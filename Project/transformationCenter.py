@@ -305,7 +305,7 @@ class TransformationCenter(QtWidgets.QWidget):
     def viewObjectRelations(self):
         if "objRelationshipWindow" not in self.openedWindows:
             newWindow = QtWidgets.QMainWindow()
-            ui = ObjectWindow(self.ocel_model.getRelation())
+            ui = ObjectWindow(self.ocel_model.getObjRelationDict())
             ui.setupUi(newWindow)
             self.openedWindows["objRelationshipWindow"] = newWindow
         self.openedWindows["objRelationshipWindow"].show()
@@ -469,7 +469,7 @@ if __name__ == "__main__":
 
     MainWindow = QtWidgets.QMainWindow()
 
-                # 'fileBig.pkl'
+                # 'fileDf.pkl'
     with open('fileBig.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)

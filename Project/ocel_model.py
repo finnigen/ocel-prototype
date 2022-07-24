@@ -81,7 +81,24 @@ class OCEL_Model:
         self.folder = newPath # save dataframes as pql here
         self.ocels = ocels # format: set(name1, name2, ...)
         self.obj_relation = obj_relation
+        self.objRelationDict = None
     
+
+    def calcObjRelationDict(self):
+        # group object relations by object, this can be better in some use cases
+        df = pd.DataFrame(self.getRelation())
+        df[1] = df[1].apply(lambda x : [x])
+        df = pd.DataFrame(df.groupby(0)[1].apply(sum))
+        df.reset_index(inplace=True)
+        df.columns = ["Object", "Related Objects"]
+        df.index = df["Object"]
+        self.objRelationDict = df.to_dict()["Related Objects"]
+
+    def getObjRelationDict(self):
+        if self.objRelationDict is None:
+            self.calcObjRelationDict()
+        return self.objRelationDict
+
     def addEventObjectDf(self, name, eventsDf, objectsDf):
         newPath = os.path.join(self.folder, name)
         
@@ -325,7 +342,7 @@ class OCEL_Model:
             newEventsDf = copy.deepcopy(eventsDf1)
             newObjectsDf = copy.deepcopy(objectsDf1)
             
-            object_relation = self.getRelation()
+            object_relation = self.getObjRelationDict()
 
             # keep track of all added objects
             addedObjects = set()
@@ -341,9 +358,7 @@ class OCEL_Model:
                     # only add those objects that are in the object relation
                     relatedObjects = set()
                     for obj1 in objects1:
-                        for obj2 in objects2:
-                            if (obj1, obj2) in object_relation:
-                                relatedObjects.add(obj2)
+                        relatedObjects = relatedObjects.union(set(objects2).intersection(object_relation[obj1]))
                         
                     newObjects = newObjects.union(relatedObjects)
 
@@ -381,7 +396,7 @@ class OCEL_Model:
         newEventsDf = copy.deepcopy(eventsDf1)
         newObjectsDf = copy.deepcopy(objectsDf1)
 
-        object_relation = self.getRelation()
+        object_relation = self.getObjRelationDict()
 
         # keep track of all added objects
         allAddedObjects = set()
@@ -393,16 +408,14 @@ class OCEL_Model:
             rightOccurences = eventsDf2[eventsDf2[("ocel:activity", "ocel:activity")] == rightAct].index
             rightObjects = set()
             for i in rightOccurences:
-                for obj in eventsDf2.loc[i][("ocel:omap", "ocel:omap")]:
-                    rightObjects.add(obj)
+                rightObjects = rightObjects.union(eventsDf2.loc[i][("ocel:omap", "ocel:omap")])
 
             for leftOcc in leftOccurences:
                 toBeAddedObj = set()
                 for leftObj in eventsDf1.loc[leftOcc][("ocel:omap", "ocel:omap")]:
-                    for rightObj in rightObjects:
-                        if (leftObj, rightObj) in object_relation:
-                            toBeAddedObj.add(rightObj)
-                            allAddedObjects.add(rightObj)
+                    allAddedObjects = allAddedObjects.union(rightObjects.intersection(object_relation[leftObj]))
+                    toBeAddedObj = toBeAddedObj.union(rightObjects.intersection(object_relation[leftObj]))
+
                 newEventsDf.at[leftOcc, ("ocel:omap", "ocel:omap")] = list(toBeAddedObj.union(newEventsDf.loc[leftOcc][("ocel:omap", "ocel:omap")]))
              
 
@@ -500,7 +513,7 @@ class OCEL_Model:
         newEventsDf = copy.deepcopy(eventsDf)
         newObjectsDf = copy.deepcopy(objectsDf)
 
-        object_relation = self.getRelation()
+        object_relation = self.getObjRelationDict()
 
         # find all objects of type objectType
         allObjects = set(objectsDf[objectsDf[("ocel:type", "ocel:type")] == objectType].index)
@@ -513,9 +526,7 @@ class OCEL_Model:
 
             # check which objects from relatedObjects are in relation with objects from objectType
             for relatedObj in relatedObjects:
-                for obj in allObjects:
-                    if (relatedObj, obj) in object_relation:
-                        toBeAddedObjects.add(obj)
+                toBeAddedObjects = toBeAddedObjects.union(allObjects.intersection(object_relation[relatedObj]))
 
             # remove event if no related objects of correct type
             if len(toBeAddedObjects) == 0:
@@ -538,6 +549,7 @@ class OCEL_Model:
 
         return True    
     
+
 
     # filter operator section start ----------------------------------------------------------------------
 
@@ -719,7 +731,7 @@ class OCEL_Model:
         objectsDf1 = self.getObjectsDf(name1)    
         objectsDf2 = self.getObjectsDf(name2)    
 
-        object_relations = self.getRelation()
+        object_relation = self.getObjRelationDict()
 
         newEventsDf1[("log", "log")] = 1
         newEventsDf2[("log", "log")] = 2
@@ -748,10 +760,8 @@ class OCEL_Model:
                     for ev_id in tempDf.loc[previousIndex][("index", "index")]:
                         toBeAddedObjects = set()
                         for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
-                            for obj2 in row[("ocel:omap", "ocel:omap")]:
-                                if (obj1, obj2) in object_relations:
-                                    toBeAddedObjects.add(obj2)
-                                    allAddedObjects.add(obj2)
+                            allAddedObjects = allAddedObjects.union(set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1]))
+                            toBeAddedObjects = toBeAddedObjects.union(set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1]))
                         newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(toBeAddedObjects.union(newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]))
 
             previousIndex = index
@@ -779,7 +789,7 @@ class OCEL_Model:
         objectsDf1 = self.getObjectsDf(name1) 
         objectsDf2 = self.getObjectsDf(name2) 
 
-        object_relations = self.getRelation()
+        object_relation = self.getObjRelationDict()
 
         newEventsDf1[("log", "log")] = 1
         newEventsDf2[("log", "log")] = 2
@@ -812,10 +822,9 @@ class OCEL_Model:
                     for ev_id in tempDf.loc[previousIndex][("index", "index")]:
                         toBeAddedObjects = set()
                         for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
-                            for obj2 in row[("ocel:omap", "ocel:omap")]:
-                                if (obj1, obj2) in object_relations:
-                                    toBeAddedObjects.add(obj2)
-                                    allAddedObjects.add(obj2)
+                            allAddedObjects = allAddedObjects.union(set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1]))
+                            toBeAddedObjects = toBeAddedObjects.union(set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1]))
+ 
                         newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(toBeAddedObjects.union(newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]))
 
 
