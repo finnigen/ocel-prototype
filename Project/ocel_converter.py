@@ -146,8 +146,12 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         
         print("Object relations between: " + table1 + " and " + table2)
         
-        # calculate path of tables to be merged on
-        path = nx.algorithms.shortest_paths.generic.shortest_path(foreignKeyGraph, source=table1, target=table2)
+        # calculate path of tables to be merged on (if such a path exists)
+        try:
+            path = nx.algorithms.shortest_paths.generic.shortest_path(foreignKeyGraph, source=table1, target=table2)
+        except:
+            print("Not connected")
+            continue
 
         print("   Calculating join path...")
         
