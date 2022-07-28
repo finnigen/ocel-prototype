@@ -11,12 +11,20 @@ class NonInterleavedMinerFrame(OperatorFrame):
         self.logSelectionLabel2 = QtWidgets.QLabel(self.operatorFrame)
         self.logSelectionLabel2.setFont(self.normalFont)
 
+        self.mergeEventsLabel = QtWidgets.QLabel(self.operatorFrame)
+        self.mergeEventsLabel.setFont(self.normalFont)
+        self.mergeEventsCheckBox = QtWidgets.QCheckBox(self.operatorFrame)
+        self.mergeEventsCheckBox.setChecked(False)
+
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.logSelectionLabel2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
+        self.innerRightLayout.addWidget(self.mergeEventsLabel, 5, 0)
+        self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 5, 1) 
 
         self.logSelectionLabel1.setText("Select first event log:")
         self.logSelectionLabel2.setText("Select second event log:")
+        self.mergeEventsLabel.setText("Merge all events from 2nd log:")
 
         self.refresh()
  
@@ -28,7 +36,9 @@ class NonInterleavedMinerFrame(OperatorFrame):
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
 
-        return self.ocel_model.nonInterleavedMiner(name1, name2, newName=newName)
+        mergeEvents = self.mergeEventsCheckBox.isChecked()
+
+        return self.ocel_model.nonInterleavedMiner(name1, name2, mergeEvents, newName=newName)
 
     def refresh(self):
         # used to refresh comboboxes for selection of operator parameters

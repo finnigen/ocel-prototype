@@ -778,12 +778,14 @@ class OCEL_Model:
 
     # interleaved miner section start ----------------------------------------------------------------------
         
-    def interleavedMiner(self, name1, name2, newName=""):
+    def interleavedMiner(self, name1, name2, mergeEvents, newName=""):
 
         newEventsDf = self.getEventsDf(name1)
 
         newEventsDf1 = copy.deepcopy(newEventsDf)
         newEventsDf2 = self.getEventsDf(name2)
+
+        missingEventsDf = copy.deepcopy(newEventsDf2)
 
         objectsDf1 = self.getObjectsDf(name1)    
         objectsDf2 = self.getObjectsDf(name2)    
@@ -814,34 +816,49 @@ class OCEL_Model:
                 previousIndex = index
             elif index[1] == 2:
                 if previousIndex[1] == 1:
+                    thisRoundObjects = set()
                     for ev_id in tempDf.loc[previousIndex][("index", "index")]:
                         toBeAddedObjects = set()
                         for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
-                            allAddedObjects = allAddedObjects.union(set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1]))
-                            toBeAddedObjects = toBeAddedObjects.union(set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1]))
+                            intersec = set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1])
+                            allAddedObjects = allAddedObjects.union(intersec)
+                            toBeAddedObjects = toBeAddedObjects.union(intersec)
+                            thisRoundObjects = thisRoundObjects.union(intersec)
                         newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(toBeAddedObjects.union(newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]))
+                    # remove objects from events in case we want to merge events
+                    if mergeEvents:
+                        for i in row[("index", "index")]:
+                            missingEventsDf.at[i, ("ocel:omap", "ocel:omap")] = list(set(missingEventsDf.at[i, ("ocel:omap", "ocel:omap")]).difference(thisRoundObjects))
 
             previousIndex = index
 
-        # add new objects from log2 to log1
-        toBeAddedObjects = list(allAddedObjects.difference(objectsDf1.index))
-        newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
+        # in case we want to merge events, add events from log2 which were not merged to the new log
+        if mergeEvents:
+            newEventsDf = pd.concat([newEventsDf, missingEventsDf])
+            newObjectsDf = pd.concat([objectsDf1, objectsDf2])
+        else:
+            # add new objects from log2 to log1
+            toBeAddedObjects = list(allAddedObjects.difference(objectsDf1.index))
+            newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
 
         # if no new name given, create own
         if newName == "":
             newName = "INTERLEAVED_MINER(" + name1 + "," + name2 + ")"
 
         self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
+        self.alignEventsObjects(newName)
         
         return True
     
     
-    def nonInterleavedMiner(self, name1, name2, newName=""):
+    def nonInterleavedMiner(self, name1, name2, mergeEvents, newName=""):
 
         newEventsDf = self.getEventsDf(name1)
 
         newEventsDf1 = copy.deepcopy(newEventsDf)
         newEventsDf2 = self.getEventsDf(name2)
+
+        missingEventsDf = copy.deepcopy(newEventsDf2)
 
         objectsDf1 = self.getObjectsDf(name1) 
         objectsDf2 = self.getObjectsDf(name2) 
@@ -876,24 +893,36 @@ class OCEL_Model:
 
             if currentIndex[1] == 2:
                 if previousIndex[1] == 1 and nextIndex[1] == currentIndex[1]:
+                    thisRoundObjects = set()
                     for ev_id in tempDf.loc[previousIndex][("index", "index")]:
                         toBeAddedObjects = set()
                         for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
-                            allAddedObjects = allAddedObjects.union(set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1]))
-                            toBeAddedObjects = toBeAddedObjects.union(set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1]))
+                            intersec = set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1])
+                            allAddedObjects = allAddedObjects.union(intersec)
+                            toBeAddedObjects = toBeAddedObjects.union(intersec)
+                            thisRoundObjects = thisRoundObjects.union(intersec)
  
                         newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(toBeAddedObjects.union(newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]))
+                    # remove objects from events in case we want to merge events
+                    if mergeEvents:
+                        for i in row[("index", "index")]:
+                            missingEventsDf.at[i, ("ocel:omap", "ocel:omap")] = list(set(missingEventsDf.at[i, ("ocel:omap", "ocel:omap")]).difference(thisRoundObjects))
 
-
-        # add new objects from log2 to log1
-        toBeAddedObjects = list(allAddedObjects.difference(objectsDf1.index))
-        newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
+        # in case we want to merge events, add events from log2 which were not merged to the new log
+        if mergeEvents:
+            newEventsDf = pd.concat([newEventsDf, missingEventsDf])
+            newObjectsDf = pd.concat([objectsDf1, objectsDf2])
+        else:
+            # add new objects from log2 to log1
+            toBeAddedObjects = list(allAddedObjects.difference(objectsDf1.index))
+            newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
 
         # if no new name given, create own
         if newName == "":
             newName = "NONINTERLEAVED_MINER(" + name1 + "," + name2 + ")"
 
         self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
+        self.alignEventsObjects(newName)
 
         return True
 
