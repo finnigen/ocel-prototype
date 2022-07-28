@@ -549,7 +549,8 @@ class OCEL_Model:
         df = pd.merge(eventsDf1, eventsDf2, on=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")]).groupby("index")[[("ocel:omap_x", "ocel:omap_x"), ("ocel:omap_y", "ocel:omap_y")]].apply(sum)
         df["merged"] = df[("ocel:omap_x", "ocel:omap_x")] + df[("ocel:omap_y", "ocel:omap_y")]
         df = df["merged"].apply(lambda x : list(set(x)))
-        newEventsDf[("ocel:omap", "ocel:omap")] = df
+        if len(df) > 0:
+            newEventsDf[("ocel:omap", "ocel:omap")] = df
         
         if newName == "":
             newName = "UNION(" + name1 + "," + name2 + ")"
