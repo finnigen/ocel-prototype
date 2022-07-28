@@ -362,7 +362,8 @@ class OCEL_Model:
                         
                     newObjects = newObjects.union(relatedObjects)
 
-                newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(newObjects.union(eventsDf1[("ocel:omap", "ocel:omap")].loc[ev_id]))
+                if newObjects != set():
+                    newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(newObjects.union(eventsDf1[("ocel:omap", "ocel:omap")].loc[ev_id]))
 
                 addedObjects = addedObjects.union(newObjects)
 
@@ -416,7 +417,8 @@ class OCEL_Model:
                     allAddedObjects = allAddedObjects.union(rightObjects.intersection(object_relation[leftObj]))
                     toBeAddedObj = toBeAddedObj.union(rightObjects.intersection(object_relation[leftObj]))
 
-                newEventsDf.at[leftOcc, ("ocel:omap", "ocel:omap")] = list(toBeAddedObj.union(newEventsDf.loc[leftOcc][("ocel:omap", "ocel:omap")]))
+                if toBeAddedObj != set():
+                    newEventsDf.at[leftOcc, ("ocel:omap", "ocel:omap")] = list(toBeAddedObj.union(newEventsDf.loc[leftOcc][("ocel:omap", "ocel:omap")]))
              
 
         # add new objects from log2 to log1
