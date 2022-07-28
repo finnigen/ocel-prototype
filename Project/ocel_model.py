@@ -398,7 +398,7 @@ class OCEL_Model:
         
     # input: 2 ocels, object relationship, activity relationship
     # output: 1 ocel, objects from log2 merged into log1 based on object and activity relation
-    def manualMiner(self, name1, name2, activity_relation, newName=""):
+    def manualMiner(self, name1, name2, activity_relation, mergeEvents=False, newName=""):
 
         # get logs
         eventsDf1 = self.getEventsDf(name1)
@@ -409,6 +409,8 @@ class OCEL_Model:
         # start from log1 since we want to merge objects from log2 into log1
         newEventsDf = copy.deepcopy(eventsDf1)
         newObjectsDf = copy.deepcopy(objectsDf1)
+
+        missingEventsDf = copy.deepcopy(eventsDf2)
 
         object_relation = self.getObjRelationDict()
 
@@ -424,25 +426,39 @@ class OCEL_Model:
             for i in rightOccurences:
                 rightObjects = rightObjects.union(eventsDf2.loc[i][("ocel:omap", "ocel:omap")])
 
+            thisRoundAddedObjects = set()
             for leftOcc in leftOccurences:
                 toBeAddedObj = set()
                 for leftObj in eventsDf1.loc[leftOcc][("ocel:omap", "ocel:omap")]:
-                    allAddedObjects = allAddedObjects.union(rightObjects.intersection(object_relation[leftObj]))
-                    toBeAddedObj = toBeAddedObj.union(rightObjects.intersection(object_relation[leftObj]))
+                    intersec = rightObjects.intersection(object_relation[leftObj])
+                    allAddedObjects = allAddedObjects.union(intersec)
+                    toBeAddedObj = toBeAddedObj.union(intersec)
+                    thisRoundAddedObjects = thisRoundAddedObjects.union(intersec)
 
                 if toBeAddedObj != set():
                     newEventsDf.at[leftOcc, ("ocel:omap", "ocel:omap")] = list(toBeAddedObj.union(newEventsDf.loc[leftOcc][("ocel:omap", "ocel:omap")]))
-             
+            
+            # in case we want to merge events, we remove merged objects from their events
+            if mergeEvents and thisRoundAddedObjects != set():
+                for i in rightOccurences:
+                    missingEventsDf.at[i, ("ocel:omap", "ocel:omap")] = list(set(missingEventsDf.at[i, ("ocel:omap", "ocel:omap")]).difference(thisRoundAddedObjects))
 
-        # add new objects from log2 to log1
-        toBeAddedObjects = list(allAddedObjects.difference(objectsDf1.index))
-        newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
+
+        # in case we want to merge events, add events from log2 which were not merged to the new log
+        if mergeEvents:
+            newEventsDf = pd.concat([newEventsDf, missingEventsDf])
+            newObjectsDf = pd.concat([objectsDf1, objectsDf2])
+        else:
+            # add new objects from log2 to log1
+            toBeAddedObjects = list(allAddedObjects.difference(objectsDf1.index))
+            newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
 
         # if no new name given, create own
         if newName == "":
             newName = "MANUAL_MINER(" + name1 + "," + name2 + ")"
 
-        self.addEventObjectDf(newName, newEventsDf, newObjectsDf)    
+        self.addEventObjectDf(newName, newEventsDf, newObjectsDf)   
+        self.alignEventsObjects(newName) 
 
         return True
 

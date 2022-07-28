@@ -7,8 +7,8 @@ class ManualMinerFrame(OperatorFrame):
     def __init__(self, parent, ocel_model, title, description):
         super().__init__(parent, ocel_model, title, description)
 
-        self.operatorSelectorLabel_3 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_3.setFont(self.normalFont)
+        self.numActLabel = QtWidgets.QLabel(self.operatorFrame)
+        self.numActLabel.setFont(self.normalFont)
         
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
 
@@ -24,20 +24,26 @@ class ManualMinerFrame(OperatorFrame):
         self.numOfActComboBox = QtWidgets.QComboBox(self.operatorFrame)
         self.numOfActComboBox.activated.connect(self.initActivitySelectors)
 
+        self.mergeEventsLabel = QtWidgets.QLabel(self.operatorFrame)
+        self.mergeEventsLabel.setFont(self.normalFont)
+        self.mergeEventsCheckBox = QtWidgets.QCheckBox(self.operatorFrame)
+        self.mergeEventsCheckBox.setChecked(False)
 
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.logSelectionLabel2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_3, 4, 0)
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_3, 4, 0)
-        self.innerRightLayout.addWidget(self.numOfActComboBox)
-        self.innerRightLayout.addWidget(self.selectActivitiesLabel)
+        self.innerRightLayout.addWidget(self.numActLabel, 4, 0)
+        self.innerRightLayout.addWidget(self.numOfActComboBox, 4, 1)
+        self.innerRightLayout.addWidget(self.mergeEventsLabel, 5, 0)
+        self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 5, 1)        
+        self.innerRightLayout.addWidget(self.selectActivitiesLabel, 6, 0)
 
         self.activityComboBoxes = []
 
         self.logSelectionLabel1.setText("Select first event log:")
         self.logSelectionLabel2.setText("Select second event log:")
-        self.operatorSelectorLabel_3.setText("Select number of activities to match:")
+        self.numActLabel.setText("Select number of activities to match:")
+        self.mergeEventsLabel.setText("Merge all events from 2nd log:")
         self.selectActivitiesLabel.setText("Match activities:")
 
         # scroll area for activity matching
@@ -126,7 +132,9 @@ class ManualMinerFrame(OperatorFrame):
         activity_relation = list(activity_relation)
         activity_relation.sort()
 
-        return self.ocel_model.manualMiner(name1, name2, activity_relation, newName=newName)
+        mergeEvents = self.mergeEventsCheckBox.isChecked()
+
+        return self.ocel_model.manualMiner(name1, name2, activity_relation, mergeEvents, newName=newName)
 
 
     def refresh(self):
