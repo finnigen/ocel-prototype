@@ -7,9 +7,8 @@ class MatchMinerFrame(OperatorFrame):
     def __init__(self, parent, ocel_model, title, description):
         super().__init__(parent, ocel_model, title, description)
 
-        self.operatorSelectorLabel_3 = QtWidgets.QLabel(self.operatorFrame)
-        self.operatorSelectorLabel_3.setFont(self.normalFont)
-        
+        self.attrSelectLabel = QtWidgets.QLabel(self.operatorFrame)
+        self.attrSelectLabel.setFont(self.normalFont)
 
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
 
@@ -23,16 +22,24 @@ class MatchMinerFrame(OperatorFrame):
         self.logSelectionLabel2 = QtWidgets.QLabel(self.operatorFrame)
         self.logSelectionLabel2.setFont(self.normalFont)
 
+        self.mergeEventsLabel = QtWidgets.QLabel(self.operatorFrame)
+        self.mergeEventsLabel.setFont(self.normalFont)
+        self.mergeEventsCheckBox = QtWidgets.QCheckBox(self.operatorFrame)
+        self.mergeEventsCheckBox.setChecked(False)
+
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.logSelectionLabel2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
-        self.innerRightLayout.addWidget(self.operatorSelectorLabel_3, 4, 0)
+        self.innerRightLayout.addWidget(self.attrSelectLabel, 4, 0)
         self.innerRightLayout.addWidget(self.attrSelectcomboBox1, 4, 1)
         self.innerRightLayout.addWidget(self.attrSelectcomboBox2, 5, 1)
+        self.innerRightLayout.addWidget(self.mergeEventsLabel, 6, 0)
+        self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 6, 1)
 
         self.logSelectionLabel1.setText("Select first event log:")
         self.logSelectionLabel2.setText("Select second event log:")
-        self.operatorSelectorLabel_3.setText("Select attribute(s) to match on:")
+        self.attrSelectLabel.setText("Select attribute(s) to match on:")
+        self.mergeEventsLabel.setText("Merge all events from 2nd log:")
 
         self.refresh()
 
@@ -62,8 +69,9 @@ class MatchMinerFrame(OperatorFrame):
         name2 = self.logSelectcomboBox2.currentText()
         attr1 = self.attrSelectcomboBox1.currentText()
         attr2 = self.attrSelectcomboBox2.currentText()
+        mergeEvents = self.mergeEventsCheckBox.isChecked()
 
-        return self.ocel_model.matchMiner(name1, name2, attr1, attr2, newName=newName)
+        return self.ocel_model.matchMiner(name1, name2, attr1, attr2, mergeEvents, newName=newName)
 
 
     def refresh(self):

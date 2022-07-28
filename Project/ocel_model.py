@@ -325,7 +325,7 @@ class OCEL_Model:
     # input: 2 ocels, object relationship, attribute name(s) from ocels
     # output: 1 ocel, objects from log2 merged into log1 based on matches in event values of passed attribute(s)
     # attribute 1 are attribute names from log1, while attribute2 are attribute names from log2
-    def matchMiner(self, name1, name2, attribute1, attribute2="", newName = ""):
+    def matchMiner(self, name1, name2, attribute1, attribute2="", mergeEvents=False, newName = ""):
 
         try:
             # if only one attribute passed, use it for both logs
@@ -341,10 +341,13 @@ class OCEL_Model:
             # start from log1 since we want to merge objects from log2 into log1
             newEventsDf = copy.deepcopy(eventsDf1)
             newObjectsDf = copy.deepcopy(objectsDf1)
+
+            # this will be used to keep track of "missing" events, i.e. events of which no objects were merged
+            missingEventsDf = copy.deepcopy(eventsDf2)
             
             object_relation = self.getObjRelationDict()
 
-            # keep track of all added objects
+            # keep track of all added objects (and events)
             addedObjects = set()
 
             # iterate through events in first log and add objects from events in log2 with same vmap values for passed attributes (if in object relation)
@@ -353,12 +356,15 @@ class OCEL_Model:
                 objects1 = eventsDf1.loc[ev_id][("ocel:omap", "ocel:omap")]
 
                 newObjects = set()
-                for objects2 in eventsDf2[eventsDf2[("ocel:vmap", attribute2)] == value][("ocel:omap", "ocel:omap")]:
+                for ev_id2, objects2 in eventsDf2[eventsDf2[("ocel:vmap", attribute2)] == value][("ocel:omap", "ocel:omap")].items():
                     
                     # only add those objects that are in the object relation
                     relatedObjects = set()
                     for obj1 in objects1:
                         relatedObjects = relatedObjects.union(set(objects2).intersection(object_relation[obj1]))
+                    
+                    # remove merged objects from event in log2
+                    missingEventsDf.at[ev_id2, ("ocel:omap", "ocel:omap")] = set(objects2).difference(relatedObjects)
                         
                     newObjects = newObjects.union(relatedObjects)
 
@@ -367,15 +373,22 @@ class OCEL_Model:
 
                 addedObjects = addedObjects.union(newObjects)
 
-            # add new objects from log2 to log1
-            toBeAddedObjects = list(addedObjects.difference(objectsDf1.index))
-            newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
+            # in case we want to merge events, add events from log2 which were not merged to the new log
+            if mergeEvents:
+                newEventsDf = pd.concat([newEventsDf, missingEventsDf])
+                newObjectsDf = pd.concat([objectsDf1, objectsDf2])
+            else:
+                # add new objects from log2 to log1
+                toBeAddedObjects = list(addedObjects.difference(objectsDf1.index))
+                newObjectsDf = pd.concat([objectsDf1, objectsDf2.loc[toBeAddedObjects]])
 
             # if no new name given, create own
             if newName == "":
                 newName = "MATCH_MINER(" + name1 + "," + name2 + ")"
 
             self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
+
+            self.alignEventsObjects(newName)
 
             return True
 
