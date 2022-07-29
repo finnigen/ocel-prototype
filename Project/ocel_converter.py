@@ -136,7 +136,6 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
 
     foreignKeyGraph = G
 
-
     for pair in product:
         ev_table1 = pair[0]
         ev_table2 = pair[1]
@@ -201,13 +200,20 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
 #        object_relations[(table1, table2)] = df
 #        object_relations[(table2, table1)] = df
 
-
         total_relation = set()
         for tup in df.to_records():
             total_relation.add((tup[1], tup[2]))
             total_relation.add((tup[2], tup[1]))
         
         ocel_model.addToRelation(total_relation)
+    
+    print("Making object relation reflexive...")    
+    # make object relation reflexive
+    reflexive = set()
+    for tableName in ocel_model.getOcelNames():
+        for obj in ocel_model.getObjects(tableName):
+            reflexive.add((obj, obj))
+    ocel_model.addToRelation(reflexive)
 
 
     # add all object relationships in form of tuples to a set
