@@ -13,7 +13,6 @@ from operatorFrames.aggregateFrame import AggregateFrame
 from operatorFrames.eventRecipeFrame import EventRecipeFrame
 from operatorFrames.unionFrame import UnionFrame
 
-
 from ocel_model import *
 
 import ocel as ocel_lib
