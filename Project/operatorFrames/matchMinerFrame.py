@@ -46,7 +46,11 @@ class MatchMinerFrame(OperatorFrame):
 
     def initAttributes1(self):
         name = self.logSelectcomboBox1.currentText()
-        attributes = self.ocel_model.getEventsDf(name)["ocel:vmap"].columns
+        df = self.ocel_model.getEventsDf(name)
+        if "ocel:vmap" not in df.columns:
+            return
+
+        attributes = df["ocel:vmap"].columns
         self.attrSelectcomboBox1.clear()
         for i in range(len(attributes)):
             self.attrSelectcomboBox1.addItem("")
@@ -54,7 +58,11 @@ class MatchMinerFrame(OperatorFrame):
 
     def initAttributes2(self):
         name = self.logSelectcomboBox2.currentText()
-        attributes = self.ocel_model.getEventsDf(name)["ocel:vmap"].columns        
+        df = self.ocel_model.getEventsDf(name)
+        if "ocel:vmap" not in df.columns:
+            return
+
+        attributes = df["ocel:vmap"].columns   
         self.attrSelectcomboBox2.clear()
         for i in range(len(attributes)):
             self.attrSelectcomboBox2.addItem("")

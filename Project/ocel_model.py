@@ -36,14 +36,15 @@ def convertCelonisActDfToEventDf(tableDf, caseColumn, activityColumn, timestampC
 
     # reorder columns
     newTable = newTable[[("ocel:omap", "ocel:omap"), ("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")] + list(newTable.drop(columns=[("ocel:omap", "ocel:omap"), ("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")]).columns)]
+    
     return newTable
 
 
 # convert celonis object table dataframe to pandas dataframe based on ocel objects
-def convertCelonisCaseDfToObjectDf(tableDf, caseColumn):
+def convertCelonisCaseDfToObjectDf(tableDf, caseColumn, table_name):
     newTable = copy.deepcopy(tableDf)
 
-    objType = caseColumn.replace(" ", "_")
+    objType = table_name.replace(" ", "_")
     newTable.index = newTable[caseColumn]
     newTable.index.rename(objType, inplace = True)
     newTable.drop(caseColumn, axis="columns", inplace=True)
@@ -218,7 +219,7 @@ class OCEL_Model:
     
     def getObjectAttributes(self, name):
         objectsDf = self.getObjectsDf(name)
-        if "ocel:ovmap" in [tup[0] for tup in objectsDf.columns]:
+        if "ocel:ovmap" in objectsDf.columns:
             return set([attr for attr in objectsDf["ocel:ovmap"].columns])
         return set()
         
