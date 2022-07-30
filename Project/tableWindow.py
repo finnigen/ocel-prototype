@@ -123,14 +123,7 @@ class PandasTableModel(QtGui.QStandardItemModel):
         QtGui.QStandardItemModel.__init__(self, parent)
         self._data = data
         for col in data.columns:
-            data_col = []
-            for x in data[col].values:
-                component = QtGui.QStandardItem("{}".format(x))
-
-                # make color dependent on object type
-                component.setData(QtGui.QColor(255,0,0), QtCore.Qt.ForegroundRole)
-                
-                data_col.append(component)
+            data_col = [QtGui.QStandardItem("{}".format(x)) for x in data[col].values]
             self.appendColumn(data_col)
         return
 

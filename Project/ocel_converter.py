@@ -87,6 +87,11 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         # convert tables to OCEL-based dataframes
         eventsDf = convertCelonisActDfToEventDf(df, case_column, act_column, time_column, sorting_column)
         objectsDf = convertCelonisCaseDfToObjectDf(case_table, case_table_case_column[table_name])
+
+        # prepend object identifiers with object type to ensure uniquness across tables
+        objType = objectsDf[("ocel:type", "ocel:type")][0]
+        objectsDf.set_index(objType + ":" + objectsDf.index.astype(str), inplace=True)
+        eventsDf[("ocel:omap", "ocel:omap")] = eventsDf[("ocel:omap", "ocel:omap")].apply(lambda x : [objType + ":" + x[0]])
         
         # add OCEL-based events and object dataframes to ocel_model
         ocel_model.addEventObjectDf(table_name, eventsDf, objectsDf)
@@ -100,7 +105,6 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
     for table_name in all_data:
         all_data[table_name].columns = [table_name + column for column in all_data[table_name].columns]    
     
-
 #    object_relations = {}
 
     foreignKeys = data_model.foreign_keys
