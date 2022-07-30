@@ -14,7 +14,7 @@ class TableWindow(QtWidgets.QMainWindow):
 
         # reset index, add name for index, and flatten column from multicolumns 
         self.eventsDf.reset_index(inplace=True)
-        self.eventsDf.columns = [("EVENT ID", "EVENT ID")] + list(self.eventsDf.columns[1:])
+        self.eventsDf.columns = [("ID", "ID")] + list(self.eventsDf.columns[1:])
         self.eventsDf.columns = self.eventsDf.columns.map(lambda x : x[1])
 
         self.objectsDf.reset_index(inplace=True)
@@ -91,6 +91,12 @@ class TableWindow(QtWidgets.QMainWindow):
         self.objectTable.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.objectTable.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
 
+        # adjust width of ID columns to content so that they aren't unnecessarily wide
+        header = self.eventTable.horizontalHeader()
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        header = self.objectTable.horizontalHeader()
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+
         # sort on timestamp
         self.eventTable.sortByColumn(3, QtCore.Qt.SortOrder.AscendingOrder)
         self.eventTable.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)
@@ -123,7 +129,12 @@ class PandasTableModel(QtGui.QStandardItemModel):
         QtGui.QStandardItemModel.__init__(self, parent)
         self._data = data
         for col in data.columns:
-            data_col = [QtGui.QStandardItem("{}".format(x)) for x in data[col].values]
+            data_col = []
+            for x in data[col].values:
+                item = QtGui.QStandardItem("{}".format(x))
+                # align item text to center
+                item.setTextAlignment(QtCore.Qt.AlignHCenter)
+                data_col.append(item)
             self.appendColumn(data_col)
         return
 
