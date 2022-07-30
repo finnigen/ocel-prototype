@@ -473,7 +473,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
 
                 # 'fileDf.pkl'
-    with open('fileDf.pkl', 'rb') as file:
+    with open('fileBig.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

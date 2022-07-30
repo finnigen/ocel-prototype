@@ -19,6 +19,10 @@ class TableWindow(QtWidgets.QMainWindow):
 
         self.objectsDf.reset_index(inplace=True)
         self.objectsDf.columns = [("OBJECT", "OBJECT")] + list(self.objectsDf.columns[1:])
+        # add index to objects table so that we can see number of objects
+        self.objectsDf.reset_index(inplace=True)
+        self.objectsDf.columns = [("", "")] + list(self.objectsDf.columns[1:])
+
         self.objectsDf.columns = self.objectsDf.columns.map(lambda x : x[1])
 
 
@@ -66,6 +70,9 @@ class TableWindow(QtWidgets.QMainWindow):
 
         self.eventsModel = PandasTableModel(self.eventsDf)
         self.eventTable.setModel(filter_model)
+        # remove index since it is same as event id columns
+        self.eventTable.verticalHeader().setVisible(False)
+        self.objectTable.verticalHeader().setVisible(False)
 
         self.objectsLabel.setText("Objects")
         self.objectTable.setSortingEnabled(True)
@@ -116,7 +123,14 @@ class PandasTableModel(QtGui.QStandardItemModel):
         QtGui.QStandardItemModel.__init__(self, parent)
         self._data = data
         for col in data.columns:
-            data_col = [QtGui.QStandardItem("{}".format(x)) for x in data[col].values]
+            data_col = []
+            for x in data[col].values:
+                component = QtGui.QStandardItem("{}".format(x))
+
+                # make color dependent on object type
+                component.setData(QtGui.QColor(255,0,0), QtCore.Qt.ForegroundRole)
+                
+                data_col.append(component)
             self.appendColumn(data_col)
         return
 

@@ -214,21 +214,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         for obj in ocel_model.getObjects(tableName):
             reflexive.add((obj, obj))
     ocel_model.addToRelation(reflexive)
-
-
-    # add all object relationships in form of tuples to a set
-#    total_relation = set()
-#    for i in range(len(tables)):
-#        for j in range(len(tables)):
-#            if i != j:
-#                df = object_relations[(list(tables.keys())[i], list(tables.keys())[j])]
-#                for tup in df.to_records():
-#                    total_relation.add((tup[1], tup[2]))
-#                    total_relation.add((tup[2], tup[1]))
-
-#    ocel_model.setRelation(total_relation)
-         
-                    
+                   
     return ocel_model
 
 
@@ -253,8 +239,8 @@ data_model = "OcelBigReducedModel"
 data_pool = "DemoPool"
 data_model = "DemoModel"
 
-# data_pool = "BigTest"
-# data_model = "BigModel1"
+data_pool = "BigTest"
+data_model = "BigModel1"
 
 # data_pool = "SAPFixed"
 # data_model = "SAPo2c"
@@ -264,7 +250,7 @@ data_model = "DemoModel"
 # for development purposes
 def saveToPickle(url, api, data_pool, data_model):
     ocel_model = convertToOcelModel(url, api, data_pool, data_model)
-    with open('fileDf.pkl', 'wb') as file:
+    with open('fileBig.pkl', 'wb') as file:
         pickle.dump(ocel_model, file)
 
 # saveToPickle(url, api, data_pool, data_model)
