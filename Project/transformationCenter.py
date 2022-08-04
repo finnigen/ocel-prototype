@@ -95,7 +95,7 @@ class TransformationCenter(QtWidgets.QWidget):
         # add title to sidebar (adjust font first)
         sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
         sidebarTitlelabel.setFont(self.titleFont)
-        sidebarTitlelabel.setText("Object-centric event logs")
+        sidebarTitlelabel.setText("Object-Centric Event Logs")
 
         OCEL_list_scrollArea.setWidget(self.OCEL_list_frame)
 
@@ -265,7 +265,7 @@ class TransformationCenter(QtWidgets.QWidget):
                                 #Custom_Widget {
                                     background: #E6E6E6;
                                     border-radius: 5px;
-                                    border: 1px solid ;                   
+                                    border: 1px solid grey;                   
                                 }""")  
 
 
@@ -419,8 +419,8 @@ class TransformationCenter(QtWidgets.QWidget):
                                 #Custom_Widget {
                                     background: #E6E6E6;
                                     border-radius: 5px;
-                                    border: 1px solid ;                   
-                                }""")  
+                                    border: 1px solid grey;                   
+                                }""")
 
         minerFrameLayout = QtWidgets.QGridLayout(minerFrame)
         minerFrameLayout.setSpacing(20)

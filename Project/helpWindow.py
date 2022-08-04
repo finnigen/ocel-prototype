@@ -12,7 +12,7 @@ class HelpWindow(QtWidgets.QMainWindow):
         self.setWindowTitle(self.title)
 
         label = QtWidgets.QLabel(self)
-        pixmap = QtGui.QPixmap('UIOverview.png')
+        pixmap = QtGui.QPixmap('overviewTutorial.png')
         label.setPixmap(pixmap)
         self.setCentralWidget(label)
     #    self.resize(pixmap.width(), pixmap.height())
