@@ -134,7 +134,7 @@ class TransformationCenter(QtWidgets.QWidget):
         operatorSelectorTitle.setText("Select an Operator")
         self.operatorSelectorLayout.addWidget(operatorSelectorTitle, 0, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
         self.operatorSelectorLayout.setAlignment(QtCore.Qt.AlignCenter)
-        self.operatorSelectorLayout.setSpacing(40)
+        self.operatorSelectorLayout.setSpacing(30)
 
         # help button on overview page
         helpButton = QtWidgets.QPushButton(self.operatorSelectorPage)
@@ -149,7 +149,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.operatorSelectorScrollAreaWidgetContents = QtWidgets.QWidget()
         self.operatorSelectorScrollGridLayout = QtWidgets.QGridLayout(self.operatorSelectorScrollAreaWidgetContents)
         self.operatorSelectorScrollGridLayout.setAlignment(QtCore.Qt.AlignCenter)
-        self.operatorSelectorScrollGridLayout.setSpacing(40)
+        self.operatorSelectorScrollGridLayout.setSpacing(30)
         self.operatorSelectorLayout.addWidget(operatorSelectionScrollArea)
         self.operatorFrames = []
         operatorSelectionScrollArea.setWidget(self.operatorSelectorScrollAreaWidgetContents)
@@ -258,6 +258,16 @@ class TransformationCenter(QtWidgets.QWidget):
     
         self.ocelSideBarFrames[name].setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.ocelSideBarFrames[name].setFrameShadow(QtWidgets.QFrame.Raised)
+
+        # change appearance of frame
+        self.ocelSideBarFrames[name].setObjectName('Custom_Widget')
+        self.ocelSideBarFrames[name].setStyleSheet("""
+                                #Custom_Widget {
+                                    background: #E6E6E6;
+                                    border-radius: 5px;
+                                    border: 1px solid ;                   
+                                }""")  
+
 
         sidebarOCELTitle = QtWidgets.QLabel(self.ocelSideBarFrames[name])
         sidebarOCELTitle.setFont(self.standardFont)
@@ -402,6 +412,15 @@ class TransformationCenter(QtWidgets.QWidget):
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         minerFrame.setSizePolicy(sizePolicy)
         minerFrame.setMaximumWidth(1000)
+
+        # set custom appearance for frame
+        minerFrame.setObjectName('Custom_Widget')
+        minerFrame.setStyleSheet("""
+                                #Custom_Widget {
+                                    background: #E6E6E6;
+                                    border-radius: 5px;
+                                    border: 1px solid ;                   
+                                }""")  
 
         minerFrameLayout = QtWidgets.QGridLayout(minerFrame)
         minerFrameLayout.setSpacing(20)
