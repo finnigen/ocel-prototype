@@ -1,6 +1,7 @@
 
 import pickle
 from tableWindow import TableWindow
+from helpWindow import HelpWindow
 from operatorFrames.matchMinerFrame import MatchMinerFrame
 from operatorFrames.interleavedMinerFrame import InterleavedMinerFrame
 from operatorFrames.nonInterleavedMinerFrame import NonInterleavedMinerFrame
@@ -131,9 +132,16 @@ class TransformationCenter(QtWidgets.QWidget):
         operatorSelectorTitle = QtWidgets.QLabel(self.operatorSelectorPage)
         operatorSelectorTitle.setFont(self.titleFont)
         operatorSelectorTitle.setText("Select an Operator")
-        self.operatorSelectorLayout.addWidget(operatorSelectorTitle, 0, 0, 1, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
+        self.operatorSelectorLayout.addWidget(operatorSelectorTitle, 0, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
         self.operatorSelectorLayout.setAlignment(QtCore.Qt.AlignCenter)
         self.operatorSelectorLayout.setSpacing(40)
+
+        # help button on overview page
+        helpButton = QtWidgets.QPushButton(self.operatorSelectorPage)
+        helpButton.setText("Help")
+        self.operatorSelectorLayout.addWidget(helpButton, 0, 0, QtCore.Qt.AlignTop | QtCore.Qt.AlignRight)
+        helpButton.clicked.connect(self.helpWindow)
+
 
         # scrollarea for operators on overview page
         operatorSelectionScrollArea = QtWidgets.QScrollArea(self.operatorSelectorPage)
@@ -294,6 +302,13 @@ class TransformationCenter(QtWidgets.QWidget):
             return
 
         self.addOcelFrameToSidebar(name)
+
+
+    def helpWindow(self):
+        if "helpWindow" not in self.openedWindows:
+            newWindow = HelpWindow()
+            self.openedWindows["helpWindow"] = newWindow
+        self.openedWindows["helpWindow"].show()
 
 
     def show_table_window(self, name):

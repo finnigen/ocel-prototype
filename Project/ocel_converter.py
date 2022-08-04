@@ -201,8 +201,12 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         df.drop_duplicates(inplace=True)
         df.reset_index(drop=True, inplace=True)
         
-#        object_relations[(table1, table2)] = df
-#        object_relations[(table2, table1)] = df
+        # prefix objects with case table names (object type)
+        column_name = table1 + case_table_case_column[ev_table1]
+        df[column_name] = df[column_name].apply(lambda x : table1 + ":" + str(x))
+        column_name = table2 + case_table_case_column[ev_table2]
+        df[column_name] = df[column_name].apply(lambda x : table2 + ":" + str(x))
+
 
         total_relation = set()
         for tup in df.to_records():
