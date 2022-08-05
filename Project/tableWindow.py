@@ -14,7 +14,7 @@ class TableWindow(QtWidgets.QMainWindow):
 
         # reset index, add name for index, and flatten column from multicolumns 
         self.eventsDf.reset_index(inplace=True)
-        self.eventsDf.columns = [("ID", "ID")] + list(self.eventsDf.columns[1:])
+        self.eventsDf.columns = [("ID", "ID"), ("Object", "Object") , ("Activity", "Activity"), ("Timestamp", "Timestamp")] + list(self.eventsDf.columns[4:])
         self.eventsDf.columns = self.eventsDf.columns.map(lambda x : x[1])
 
         self.objectsDf.reset_index(inplace=True)
@@ -24,6 +24,28 @@ class TableWindow(QtWidgets.QMainWindow):
         self.objectsDf.columns = [("", "")] + list(self.objectsDf.columns[1:])
 
         self.objectsDf.columns = self.objectsDf.columns.map(lambda x : x[1])
+
+        # transform format of objectsDf so that we have a column for each object type
+        columns = [""]
+        objTypes = set(self.objectsDf["ocel:type"])
+        for ot in objTypes:
+            columns.append(ot + " objects")
+            self.objectsDf[ot + " objects"] = self.objectsDf["OBJECT"].apply(lambda x : x if x.split(":")[0] == ot else "-")
+        self.objectsDf.drop(["OBJECT", "ocel:type"], axis=1, inplace=True)
+        # re-order columns
+        columns = columns + list(set(self.objectsDf.columns).difference(columns))
+        self.objectsDf = self.objectsDf[columns]
+
+        # transform format of eventsDf so that we have a column for each object type
+        columns = ["ID"]
+        for ot in objTypes:
+            columns.append(ot + " objects")
+            self.eventsDf[ot + " objects"] = self.eventsDf["Object"].apply(lambda x : [o for o in x if o.split(":")[0] == ot])
+        self.eventsDf.drop(["Object"], axis=1, inplace=True)
+        # re-order columns
+        columns += ["Activity", "Timestamp"]
+        columns = columns + list(set(self.eventsDf.columns).difference(columns))
+        self.eventsDf = self.eventsDf[columns]
 
 
     def setupUi(self, MainWindow):
