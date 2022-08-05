@@ -4,6 +4,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from pycelonis import get_celonis
 import ocel
 
+
+# dialog box that opens once export button is pressed
+# this is where user specifies parameters for export to Celonis
+
 class ExportDialog(QDialog):
     def __init__(self, filePath, url, api, parent=None):
         super().__init__(parent)
@@ -45,7 +49,6 @@ class ExportDialog(QDialog):
         for i in range(len(self.celonis.pools)):
             self.dataPool.addItem("")
             self.dataPool.setItemText(i, self.celonis.pools[i].name)
-
 
         ######## Objects selection
 

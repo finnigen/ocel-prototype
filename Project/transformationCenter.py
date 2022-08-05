@@ -13,6 +13,8 @@ from operatorFrames.concatFrame import ConcatFrame
 from operatorFrames.aggregateFrame import AggregateFrame
 from operatorFrames.eventRecipeFrame import EventRecipeFrame
 from operatorFrames.unionFrame import UnionFrame
+from operatorFrames.differenceFrame import DifferenceFrame
+
 
 from ocel_model import *
 
@@ -161,6 +163,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
         description = "Merge objects across logs based on matching activity names, timestamps, and object relationships."
         self.initOperatorPage("Union", description, UnionFrame)
+        description = "Remove objects from events with matching activity names and timestamps (does not add empty logs)."
+        self.initOperatorPage("Difference", description, DifferenceFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs as well as object relationships."
         self.initOperatorPage("Interleaved Miner", description, InterleavedMinerFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs (non-interleaved) as well as object relationships."
@@ -507,7 +511,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
 
                 # 'fileDf.pkl'
-    with open('fileOrdersOCEL.pkl', 'rb') as file:
+    with open('fileBig.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

@@ -957,8 +957,31 @@ class OCEL_Model:
         return True
 
 
+    def difference(self, name1, name2, newName):
 
+        # get logs
+        eventsDf1 = self.getEventsDf(name1)
+        objectsDf1 = self.getObjectsDf(name1)
+        eventsDf2 = self.getEventsDf(name2)
+        objectsDf2 = self.getObjectsDf(name2)
+
+        newEventsDf = copy.deepcopy(eventsDf1)
+
+        joined = pd.merge(eventsDf1, eventsDf2, how="left", on=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")])
+        newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).difference(r[("ocel:omap_y", "ocel:omap_y")])), axis=1)
     
+        newObjectsDf = pd.concat([objectsDf1, objectsDf2])
+
+        # if no new name given, create own
+        if newName == "":
+            newName = "DIFFERENCE(" + name1 + "," + name2 + ")"
+
+        self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
+        self.alignEventsObjects(newName)
+
+        return True
+
+
 # ------------------------- Event Recipe Operator -------------------------------------
 
     def matchingEvents(self, sequence, objectsDf, eventsDf):

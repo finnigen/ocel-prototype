@@ -250,8 +250,8 @@ data_model = "DemoModel"
 data_pool = "BigTest"
 data_model = "BigModel1"
 
-data_pool = "OCELOrdersManagementPool"
-data_model = "OCELOrdersManagementModel"
+#data_pool = "OCELOrdersManagementPool"
+#data_model = "OCELOrdersManagementModel"
 
 # data_pool = "SAPFixed"
 # data_model = "SAPo2c"
@@ -261,7 +261,7 @@ data_model = "OCELOrdersManagementModel"
 # for development purposes
 def saveToPickle(url, api, data_pool, data_model):
     ocel_model = convertToOcelModel(url, api, data_pool, data_model)
-    with open('fileOrdersOCEL.pkl', 'wb') as file:
+    with open('fileBig.pkl', 'wb') as file:
         pickle.dump(ocel_model, file)
 
 # saveToPickle(url, api, data_pool, data_model)

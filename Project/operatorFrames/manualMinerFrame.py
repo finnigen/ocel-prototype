@@ -85,12 +85,13 @@ class ManualMinerFrame(OperatorFrame):
                 i.setParent(None)
 
         self.activityComboBoxes = []
-        for i in range(int(self.numOfActComboBox.currentText())):
-            leftActivityComboBox = QtWidgets.QComboBox(self.scrollAreaWidgetContents)
-            self.scrollGridLayout.addWidget(leftActivityComboBox, i+6, 0)
-            rightActivityComboBox = QtWidgets.QComboBox(self.scrollAreaWidgetContents)
-            self.scrollGridLayout.addWidget(rightActivityComboBox, i+6, 1)
-            self.activityComboBoxes.append((leftActivityComboBox, rightActivityComboBox))
+        if self.numOfActComboBox.currentText():
+            for i in range(int(self.numOfActComboBox.currentText())):
+                leftActivityComboBox = QtWidgets.QComboBox(self.scrollAreaWidgetContents)
+                self.scrollGridLayout.addWidget(leftActivityComboBox, i+6, 0)
+                rightActivityComboBox = QtWidgets.QComboBox(self.scrollAreaWidgetContents)
+                self.scrollGridLayout.addWidget(rightActivityComboBox, i+6, 1)
+                self.activityComboBoxes.append((leftActivityComboBox, rightActivityComboBox))
         
         # get set of all activities in both logs
         activities1 = set(self.ocel_model.getEventsDf(name1)[("ocel:activity", "ocel:activity")])
