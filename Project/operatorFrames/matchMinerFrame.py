@@ -5,7 +5,7 @@ from operatorFrames.operatorFrame import OperatorFrame
 class MatchMinerFrame(OperatorFrame):
  
     def __init__(self, parent, ocel_model, title, description):
-        super().__init__(parent, ocel_model, title, description)
+        super().__init__(parent, ocel_model, title, description, )
 
         self.attrSelectLabel = QtWidgets.QLabel(self.operatorFrame)
         self.attrSelectLabel.setFont(self.normalFont)

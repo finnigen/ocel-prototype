@@ -316,7 +316,7 @@ class TransformationCenter(QtWidgets.QWidget):
 
     def helpWindow(self):
         if "helpWindow" not in self.openedWindows:
-            newWindow = HelpWindow()
+            newWindow = HelpWindow("tutorialPics/overviewTutorial.png")
             self.openedWindows["helpWindow"] = newWindow
         self.openedWindows["helpWindow"].show()
 

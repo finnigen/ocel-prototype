@@ -6,16 +6,16 @@ from tableWindow import PandasTableModel
 
 class HelpWindow(QtWidgets.QMainWindow):
 
-    def __init__(self):
+    def __init__(self, tutorialPic):
         super(HelpWindow, self).__init__()
         self.title = "Image Viewer"
         self.setWindowTitle(self.title)
 
         label = QtWidgets.QLabel(self)
-        pixmap = QtGui.QPixmap('overviewTutorial.png')
+        pixmap = QtGui.QPixmap(tutorialPic)
         label.setPixmap(pixmap)
         self.setCentralWidget(label)
-    #    self.resize(pixmap.width(), pixmap.height())
+        self.resize(pixmap.width(), pixmap.height())
 
     #    QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
