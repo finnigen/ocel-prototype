@@ -1,3 +1,5 @@
+import pickle
+from turtle import right
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import pandas as pd
@@ -68,6 +70,7 @@ class TableWindow(QtWidgets.QMainWindow):
         # enable custom numerical sorting
         filter_model = SortFilterProxyModel()
         filter_model.setSourceModel(_model)
+        self.objectTable.setModel(filter_model)
 
         self.objectTable.setModel(filter_model)
 
@@ -89,9 +92,10 @@ class TableWindow(QtWidgets.QMainWindow):
         # enable custom numerical sorting
         filter_model = SortFilterProxyModel()
         filter_model.setSourceModel(_model)
-
-        self.eventsModel = PandasTableModel(self.eventsDf)
         self.eventTable.setModel(filter_model)
+
+        self.eventTable.setModel(filter_model)
+
         # remove index since it is same as event id columns
         self.eventTable.verticalHeader().setVisible(False)
         self.objectTable.verticalHeader().setVisible(False)
@@ -138,7 +142,7 @@ class SortFilterProxyModel(QtCore.QSortFilterProxyModel):
 
         left_var = left_index.data(QtCore.Qt.EditRole)
         right_var = right_index.data(QtCore.Qt.EditRole)
-
+        
         try:
             return float(left_var) < float(right_var)
         except (ValueError, TypeError):
@@ -179,10 +183,12 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ocel = {'ocel:global-event': {'ocel:activity': ['place order', 'send package']}, 'ocel:global-object': {'ocel:type': '__INVALID__'}, 'ocel:global-log': {'ocel:attribute-names': ['ATT_package_attr1', 'EVID_general', 'EVID_package', 'ATT_EVENT_attr1'], 'ocel:object-types': ['CASE_package'], 'ocel:version': '1.0', 'ocel:ordering': 'timestamp'}, 'ocel:events': {'0': {'ocel:activity': 'place order', 'ocel:timestamp': '2020-07-09 08:20:00', 'ocel:omap': ['package1'], 'ocel:vmap': {'ATT_EVENT_attr1': 'attValue', 'EVID_general': '1.0', 'EVID_package': '1.0:package1'}}, '1': {'ocel:activity': 'send package', 'ocel:timestamp': '2020-07-09 08:31:00', 'ocel:omap': ['package1'], 'ocel:vmap': {'ATT_EVENT_attr1': 'attValue', 'EVID_general': '7.0', 'EVID_package': '7.0:package1'}}}, 'ocel:objects': {'package1': {'ocel:type': 'CASE_package', 'ocel:ovmap': {'ATT_package_attr1': 'attValue'}}}}
-    objdf = {('ocel:type', 'ocel:type'): {'o1': 'CASE_ORDERS', 'o2': 'CASE_ORDERS'}}
-    evdf = {('ocel:omap', 'ocel:omap'): {0: ['o1'],   1: ['o1'],   2: ['o1'],   3: ['o2'],   4: ['o2'],   5: ['o1'],   6: ['o2'],   7: ['o2'],   8: ['o2'],   9: ['o2']},  ('ocel:activity', 'ocel:activity'): {0: 'place order',   1: 'confirm order',   2: 'pay order',   3: 'place order',   4: 'confirm order',   5: 'order dispatched',   6: 'order delayed',   7: 'order updated',   8: 'pay order',   9: 'order dispatched'},  ('ocel:timestamp', 'ocel:timestamp'): {0: '2020-07-15 13:00:00',   1: '2020-07-15 14:00:00',   2: '2020-07-15 14:30:00',   3: '2020-07-16 09:21:00',   4: '2020-07-16 09:22:00',   5: '2020-07-16 10:00:00',   6: '2020-07-19 18:00:00',   7: '2020-07-20 10:31:00',   8: '2020-07-20 12:44:20',   9: '2020-07-21 10:00:00'},  ('ocel:vmap', 'WEIGHT'): {0: 550,   1: 550,   2: 550,   3: 2480,   4: 2480,   5: 550,   6: 2480,   7: 2480,   8: 2480,   9: 2480},  ('ocel:vmap', 'PRICE'): {0: 30,   1: 30,   2: 30,   3: 316,   4: 316,   5: 30,   6: 316,   7: 316,   8: 316,   9: 316}}
-    ui = TableWindow(ocel, "package_EVENTS", objdf, evdf)
+
+    with open('fileBig.pkl', 'rb') as file:
+        # Call load method to deserialze
+        ocel_model = pickle.load(file)
+
+    ui = TableWindow(ocel_model, "items_EVENTS")
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
