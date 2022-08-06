@@ -14,6 +14,7 @@ from operatorFrames.aggregateFrame import AggregateFrame
 from operatorFrames.eventRecipeFrame import EventRecipeFrame
 from operatorFrames.unionFrame import UnionFrame
 from operatorFrames.differenceFrame import DifferenceFrame
+from operatorFrames.intersectionFrame import IntersectionFrame
 
 
 from ocel_model import *
@@ -163,7 +164,9 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
         description = "Merge objects across logs based on matching activity names, timestamps, and object relationships."
         self.initOperatorPage("Union", description, UnionFrame)
-        description = "Remove objects from events with matching activity names and timestamps (does not add empty logs)."
+        description = "Intersect set of objects for events with matching activity names and timestamps."
+        self.initOperatorPage("Intersection", description, IntersectionFrame)
+        description = "Remove objects from events with matching activity names and timestamps."
         self.initOperatorPage("Difference", description, DifferenceFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs as well as object relationships."
         self.initOperatorPage("Interleaved Miner", description, InterleavedMinerFrame)
@@ -241,6 +244,7 @@ class TransformationCenter(QtWidgets.QWidget):
             return
 
         self.refreshSelection(newName)
+
 
 
     def removeFromLogs(self, name):
@@ -489,6 +493,20 @@ class ExportWorkerThread(QThread):
             self.exportDone.emit(self.name, False)
 
 
+class OperatorWorkerThread(QThread):
+    operatorDone = pyqtSignal(str, bool)
+    def __init__(self, operatorFrames, pageNum, newName):
+        super().__init__()
+        self.operatorFrames = operatorFrames
+        self.pageNum = pageNum
+        self.newName = newName
+
+    def run(self):
+        try:
+            result = self.operatorFrames[self.pageNum].getNewLog(self.newName)
+            self.exportDone.emit(self.name, result)
+        except:
+            self.exportDone.emit(self.name, False)
 
 
 if __name__ == "__main__":

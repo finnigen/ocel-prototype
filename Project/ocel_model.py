@@ -536,7 +536,7 @@ class OCEL_Model:
     
     
     # union operator (merge objects of events with same activty / timestamp)
-    def union(self, name1, name2, mergeEvents=False, newName=""):
+    def union(self, name1, name2, respectObjRelations=True, mergeEvents=False, newName=""):
 
         eventsDf1 = self.getEventsDf(name1)
         objectsDf1 = self.getObjectsDf(name1)
@@ -564,9 +564,13 @@ class OCEL_Model:
         if len(df) > 0:
             for index, row in df.iterrows():
                 toBeAddedObjects = set()
-                for obj in row["ocel:omap_x"]:
-                    intersec = set(row["ocel:omap_y"]).intersection(object_relation[obj])
-                    toBeAddedObjects = toBeAddedObjects.union(intersec)
+
+                if respectObjRelations:
+                    for obj in row["ocel:omap_x"]:
+                        intersec = set(row["ocel:omap_y"]).intersection(object_relation[obj])
+                        toBeAddedObjects = toBeAddedObjects.union(intersec)
+                else:
+                    toBeAddedObjects = set(row["ocel:omap_y"])
 
                 if toBeAddedObjects != set():
                     # add merged objects to events of first log
@@ -588,6 +592,69 @@ class OCEL_Model:
         self.alignEventsObjects(newName)
         
         return True
+
+
+    def difference(self, name1, name2, newName):
+
+        # get logs
+        eventsDf1 = self.getEventsDf(name1)
+        objectsDf1 = self.getObjectsDf(name1)
+        eventsDf2 = self.getEventsDf(name2)
+        objectsDf2 = self.getObjectsDf(name2)
+
+        newEventsDf = copy.deepcopy(eventsDf1)
+
+        # first group by timestamp and activity
+        eventsDf2 = eventsDf2.groupby([("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity")])[[("ocel:omap", "ocel:omap")]].apply(sum)
+
+        # join dataframes based on activity and timestamps
+        joined = pd.merge(eventsDf1, eventsDf2, how="left", on=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")])
+        
+        # remove objects from second log from first log
+        newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).difference(r[("ocel:omap_y", "ocel:omap_y")])), axis=1)
+
+        newObjectsDf = pd.concat([objectsDf1, objectsDf2])
+
+        # if no new name given, create own
+        if newName == "":
+            newName = "DIFFERENCE(" + name1 + "," + name2 + ")"
+
+        self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
+        self.alignEventsObjects(newName)
+
+        return True
+
+
+    def intersection(self, name1, name2, newName):
+
+        # get logs
+        eventsDf1 = self.getEventsDf(name1)
+        objectsDf1 = self.getObjectsDf(name1)
+        eventsDf2 = self.getEventsDf(name2)
+        objectsDf2 = self.getObjectsDf(name2)
+
+        newEventsDf = copy.deepcopy(eventsDf1)
+
+        # first group by timestamp and activity
+        eventsDf2 = eventsDf2.groupby([("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity")])[[("ocel:omap", "ocel:omap")]].apply(sum)
+
+        # join dataframes based on activity and timestamps
+        joined = pd.merge(eventsDf1, eventsDf2, how="left", on=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")])
+        
+        # remove objects from second log from first log
+        newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).intersection(r[("ocel:omap_y", "ocel:omap_y")])), axis=1)
+
+        newObjectsDf = pd.concat([objectsDf1, objectsDf2])
+
+        # if no new name given, create own
+        if newName == "":
+            newName = "INTERSECTION(" + name1 + "," + name2 + ")"
+
+        self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
+        self.alignEventsObjects(newName)
+
+        return True
+        
 
 
     # flattening operator that transforms all events to one object notion
@@ -956,30 +1023,6 @@ class OCEL_Model:
 
         return True
 
-
-    def difference(self, name1, name2, newName):
-
-        # get logs
-        eventsDf1 = self.getEventsDf(name1)
-        objectsDf1 = self.getObjectsDf(name1)
-        eventsDf2 = self.getEventsDf(name2)
-        objectsDf2 = self.getObjectsDf(name2)
-
-        newEventsDf = copy.deepcopy(eventsDf1)
-
-        joined = pd.merge(eventsDf1, eventsDf2, how="left", on=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")])
-        newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).difference(r[("ocel:omap_y", "ocel:omap_y")])), axis=1)
-    
-        newObjectsDf = pd.concat([objectsDf1, objectsDf2])
-
-        # if no new name given, create own
-        if newName == "":
-            newName = "DIFFERENCE(" + name1 + "," + name2 + ")"
-
-        self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
-        self.alignEventsObjects(newName)
-
-        return True
 
 
 # ------------------------- Event Recipe Operator -------------------------------------

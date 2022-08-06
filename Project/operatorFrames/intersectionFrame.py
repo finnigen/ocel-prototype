@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 from operatorFrames.operatorFrame import OperatorFrame
 
-class UnionFrame(OperatorFrame):
+class IntersectionFrame(OperatorFrame):
  
     def __init__(self, parent, ocel_model, title, description):
         super().__init__(parent, ocel_model, title, description)
@@ -11,28 +12,12 @@ class UnionFrame(OperatorFrame):
         self.logSelectionLabel2 = QtWidgets.QLabel(self.operatorFrame)
         self.logSelectionLabel2.setFont(self.normalFont)
 
-        self.objRelationsLabel = QtWidgets.QLabel(self.operatorFrame)
-        self.objRelationsLabel.setFont(self.normalFont)
-        self.objRelationsCheckBox = QtWidgets.QCheckBox(self.operatorFrame)
-        self.objRelationsCheckBox.setChecked(True)
-
-        self.mergeEventsLabel = QtWidgets.QLabel(self.operatorFrame)
-        self.mergeEventsLabel.setFont(self.normalFont)
-        self.mergeEventsCheckBox = QtWidgets.QCheckBox(self.operatorFrame)
-        self.mergeEventsCheckBox.setChecked(False)
-
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.logSelectionLabel2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
-        self.innerRightLayout.addWidget(self.objRelationsLabel, 4, 0)
-        self.innerRightLayout.addWidget(self.objRelationsCheckBox, 4, 1)
-        self.innerRightLayout.addWidget(self.mergeEventsLabel, 5, 0)
-        self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 5, 1)
 
         self.logSelectionLabel1.setText("Select first event log:")
         self.logSelectionLabel2.setText("Select second event log:")
-        self.objRelationsLabel.setText("Consider object relationships when merging:")
-        self.mergeEventsLabel.setText("Merge all events from 2nd log:")
 
         self.refresh()
  
@@ -44,11 +29,7 @@ class UnionFrame(OperatorFrame):
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
 
-        respectObjRelations = self.objRelationsCheckBox.isChecked()
-        mergeEvents = self.mergeEventsCheckBox.isChecked()
-
-        return self.ocel_model.union(name1, name2, respectObjRelations, mergeEvents, newName=newName)
-
+        return self.ocel_model.intersection(name1, name2, newName=newName)
 
     def refresh(self):
         # used to refresh comboboxes for selection of operator parameters
