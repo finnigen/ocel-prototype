@@ -239,7 +239,7 @@ class TransformationCenter(QtWidgets.QWidget):
                 return
             # avoid duplicate names
             duplicate = False
-            if text in self.ocel_model.getOcelNames():
+            if text in self.ocelSideBarFrames.keys():
                 text = ""
                 duplicate = True
         newName=text
