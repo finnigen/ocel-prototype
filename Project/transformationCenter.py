@@ -289,7 +289,14 @@ class TransformationCenter(QtWidgets.QWidget):
             self.ocelSideBarFrames[name].setParent(None)
             return
 
-        # in case operator succeeded, enable normal OCEL frame buttons
+        # if newly created OCEL is empty, don't add
+        elif len(self.ocel_model.getEventsDf(name)) == 0:
+            QtWidgets.QMessageBox.question(self, 'Operator Complete', name + ' log is empty and will not be added', QtWidgets.QMessageBox.Ok)
+            self.removeFromLogs(name)
+            return
+
+
+        # in case operator succeeded and ocel not empty, enable normal OCEL frame buttons
         QtWidgets.QMessageBox.question(self, 'Operator Complete', 'Creation of ' + name + ' log completed', QtWidgets.QMessageBox.Ok)
         self.ocelSideBarExportButtons[name].setEnabled(True)
         self.ocelSideBarDeleteButtons[name].setEnabled(True)
