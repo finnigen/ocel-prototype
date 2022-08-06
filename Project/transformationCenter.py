@@ -123,6 +123,9 @@ class TransformationCenter(QtWidgets.QWidget):
 
         ################## start of code for right-hand operator section
 
+        # keep track of worker threads for operators
+        self.operatorWorkers = {}
+
         # stacked widget for multiple different views (e.g. operators overview, specific operator page...)
         self.operatorSectionStackedWidget = QtWidgets.QStackedWidget(self.rightFrame)
         self.rightGridLayout.addWidget(self.operatorSectionStackedWidget, 0, 0, 1, 2)
@@ -210,6 +213,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarExportButtons = {}
         self.ocelSideBarDeleteButtons = {}
         self.ocelSideBarViewButtons = {}
+        self.ocelSideBarCancelButtons = {}
+
 
         ocel_names = list(self.ocel_model.getOcelNames())
         ocel_names.sort()
@@ -239,12 +244,60 @@ class TransformationCenter(QtWidgets.QWidget):
                 duplicate = True
         newName=text
 
-        result = self.operatorFrames[pageNum].getNewLog(newName)
-        if not result:
+#        result = self.operatorFrames[pageNum].getNewLog(newName)
+#        if not result:
+#            return
+
+
+
+        currentFrame = self.operatorFrames[pageNum]
+        parameters = currentFrame.getParameters()
+        # create thread so that GUI stays responsive while exporting
+        self.operatorWorkers[newName] = OperatorWorkerThread(currentFrame, parameters, newName)
+        self.operatorWorkers[newName].operatorDone.connect(self.operatortDone)
+        self.operatorWorkers[newName].finished.connect(self.operatorWorkers[newName].quit)
+        self.operatorWorkers[newName].finished.connect(self.operatorWorkers[newName].deleteLater)
+        self.operatorWorkers[newName].start()
+
+        # add "temporary" frame for new OCEL but disable/hide buttons since it is in the process of being created
+        self.refreshSelection(newName)
+        self.ocelSideBarExportButtons[newName].setEnabled(False)
+        self.ocelSideBarDeleteButtons[newName].setEnabled(False)
+        self.ocelSideBarViewButtons[newName].setEnabled(False)
+        self.ocelSideBarExportButtons[newName].hide()
+        self.ocelSideBarDeleteButtons[newName].hide()
+        self.ocelSideBarViewButtons[newName].hide()
+        
+        # add cancel button so we can stop long running operations
+        cancelButton = QtWidgets.QPushButton(self.ocelSideBarFrames[newName])
+        cancelButton.setText("Cancel Operation")
+        cancelButton.clicked.connect(lambda checked, x=newName: self.cancelOperator(x))
+        self.ocelSideBarFrames[newName].layout().addWidget(cancelButton)
+        self.ocelSideBarCancelButtons[newName] = cancelButton
+    
+
+
+    def cancelOperator(self, name):
+        self.operatorWorkers[name].exit()
+        self.removeFromLogs(name)
+
+
+    def operatortDone(self, name, success):
+        # in case operator failed, remove associated OCEL frame from sidebar
+        if not success:
+            QtWidgets.QMessageBox.question(self, 'Operator Failed', 'Creation of ' + name + ' log failed', QtWidgets.QMessageBox.Ok)
+            self.ocelSideBarFrames[name].setParent(None)
             return
 
-        self.refreshSelection(newName)
-
+        # in case operator succeeded, enable normal OCEL frame buttons
+        QtWidgets.QMessageBox.question(self, 'Operator Complete', 'Creation of ' + name + ' log completed', QtWidgets.QMessageBox.Ok)
+        self.ocelSideBarExportButtons[name].setEnabled(True)
+        self.ocelSideBarDeleteButtons[name].setEnabled(True)
+        self.ocelSideBarViewButtons[name].setEnabled(True)
+        self.ocelSideBarExportButtons[name].show()
+        self.ocelSideBarDeleteButtons[name].show()
+        self.ocelSideBarViewButtons[name].show()
+        self.ocelSideBarCancelButtons[name].setParent(None)
 
 
     def removeFromLogs(self, name):
@@ -370,11 +423,11 @@ class TransformationCenter(QtWidgets.QWidget):
             self.ocelSideBarExportButtons[name].setStyleSheet("background-color: red")
 
             # create thread so that GUI stays responsive while exporting
-            self.worker = ExportWorkerThread(name, filePath, self.url, self.api, parameters[0], parameters[1], parameters[2], parameters[3])
-            self.worker.exportDone.connect(self.exportDone)
-            self.worker.finished.connect(self.worker.quit)
-            self.worker.finished.connect(self.worker.deleteLater)
-            self.worker.start()
+            self.exportWorker = ExportWorkerThread(name, filePath, self.url, self.api, parameters[0], parameters[1], parameters[2], parameters[3])
+            self.exportWorker.exportDone.connect(self.exportDone)
+            self.exportWorker.finished.connect(self.exportWorker.quit)
+            self.exportWorker.finished.connect(self.exportWorker.deleteLater)
+            self.exportWorker.start()
 
 
     def exportDone(self, name, success):
@@ -495,18 +548,21 @@ class ExportWorkerThread(QThread):
 
 class OperatorWorkerThread(QThread):
     operatorDone = pyqtSignal(str, bool)
-    def __init__(self, operatorFrames, pageNum, newName):
+    def __init__(self, operatorFrame, parameters, newName):
         super().__init__()
-        self.operatorFrames = operatorFrames
-        self.pageNum = pageNum
+        self.operatorFrame = operatorFrame
+        self.parameters = parameters
         self.newName = newName
 
     def run(self):
-        try:
-            result = self.operatorFrames[self.pageNum].getNewLog(self.newName)
-            self.exportDone.emit(self.name, result)
-        except:
-            self.exportDone.emit(self.name, False)
+        result = self.operatorFrame.getNewLog(self.newName, self.parameters)
+        self.operatorDone.emit(self.newName, result)
+
+#        try:
+#            result = self.operatorFrame.getNewLog(self.newName)
+#            self.operatorDone.emit(self.newName, result)
+#        except:
+#            self.operatorDone.emit(self.newName, False)
 
 
 if __name__ == "__main__":

@@ -198,32 +198,44 @@ class FilterFrame(OperatorFrame):
             self.scrollGridLayout.itemAt(i).widget().deleteLater()
     
 
-    def getNewLog(self, newName):
-        # returns new log that is created by applying given operator with selected parameters + name
-        # this is used for the "add to logs" and "export" button in the main window
-        
+    def getParameters(self):
         name = self.logSelectcomboBox1.currentText()
         
         mode = self.modeSelectionComboBox.currentText()
 
-        parameters = ""
+        filterParameters = ""
         if mode == "activity" or mode == "object" or mode == "objectType":
-            parameters = set()
+            filterParameters = set()
             for label, checkbox in self.boxes:
                 if checkbox.isChecked():
-                    parameters.add(label.text())
+                    filterParameters.add(label.text())
         elif mode == "eventAttribute" or "objectAttribute":
-            parameters = {}
+            filterParameters = {}
             for attribute, checkbox, text in self.boxes:
                 if checkbox.isChecked() and len(text.text()) != 0:
                     values = text.text().split(";")
-                    parameters[attribute.text()] = values
+                    filterParameters[attribute.text()] = values
         elif mode == "timestamp":
             start = datetime.datetime.strptime(self.startDate.text(), '%m/%d/%y %H:%M %p')
             end = datetime.datetime.strptime(self.endDate.text(), '%m/%d/%y %H:%M %p')
-            parameters = (start, end)
+            filterParameters = (start, end)
+        
+        return {"name" : name, "mode" : mode, "filterParameters" : filterParameters, }
+        
 
-        return self.ocel_model.filterLog(name, parameters, mode, newName=newName)
+
+    def getNewLog(self, newName, parameters={}):
+        # returns new log that is created by applying given operator with selected parameters + name
+        # this is used for the "add to logs" and "export" button in the main window
+        
+        if len(parameters) == 0:
+            parameters = self.getParameters()
+        
+        name = parameters["name"]
+        filterParameters = parameters["filterParameters"]
+        mode = parameters["mode"]
+
+        return self.ocel_model.filterLog(name, filterParameters, mode, newName=newName)
 
 
     def refresh(self):

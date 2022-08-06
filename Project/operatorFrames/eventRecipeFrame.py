@@ -217,11 +217,7 @@ class EventRecipeFrame(OperatorFrame):
             layout.itemAt(i).widget().deleteLater()
         
 
-
-    def getNewLog(self, newName):
-        # returns new log that is created by applying given operator with selected parameters + name
-        # this is used for the "add to logs" and "export" button in the main window
-        
+    def getParameters(self):
         # name of log
         name = self.logSelectcomboBox1.currentText()
 
@@ -266,6 +262,26 @@ class EventRecipeFrame(OperatorFrame):
 
         # directly parameter
         directly = self.directlyFollowsCheckbox.isChecked()
+
+        return {"name" : name, "newActivityName" : newActivityName, "sequence" : sequence, "time" : time, "matchOnObjectTypes" : matchOnObjectTypes, "matchOnAttributes" : matchOnAttributes, "findAll" : findAll, "directly" : directly}
+        
+
+
+    def getNewLog(self, newName, parameters={}):
+        # returns new log that is created by applying given operator with selected parameters + name
+        # this is used for the "add to logs" and "export" button in the main window
+        
+        if len(parameters) == 0:
+            parameters = self.getParameters()
+
+        name = parameters["name"]
+        newActivityName = parameters["newActivityName"]
+        sequence = parameters["sequence"]
+        time = parameters["time"]
+        matchOnObjectTypes = parameters["matchOnObjectTypes"]
+        matchOnAttributes = parameters["matchOnAttributes"]
+        findAll = parameters["findAll"]
+        directly = parameters["directly"]
 
         return self.ocel_model.eventRecipe(name, newActivityName, sequence, time, matchOnObjectTypes, matchOnAttributes, findAll, directly, newName)
 

@@ -76,7 +76,10 @@ class OperatorFrame(QtWidgets.QFrame):
             self.openedWindows["helpWindow"] = newWindow
         self.openedWindows["helpWindow"].show()
 
-    def getNewLog(self, newName):
+    def getParameters(self):
+        return {}
+
+    def getNewLog(self, newName, parameters = {}):
         # returns new log that is created by applying given operator with selected parameters
         # this is used for the "add to logs" and "export" button in the main window
         pass

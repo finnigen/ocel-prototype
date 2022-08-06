@@ -23,12 +23,22 @@ class FlattenFrame(OperatorFrame):
         self.refresh()
  
 
-    def getNewLog(self, newName):
+    def getParameters(self):
+        name = self.logSelectcomboBox1.currentText()
+        objectType = self.objectTypeComboBox.currentText()
+
+        return {"name" : name, "objectType": objectType}
+
+    def getNewLog(self, newName, parameters={}):
+
         # returns new log that is created by applying given operator with selected parameters + name
         # this is used for the "add to logs" and "export" button in the main window
         
-        name = self.logSelectcomboBox1.currentText()
-        objectType = self.objectTypeComboBox.currentText()
+        if len(parameters) == 0:
+            parameters = self.getParameters()
+        
+        name = parameters["name"]
+        objectType = parameters["objectType"]
 
         return self.ocel_model.flatten(name, objectType, newName=newName)
 

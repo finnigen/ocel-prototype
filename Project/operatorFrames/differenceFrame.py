@@ -22,14 +22,25 @@ class DifferenceFrame(OperatorFrame):
         self.refresh()
  
 
-    def getNewLog(self, newName):
-        # returns new log that is created by applying given operator with selected parameters + name
-        # this is used for the "add to logs" and "export" button in the main window
-        
+    def getParameters(self):
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
 
+        return {"name1" : name1, "name2" : name2}
+
+
+    def getNewLog(self, newName, parameters={}):
+        # returns new log that is created by applying given operator with selected parameters + name
+        # this is used for the "add to logs" and "export" button in the main window
+        
+        if len(parameters) == 0:
+            parameters = self.getParameters()
+        
+        name1 = parameters["name1"]
+        name2 = parameters["name2"]
+
         return self.ocel_model.difference(name1, name2, newName=newName)
+        
 
     def refresh(self):
         # used to refresh comboboxes for selection of operator parameters
