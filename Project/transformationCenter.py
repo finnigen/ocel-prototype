@@ -214,6 +214,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarDeleteButtons = {}
         self.ocelSideBarViewButtons = {}
         self.ocelSideBarCancelButtons = {}
+        self.ocelSideBarCancelLabels = {}
 
 
         ocel_names = list(self.ocel_model.getOcelNames())
@@ -269,12 +270,16 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarViewButtons[newName].hide()
         
         # add cancel button so we can stop long running operations
+        cancelLabel = QtWidgets.QLabel(self.ocelSideBarFrames[newName])
+        cancelLabel.setText("Generating Log...")
+        cancelLabel.setAlignment(QtCore.Qt.AlignCenter)
         cancelButton = QtWidgets.QPushButton(self.ocelSideBarFrames[newName])
         cancelButton.setText("Cancel Operation")
         cancelButton.clicked.connect(lambda checked, x=newName: self.cancelOperator(x))
+        self.ocelSideBarFrames[newName].layout().addWidget(cancelLabel)
         self.ocelSideBarFrames[newName].layout().addWidget(cancelButton)
         self.ocelSideBarCancelButtons[newName] = cancelButton
-    
+        self.ocelSideBarCancelLabels[newName] = cancelLabel
 
 
     def cancelOperator(self, name):
@@ -305,6 +310,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarDeleteButtons[name].show()
         self.ocelSideBarViewButtons[name].show()
         self.ocelSideBarCancelButtons[name].setParent(None)
+        self.ocelSideBarCancelLabels[name].setParent(None)
 
 
     def removeFromLogs(self, name):

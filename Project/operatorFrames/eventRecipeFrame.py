@@ -193,7 +193,7 @@ class EventRecipeFrame(OperatorFrame):
             for j in range(len(activities)):
                 leftActivityComboBox.addItem("")
                 leftActivityComboBox.setItemText(j, activities[j])
-            leftActivityComboBox.setCurrentIndex(i)
+            leftActivityComboBox.setCurrentIndex(i % len(activities))
 
             objectBoxes = []
             for j in range(len(objectTypes)):

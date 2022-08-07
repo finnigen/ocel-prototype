@@ -107,12 +107,12 @@ class ManualMinerFrame(OperatorFrame):
             for i in range(len(activities1)):
                 tup[0].addItem("")
                 tup[0].setItemText(i, activities1[i])
-            tup[0].setCurrentIndex(num)
+            tup[0].setCurrentIndex(num % len(activities1))
 
             for i in range(len(activities2)):
                 tup[1].addItem("")
                 tup[1].setItemText(i, activities2[i])
-            tup[1].setCurrentIndex(num)
+            tup[1].setCurrentIndex(num % len(activities2))
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
