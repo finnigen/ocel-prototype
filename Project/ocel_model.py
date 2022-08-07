@@ -105,6 +105,12 @@ class OCEL_Model:
         return self.objRelationDict
 
     def addEventObjectDf(self, name, eventsDf, objectsDf):
+
+        # make sure events and objects dataframes are aligned (no conflicts in which objects mentioned where...)
+        self.alignEventsObjectsBeforeAdding(name, eventsDf, objectsDf)
+        if len(eventsDf) == 0:
+            raise EmptyLogException('Event log empty')
+
         newPath = os.path.join(self.folder, name)
         
         # remove if exists already
@@ -121,6 +127,8 @@ class OCEL_Model:
         eventsDf.to_pickle(os.path.join(newPath, "eventsDf.pkl"))
         objectsDf.to_pickle(os.path.join(newPath, "objectsDf.pkl"))            
         self.ocels.add(name)
+
+        return True
 
     def setEventsDf(self, name, eventsDf):
         newPath = os.path.join(self.folder, name)
@@ -173,45 +181,8 @@ class OCEL_Model:
             mentionedObjects = mentionedObjects.union(obj)
         toRemovedObjects = objects.difference(mentionedObjects)
         objectsDf.drop(index=toRemovedObjects, inplace=True)
-
-        if len(eventsDf) == 0:
-            raise EmptyLogException('Event log empty')
         
-        self.addEventObjectDf(name, eventsDf, objectsDf)
-        return True
-        
-
-    def alignEventsObjects(self, name):
-        # remove objects that aren't mentioned in any events
-        # remove objects from events that aren't mentioned in objectsDf
-        eventsDf = self.getEventsDf(name)
-        objectsDf = self.getObjectsDf(name)
-        objectsDf = objectsDf[~objectsDf.index.duplicated(keep='first')]
-        objects = set(objectsDf.index)
-        
-        # remove objects from events (and delete events without objects)
-        toBeRemoved = []
-        for index, row in eventsDf.iterrows():
-            relatedObjects = objects.intersection(row["ocel:omap"]["ocel:omap"])
-            if len(relatedObjects) == 0:
-                toBeRemoved.append(index)
-            else:
-                eventsDf.at[index, ("ocel:omap", "ocel:omap")] = list(relatedObjects)
-        
-        # drop rows
-        eventsDf.drop(toBeRemoved, inplace=True)
-        # reset index of events dataframe
-        eventsDf.reset_index(inplace=True, drop=True)
-        
-        # remove objects not mentioned in any events
-        mentionedObjects = set()
-        for obj in eventsDf["ocel:omap"]["ocel:omap"]:
-            mentionedObjects = mentionedObjects.union(obj)
-        toRemovedObjects = objects.difference(mentionedObjects)
-        objectsDf.drop(index=toRemovedObjects, inplace=True)
-        
-        self.setEventsDf(name, eventsDf)
-        self.setObjectsDf(name, objectsDf)
+        return (eventsDf, objectsDf)
         
         
     def removeOCEL(self, name):
@@ -424,7 +395,7 @@ class OCEL_Model:
         if newName == "":
             newName = "MATCH_MINER(" + name1 + "," + name2 + ")"
 
-        return self.alignEventsObjectsBeforeAdding(newName, newEventsDf, newObjectsDf)
+        return self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
 
 
 
@@ -490,7 +461,7 @@ class OCEL_Model:
         if newName == "":
             newName = "MANUAL_MINER(" + name1 + "," + name2 + ")"
 
-        return self.alignEventsObjectsBeforeAdding(newName, newEventsDf, newObjectsDf)
+        return self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
 
 
     
@@ -618,7 +589,7 @@ class OCEL_Model:
         if newName == "":
             newName = "UNION(" + name1 + "," + name2 + ")"
 
-        return self.alignEventsObjectsBeforeAdding(newName, newEventsDf, pd.concat([objectsDf1, objectsDf2]))
+        return self.addEventObjectDf(newName, newEventsDf, pd.concat([objectsDf1, objectsDf2]))
 
 
 
@@ -647,7 +618,7 @@ class OCEL_Model:
         if newName == "":
             newName = "DIFFERENCE(" + name1 + "," + name2 + ")"
 
-        return self.alignEventsObjectsBeforeAdding(newName, newEventsDf, newObjectsDf)
+        return self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
 
 
 
@@ -676,7 +647,7 @@ class OCEL_Model:
         if newName == "":
             newName = "INTERSECTION(" + name1 + "," + name2 + ")"
 
-        return self.alignEventsObjectsBeforeAdding(newName, newEventsDf, newObjectsDf)
+        return self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
 
         
 
@@ -764,7 +735,7 @@ class OCEL_Model:
         # reset index of events dataframe
         eventsDf.reset_index(inplace=True, drop=True)
 
-        return self.alignEventsObjectsBeforeAdding(newName, newEventsDf, objectsDf)
+        return self.addEventObjectDf(newName, newEventsDf, objectsDf)
 
 
 
@@ -793,7 +764,7 @@ class OCEL_Model:
         # reset index of events dataframe
         eventsDf.reset_index(inplace=True, drop=True)
 
-        return self.alignEventsObjectsBeforeAdding(newName, eventsDf, newObjectsDf)
+        return self.addEventObjectDf(newName, eventsDf, newObjectsDf)
 
 
 
@@ -869,7 +840,7 @@ class OCEL_Model:
             if newName == "":
                 newName = "FILTER(" + name + ")"
 
-            return self.alignEventsObjectsBeforeAdding(newName, newEventsDf, objectsDf)
+            return self.addEventObjectDf(newName, newEventsDf, objectsDf)
 
     
 
@@ -942,7 +913,7 @@ class OCEL_Model:
         if newName == "":
             newName = "INTERLEAVED_MINER(" + name1 + "," + name2 + ")"
 
-        return self.alignEventsObjectsBeforeAdding(newName, newEventsDf, newObjectsDf)
+        return self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
 
     
     
@@ -1016,7 +987,7 @@ class OCEL_Model:
         if newName == "":
             newName = "NONINTERLEAVED_MINER(" + name1 + "," + name2 + ")"
 
-        return self.alignEventsObjectsBeforeAdding(newName, newEventsDf, newObjectsDf)
+        return self.addEventObjectDf(newName, newEventsDf, newObjectsDf)
 
 
 
@@ -1316,4 +1287,4 @@ class OCEL_Model:
         if newName == "":
             newName = "EVENT_RECIPE(" + name + ")"
 
-        return self.alignEventsObjectsBeforeAdding(newName, eventsDf, objectsDf)
+        return self.addEventObjectDf(newName, eventsDf, objectsDf)
