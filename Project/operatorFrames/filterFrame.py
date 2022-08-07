@@ -185,11 +185,20 @@ class FilterFrame(OperatorFrame):
 
 
     def initTimestamps(self):
+        # get min and max date from events
+        logName = self.logSelectcomboBox1.currentText()
+        timestamps = self.ocel_model.getEventsDf(logName)[("ocel:timestamp", "ocel:timestamp")]
+        mini = min(timestamps)
+        maxi = max(timestamps)
+        print(mini)
+
         self.startDate = QtWidgets.QDateTimeEdit(self.scrollAreaWidgetContents)
         self.endDate = QtWidgets.QDateTimeEdit(self.scrollAreaWidgetContents)
-        defaultDate = QtCore.QDateTime(2020, 1, 1, 12, 30)
-        self.startDate.setDateTime(defaultDate)
-        self.endDate.setDateTime(defaultDate)
+        mini = QtCore.QDateTime.fromString(str(mini), 'yyyy-MM-dd hh:mm:ss')
+        maxi = QtCore.QDateTime.fromString(str(maxi), 'yyyy-MM-dd hh:mm:ss')
+
+        self.startDate.setDateTime(mini)
+        self.endDate.setDateTime(maxi)
         self.scrollGridLayout.addWidget(self.startDate, 6, 0)
         self.scrollGridLayout.addWidget(self.endDate, 6, 1)
 
