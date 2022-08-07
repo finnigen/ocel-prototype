@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from operatorFrames.operatorFrame import OperatorFrame
 import datetime
+from pandas.api.types import is_numeric_dtype
 
 class FilterFrame(OperatorFrame):
  
@@ -43,69 +44,70 @@ class FilterFrame(OperatorFrame):
         self.resetParameters()
 
         mode = self.modeSelectionComboBox.currentText()
-        if mode == "timestamp":
+        if mode == "Timestamps":
             self.initTimestamps()
-        elif mode == "activity":
+        elif mode == "Activities":
             self.initActivities()
-        elif mode == "object":
+        elif mode == "Objects":
             self.initObjects()
-        elif mode == "objectType":
+        elif mode == "Object Types":
             self.initObjectTypes()
-        elif mode == "eventAttribute" or mode == "objectAttribute":
+        elif mode == "Event Attributes" or mode == "Object Attributes":
             self.initAttributes(mode)
 
+
+    # we only consider attributes with numeric values
     def initAttributes(self, mode):
         logName = self.logSelectcomboBox1.currentText()
 
-        if mode == "eventAttribute":
-            if "ocel:vmap" in self.ocel_model.getEventsDf(logName).columns:
-                attributesDf = self.ocel_model.getEventsDf(logName)["ocel:vmap"]
+        if mode == "Event Attributes":
+            df = self.ocel_model.getEventsDf(logName)
+            if "ocel:vmap" in df.columns:
+                attributesDf = df["ocel:vmap"]
             else:
                 return
         else:
-            if "ocel:ovmap" in self.ocel_model.getObjectsDf(logName).columns:
-                attributesDf = self.ocel_model.getObjectsDf(logName)["ocel:ovmap"]
+            df = self.ocel_model.getObjectsDf(logName)
+            if "ocel:ovmap" in df.columns:
+                attributesDf = df["ocel:ovmap"]
             else:
                 return
 
+        # filter out non numeric attributes
         attributes = list(attributesDf.columns)
-        attributes.sort()
+        numericAttributes = []
+        for attr in attributes:
+            if is_numeric_dtype(attributesDf[attr]):
+                numericAttributes.append(attr)
+                
+        numericAttributes.sort()
 
         self.boxes = []
-        for i in range(len(attributes)):
+        for i in range(len(numericAttributes)):
             label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-            label.setText(attributes[i])
+            label.setText(numericAttributes[i])
             checkbox = QtWidgets.QCheckBox(self.scrollAreaWidgetContents)
             checkbox.setChecked(True)
-            text = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-            
-            typ = attributesDf[attributes[i]].dtype
-            if typ == "int64" or typ == "float64" or typ == "datetime64[ns]":
-                mini = min(attributesDf[attributes[i]])
-                maxi = max(attributesDf[attributes[i]])
-                attributeValueStr = str(mini) + ";" + str(maxi)
-            else:
-                # get all attribute values and save them in input box comma separated
-                allAttributeValues = set(attributesDf[attributes[i]].dropna())
+            textLeft = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
+            textRight = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
 
-                attributeValueStr = ""
-                for value in allAttributeValues:
-                    attributeValueStr += str(value) + ";"
-                if attributeValueStr != "" and attributeValueStr[-1] == ";":
-                    attributeValueStr = attributeValueStr[:-1]
+            mini = min(attributesDf[numericAttributes[i]])
+            maxi = max(attributesDf[numericAttributes[i]])
 
-            text.setText(attributeValueStr)
+            textLeft.setText(str(mini))
+            textRight.setText(str(maxi))
 
             label2 = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-            label2.setText("Allowed values separated by ; (no space)")
+            label2.setText("Enter min and max values")
 
             self.scrollGridLayout.addWidget(label, i+6, 0, QtCore.Qt.AlignCenter)
             self.scrollGridLayout.addWidget(checkbox, i+6, 1, QtCore.Qt.AlignCenter)
-            self.scrollGridLayout.addWidget(text, i+6, 2, QtCore.Qt.AlignCenter)
-            self.scrollGridLayout.addWidget(label2, i+6, 3, QtCore.Qt.AlignCenter)
+            self.scrollGridLayout.addWidget(textLeft, i+6, 3, QtCore.Qt.AlignCenter)
+            self.scrollGridLayout.addWidget(textRight, i+6, 4, QtCore.Qt.AlignCenter)
+            self.scrollGridLayout.addWidget(label2, i+6, 2, QtCore.Qt.AlignCenter)
 
             # save activity and checkbox so we can check state later
-            self.boxes.append((label, checkbox, text))
+            self.boxes.append((label, checkbox, textLeft, textRight))
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
@@ -204,18 +206,17 @@ class FilterFrame(OperatorFrame):
         mode = self.modeSelectionComboBox.currentText()
 
         filterParameters = ""
-        if mode == "activity" or mode == "object" or mode == "objectType":
+        if mode == "Activities" or mode == "Objects" or mode == "Object Types":
             filterParameters = set()
             for label, checkbox in self.boxes:
                 if checkbox.isChecked():
                     filterParameters.add(label.text())
-        elif mode == "eventAttribute" or "objectAttribute":
+        elif mode == "Event Attributes" or mode == "Object Attributes":
             filterParameters = {}
-            for attribute, checkbox, text in self.boxes:
-                if checkbox.isChecked() and len(text.text()) != 0:
-                    values = text.text().split(";")
-                    filterParameters[attribute.text()] = values
-        elif mode == "timestamp":
+            for attribute, checkbox, textLeft, textRight in self.boxes:
+                if checkbox.isChecked() and len(textLeft.text()) != 0 and len(textRight.text()) != 0:
+                    filterParameters[attribute.text()] = (textLeft.text(), textRight.text())
+        elif mode == "Timestamps":
             start = datetime.datetime.strptime(self.startDate.text(), '%m/%d/%y %H:%M %p')
             end = datetime.datetime.strptime(self.endDate.text(), '%m/%d/%y %H:%M %p')
             filterParameters = (start, end)
@@ -251,7 +252,7 @@ class FilterFrame(OperatorFrame):
             self.logSelectcomboBox1.addItem("")
             self.logSelectcomboBox1.setItemText(i, names[i])
 
-        modes = ["activity", "eventAttribute", "objectAttribute", "object", "objectType", "timestamp"]
+        modes = ["Activities", "Event Attributes", "Object Attributes", "Objects", "Object Types", "Timestamps"]
         for i in range(len(modes)):
             self.modeSelectionComboBox.addItem("")
             self.modeSelectionComboBox.setItemText(i, modes[i])

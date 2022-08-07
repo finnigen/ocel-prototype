@@ -252,12 +252,11 @@ class TransformationCenter(QtWidgets.QWidget):
 #            return
 
 
-
         currentFrame = self.operatorFrames[pageNum]
         parameters = currentFrame.getParameters()
         # create thread so that GUI stays responsive while exporting
         self.operatorWorkers[newName] = OperatorWorkerThread(currentFrame, parameters, newName)
-        self.operatorWorkers[newName].operatorDone.connect(self.operatortDone)
+        self.operatorWorkers[newName].operatorDone.connect(self.operatorDone)
         self.operatorWorkers[newName].finished.connect(self.operatorWorkers[newName].quit)
         self.operatorWorkers[newName].finished.connect(self.operatorWorkers[newName].deleteLater)
         self.operatorWorkers[newName].start()
@@ -285,24 +284,23 @@ class TransformationCenter(QtWidgets.QWidget):
 #        self.ocelSideBarFrames[newName].layout().addWidget(cancelButton)
 
 
+#    def cancelOperator(self, name):
+#        # cancelling Operator mid-way does not work...
+#        self.operatorWorkers[name].exit()
+#        self.removeFromLogs(name)
 
-    def cancelOperator(self, name):
-        # cancelling Operator mid-way does not work...
-        self.operatorWorkers[name].exit()
-        self.removeFromLogs(name)
 
-
-    def operatortDone(self, name, success):
+    def operatorDone(self, name, outcome):
         # in case operator failed, remove associated OCEL frame from sidebar
-        if not success:
+        if outcome == "error":
             QtWidgets.QMessageBox.question(self, 'Operator Failed', 'Creation of ' + name + ' log failed', QtWidgets.QMessageBox.Ok)
             self.ocelSideBarFrames[name].setParent(None)
             return
 
         # if newly created OCEL is empty, don't add
-        elif len(self.ocel_model.getEventsDf(name)) == 0:
-            QtWidgets.QMessageBox.question(self, 'Operator Complete', name + ' log is empty and will not be added', QtWidgets.QMessageBox.Ok)
+        elif outcome == "empty":
             self.removeFromLogs(name)
+            QtWidgets.QMessageBox.question(self, 'Operator Complete', name + ' log is empty and will not be added', QtWidgets.QMessageBox.Ok)
             return
 
 
@@ -567,7 +565,7 @@ class ExportWorkerThread(QThread):
 
 
 class OperatorWorkerThread(QThread):
-    operatorDone = pyqtSignal(str, bool)
+    operatorDone = pyqtSignal(str, str)
     def __init__(self, operatorFrame, parameters, newName):
         super().__init__()
         self.operatorFrame = operatorFrame
@@ -575,14 +573,17 @@ class OperatorWorkerThread(QThread):
         self.newName = newName
 
     def run(self):
-        result = self.operatorFrame.getNewLog(self.newName, self.parameters)
-        self.operatorDone.emit(self.newName, result)
-
-#        try:
-#            result = self.operatorFrame.getNewLog(self.newName)
-#            self.operatorDone.emit(self.newName, result)
-#        except:
-#            self.operatorDone.emit(self.newName, False)
+        try:
+            result = self.operatorFrame.getNewLog(self.newName, self.parameters)
+            if result:
+                outcome = "success"
+            else:
+                outcome = "error"
+            self.operatorDone.emit(self.newName, outcome)
+        except EmptyLogException as el:
+            self.operatorDone.emit(self.newName, "empty")
+        except:
+            self.operatorDone.emit(self.newName, "error")
 
 
 
