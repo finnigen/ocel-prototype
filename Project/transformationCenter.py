@@ -586,36 +586,6 @@ class OperatorWorkerThread(QThread):
 
 
 
-class WorkerSignals(QObject):
-    finished = pyqtSignal()
-    error = pyqtSignal(tuple)
-    result = pyqtSignal(object)
-    progress = pyqtSignal(int)
-    operatorDone = pyqtSignal(str, bool)
-
-class Worker(QtCore.QRunnable):
-
-    def __init__(self, fn, *args, **kwargs):
-        super(Worker, self).__init__()
-
-        # Store constructor arguments (re-used for processing)
-        self.fn = fn
-        self.args = args
-        self.kwargs = kwargs
-        self.signals = WorkerSignals()
-
-
-    @QtCore.pyqtSlot()
-    def run(self):
-
-        result = self.fn(*self.args, **self.kwargs)
-        self.signals.operatorDone.emit(self.kwargs["newName"], result) 
-
-
-
-
-
-
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
