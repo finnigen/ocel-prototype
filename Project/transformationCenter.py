@@ -1,4 +1,6 @@
 
+import traceback, sys
+
 import pickle
 from tableWindow import TableWindow
 from helpWindow import HelpWindow
@@ -214,7 +216,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarDeleteButtons = {}
         self.ocelSideBarViewButtons = {}
         self.ocelSideBarCancelButtons = {}
-        self.ocelSideBarCancelLabels = {}
+        self.ocelSideBargeneratingLabels = {}
 
 
         ocel_names = list(self.ocel_model.getOcelNames())
@@ -269,20 +271,23 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarDeleteButtons[newName].hide()
         self.ocelSideBarViewButtons[newName].hide()
         
+        generatingLabel = QtWidgets.QLabel(self.ocelSideBarFrames[newName])
+        generatingLabel.setText("Generating Log...")
+        generatingLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ocelSideBarFrames[newName].layout().addWidget(generatingLabel)
+        self.ocelSideBargeneratingLabels[newName] = generatingLabel
+
         # add cancel button so we can stop long running operations
-        cancelLabel = QtWidgets.QLabel(self.ocelSideBarFrames[newName])
-        cancelLabel.setText("Generating Log...")
-        cancelLabel.setAlignment(QtCore.Qt.AlignCenter)
-        cancelButton = QtWidgets.QPushButton(self.ocelSideBarFrames[newName])
-        cancelButton.setText("Cancel Operation")
-        cancelButton.clicked.connect(lambda checked, x=newName: self.cancelOperator(x))
-        self.ocelSideBarFrames[newName].layout().addWidget(cancelLabel)
-        self.ocelSideBarFrames[newName].layout().addWidget(cancelButton)
-        self.ocelSideBarCancelButtons[newName] = cancelButton
-        self.ocelSideBarCancelLabels[newName] = cancelLabel
+#        cancelButton = QtWidgets.QPushButton(self.ocelSideBarFrames[newName])
+#        cancelButton.setText("Cancel Operation")
+#        cancelButton.clicked.connect(lambda checked, x=newName: self.cancelOperator(x))
+#        self.ocelSideBarCancelButtons[newName] = cancelButton
+#        self.ocelSideBarFrames[newName].layout().addWidget(cancelButton)
+
 
 
     def cancelOperator(self, name):
+        # cancelling Operator mid-way does not work...
         self.operatorWorkers[name].exit()
         self.removeFromLogs(name)
 
@@ -309,8 +314,9 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarExportButtons[name].show()
         self.ocelSideBarDeleteButtons[name].show()
         self.ocelSideBarViewButtons[name].show()
-        self.ocelSideBarCancelButtons[name].setParent(None)
-        self.ocelSideBarCancelLabels[name].setParent(None)
+        # remove Generatting... label
+        self.ocelSideBargeneratingLabels[name].setParent(None)
+#        self.ocelSideBarCancelButtons[name].setParent(None)
 
 
     def removeFromLogs(self, name):
@@ -559,6 +565,7 @@ class ExportWorkerThread(QThread):
             self.exportDone.emit(self.name, False)
 
 
+
 class OperatorWorkerThread(QThread):
     operatorDone = pyqtSignal(str, bool)
     def __init__(self, operatorFrame, parameters, newName):
@@ -576,6 +583,37 @@ class OperatorWorkerThread(QThread):
 #            self.operatorDone.emit(self.newName, result)
 #        except:
 #            self.operatorDone.emit(self.newName, False)
+
+
+
+class WorkerSignals(QObject):
+    finished = pyqtSignal()
+    error = pyqtSignal(tuple)
+    result = pyqtSignal(object)
+    progress = pyqtSignal(int)
+    operatorDone = pyqtSignal(str, bool)
+
+class Worker(QtCore.QRunnable):
+
+    def __init__(self, fn, *args, **kwargs):
+        super(Worker, self).__init__()
+
+        # Store constructor arguments (re-used for processing)
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = WorkerSignals()
+
+
+    @QtCore.pyqtSlot()
+    def run(self):
+
+        result = self.fn(*self.args, **self.kwargs)
+        self.signals.operatorDone.emit(self.kwargs["newName"], result) 
+
+
+
+
 
 
 if __name__ == "__main__":
