@@ -573,6 +573,8 @@ class OperatorWorkerThread(QThread):
         self.newName = newName
 
     def run(self):
+        result = self.operatorFrame.getNewLog(self.newName, self.parameters)
+
         try:
             result = self.operatorFrame.getNewLog(self.newName, self.parameters)
             if result:
@@ -582,7 +584,8 @@ class OperatorWorkerThread(QThread):
             self.operatorDone.emit(self.newName, outcome)
         except EmptyLogException as el:
             self.operatorDone.emit(self.newName, "empty")
-        except:
+        except Exception as e:
+            print(e)
             self.operatorDone.emit(self.newName, "error")
 
 

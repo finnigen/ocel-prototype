@@ -107,7 +107,7 @@ class OCEL_Model:
     def addEventObjectDf(self, name, eventsDf, objectsDf):
 
         # make sure events and objects dataframes are aligned (no conflicts in which objects mentioned where...)
-        self.alignEventsObjectsBeforeAdding(name, eventsDf, objectsDf)
+        eventsDf, objectsDf = self.alignEventsObjectsBeforeAdding(eventsDf, objectsDf)
         if len(eventsDf) == 0:
             raise EmptyLogException('Event log empty')
 
@@ -154,15 +154,18 @@ class OCEL_Model:
 
         self.ocels.add(name)
         
-    def alignEventsObjectsBeforeAdding(self, name, eventsDf, objectsDf):
+    def alignEventsObjectsBeforeAdding(self, eventsDf, objectsDf):
         # remove objects that aren't mentioned in any events
         # remove objects from events that aren't mentioned in objectsDf
+
+        eventsDf.reset_index(inplace=True, drop=True)
 
         objectsDf = objectsDf[~objectsDf.index.duplicated(keep='first')]
         objects = set(objectsDf.index)
         
         # remove objects from events (and delete events without objects)
         toBeRemoved = []
+        
         for index, row in eventsDf.iterrows():
             relatedObjects = objects.intersection(row["ocel:omap"]["ocel:omap"])
             if len(relatedObjects) == 0:
@@ -373,7 +376,8 @@ class OCEL_Model:
                     relatedObjects = relatedObjects.union(set(objects2).intersection(object_relation[obj1]))
                 
                 # remove merged objects from event in log2
-                missingEventsDf.at[ev_id2, ("ocel:omap", "ocel:omap")] = set(objects2).difference(relatedObjects)
+                if mergeEvents:
+                    missingEventsDf.at[ev_id2, ("ocel:omap", "ocel:omap")] = set(objects2).difference(relatedObjects)
                     
                 newObjects = newObjects.union(relatedObjects)
 

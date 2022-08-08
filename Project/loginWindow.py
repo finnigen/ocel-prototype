@@ -131,7 +131,7 @@ class Ui_LoginWindow(object):
         self.dataPoolLabel.setText("Select a data pool:")
         self.dataModelLabel.setText("Select a data model:")
         self.conversionButton.setText("Start Conversion")
-        self.waitLabel.setText("Pease be patient. This can take up to a few minutes...")
+        self.waitLabel.setText("Pease be patient. This can take a few minutes...")
         self.waitLabel.hide()
 
     def login(self):

@@ -94,10 +94,10 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         eventsDf[("ocel:omap", "ocel:omap")] = eventsDf[("ocel:omap", "ocel:omap")].apply(lambda x : [objType + ":" + str(x[0])])
         
         # add OCEL-based events and object dataframes to ocel_model
-        ocel_model.addEventObjectDf(table_name, eventsDf, objectsDf)
-        # align objects and events dataframe so that there aren't objects in objectsDf not mentioned in any events and no objects in eventsDf not mentioned in objectsDf (conflicts are being handles by removing events/objects)
-        ocel_model.alignEventsObjects(table_name)
-        
+        try:
+            ocel_model.addEventObjectDf(table_name, eventsDf, objectsDf)
+        except EmptyLogException:
+            print(table_name + " not added since it is empty")      
 
     print("Generating object relationships...")
         
