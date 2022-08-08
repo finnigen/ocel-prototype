@@ -24,7 +24,7 @@ class ConcatFrame(OperatorFrame):
 
     def getParameters(self):
         name1 = self.logSelectcomboBox1.currentText()
-        name2 = self.logSelectcomboBox1.currentText()
+        name2 = self.logSelectcomboBox2.currentText()
 
         return {"name1" : name1, "name2" : name2}
 

@@ -489,9 +489,7 @@ class OCEL_Model:
         if newName == "":
             newName = "CONCAT(" + name1 + "," + name2 + ")"
 
-        self.addEventObjectDf(newName, newEventsDf, newObjectsDf)    
-
-        return True
+        return self.addEventObjectDf(newName, newEventsDf, newObjectsDf)    
 
     
     # aggregate operator (merge objects of events with same activty / timestamp into first occurence)
@@ -535,10 +533,8 @@ class OCEL_Model:
         if newName == "":
             newName = "AGGREGATE(" + name + ")"
 
-        self.addEventObjectDf(newName, newEventsDf, objectsDf)   
-        
-        return True
-    
+        return self.addEventObjectDf(newName, newEventsDf, objectsDf)   
+
     
     # union operator (merge objects of events with same activty / timestamp)
     def union(self, name1, name2, respectObjRelations=True, mergeEvents=False, newName=""):
@@ -698,9 +694,7 @@ class OCEL_Model:
         if newName == "":
             newName = "FLATTEN(" + name + ")"
 
-        self.addEventObjectDf(newName, newEventsDf, newObjectsDf)    
-
-        return True    
+        return self.addEventObjectDf(newName, newEventsDf, newObjectsDf)    
     
 
 

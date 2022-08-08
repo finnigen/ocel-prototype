@@ -1,5 +1,4 @@
 
-import traceback, sys
 
 import pickle
 from tableWindow import TableWindow
@@ -573,8 +572,6 @@ class OperatorWorkerThread(QThread):
         self.newName = newName
 
     def run(self):
-        result = self.operatorFrame.getNewLog(self.newName, self.parameters)
-
         try:
             result = self.operatorFrame.getNewLog(self.newName, self.parameters)
             if result:
