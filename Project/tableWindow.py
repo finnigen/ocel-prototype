@@ -13,6 +13,8 @@ class TableWindow(QtWidgets.QMainWindow):
         self.name = name
         self.eventsDf = ocel_model.getEventsDf(name)
         self.objectsDf = ocel_model.getObjectsDf(name)
+        self.eventsDf.fillna('-', inplace=True)
+        self.objectsDf.fillna('-', inplace=True)
 
         # reset index, add name for index, and flatten column from multicolumns 
         self.eventsDf.reset_index(inplace=True)
