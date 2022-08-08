@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from operatorFrames.operatorFrame import OperatorFrame
 import datetime
 from pandas.api.types import is_numeric_dtype
+import math
 
 class FilterFrame(OperatorFrame):
  
@@ -91,8 +92,16 @@ class FilterFrame(OperatorFrame):
             textLeft = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
             textRight = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
 
+            # only accept doubles
+            textLeft.setValidator(QtGui.QDoubleValidator(0.99,99.99,2))
+            textRight.setValidator(QtGui.QDoubleValidator(0.99,99.99,2))
+
             mini = min(attributesDf[numericAttributes[i]])
             maxi = max(attributesDf[numericAttributes[i]])
+
+            # round to fit double format
+            mini = math.floor(mini * 100)/100.0
+            maxi = math.ceil(maxi * 100)/100.0
 
             textLeft.setText(str(mini))
             textRight.setText(str(maxi))
@@ -190,7 +199,6 @@ class FilterFrame(OperatorFrame):
         timestamps = self.ocel_model.getEventsDf(logName)[("ocel:timestamp", "ocel:timestamp")]
         mini = min(timestamps)
         maxi = max(timestamps)
-        print(mini)
 
         self.startDate = QtWidgets.QDateTimeEdit(self.scrollAreaWidgetContents)
         self.endDate = QtWidgets.QDateTimeEdit(self.scrollAreaWidgetContents)
@@ -199,6 +207,8 @@ class FilterFrame(OperatorFrame):
 
         self.startDate.setDateTime(mini)
         self.endDate.setDateTime(maxi)
+        self.startDate.setDisplayFormat("yyyy-MM-dd hh:mm:ss")
+        self.endDate.setDisplayFormat("yyyy-MM-dd hh:mm:ss")
         self.scrollGridLayout.addWidget(self.startDate, 6, 0)
         self.scrollGridLayout.addWidget(self.endDate, 6, 1)
 
@@ -226,8 +236,8 @@ class FilterFrame(OperatorFrame):
                 if checkbox.isChecked() and len(textLeft.text()) != 0 and len(textRight.text()) != 0:
                     filterParameters[attribute.text()] = (textLeft.text(), textRight.text())
         elif mode == "Timestamps":
-            start = datetime.datetime.strptime(self.startDate.text(), '%m/%d/%y %H:%M %p')
-            end = datetime.datetime.strptime(self.endDate.text(), '%m/%d/%y %H:%M %p')
+            start = datetime.datetime.strptime(self.startDate.text(), '%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(self.endDate.text(), '%Y-%m-%d %H:%M:%S')
             filterParameters = (start, end)
         
         return {"name" : name, "mode" : mode, "filterParameters" : filterParameters, }

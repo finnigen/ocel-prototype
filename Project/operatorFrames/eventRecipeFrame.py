@@ -47,6 +47,8 @@ class EventRecipeFrame(OperatorFrame):
         self.timedeltaCheckLabel.setText("Max time between 1st and last event (in hours)")
         self.timedeltaCheckText = QtWidgets.QLineEdit(self.outerScrollAreaWidgetContents)
 
+        self.timedeltaCheckText.setValidator(QtGui.QDoubleValidator(0.99,99.99,2))
+
         self.matchObjectTypesCheckbox = QtWidgets.QCheckBox(self.outerScrollAreaWidgetContents)
         self.matchObjectTypesCheckbox.setChecked(False)
         self.matchObjectTypesCheckbox.stateChanged.connect(self.initObjectTypeSelection)
@@ -186,10 +188,10 @@ class EventRecipeFrame(OperatorFrame):
 
             label = QtWidgets.QLabel(seqFrame)
             label.setText(str(i+1))
-            seqFrameLayout.addWidget(label, 0, 0)
+            seqFrameLayout.addWidget(label, 0, 0, 1, 1)
             
             leftActivityComboBox = QtWidgets.QComboBox(seqFrame)
-            seqFrameLayout.addWidget(leftActivityComboBox, 0, 1)
+            seqFrameLayout.addWidget(leftActivityComboBox, 0, 1, 1, 3)
             for j in range(len(activities)):
                 leftActivityComboBox.addItem("")
                 leftActivityComboBox.setItemText(j, activities[j])
@@ -202,8 +204,8 @@ class EventRecipeFrame(OperatorFrame):
                 label.setText(objectTypes[j])
                 checkbox = QtWidgets.QCheckBox(seqFrame)
                 checkbox.setChecked(False)
-                seqFrameLayout.addWidget(label, j, 2, QtCore.Qt.AlignCenter)
-                seqFrameLayout.addWidget(checkbox, j, 3, QtCore.Qt.AlignCenter)
+                seqFrameLayout.addWidget(label, j, 4, QtCore.Qt.AlignCenter)
+                seqFrameLayout.addWidget(checkbox, j, 5, QtCore.Qt.AlignCenter)
                 # save activity and checkbox so we can check state later
                 objectBoxes.append((label, checkbox))
 

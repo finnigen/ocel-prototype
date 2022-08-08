@@ -87,10 +87,13 @@ class ManualMinerFrame(OperatorFrame):
         self.activityComboBoxes = []
         if self.numOfActComboBox.currentText():
             for i in range(int(self.numOfActComboBox.currentText())):
+                label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+                label.setText(str(i+1))
+                self.scrollGridLayout.addWidget(label, i+6, 0, 1, 1)
                 leftActivityComboBox = QtWidgets.QComboBox(self.scrollAreaWidgetContents)
-                self.scrollGridLayout.addWidget(leftActivityComboBox, i+6, 0)
+                self.scrollGridLayout.addWidget(leftActivityComboBox, i+6, 1, 1, 4)
                 rightActivityComboBox = QtWidgets.QComboBox(self.scrollAreaWidgetContents)
-                self.scrollGridLayout.addWidget(rightActivityComboBox, i+6, 1)
+                self.scrollGridLayout.addWidget(rightActivityComboBox, i+6, 5, 1, 4)
                 self.activityComboBoxes.append((leftActivityComboBox, rightActivityComboBox))
         
         # get set of all activities in both logs

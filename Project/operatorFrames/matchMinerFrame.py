@@ -16,8 +16,12 @@ class MatchMinerFrame(OperatorFrame):
         self.logSelectcomboBox1.activated.connect(self.initAttributes1)
         self.logSelectcomboBox2.activated.connect(self.initAttributes2)
 
-        self.attrSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
+        self.attrSelectLabel1 = QtWidgets.QLabel(self.operatorFrame)
+        self.attrSelectLabel1.setFont(self.normalFont)
+        self.attrSelectLabel2 = QtWidgets.QLabel(self.operatorFrame)
+        self.attrSelectLabel2.setFont(self.normalFont)
 
+        self.attrSelectcomboBox1 = QtWidgets.QComboBox(self.operatorFrame)
         self.attrSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
         
         self.logSelectionLabel2 = QtWidgets.QLabel(self.operatorFrame)
@@ -32,14 +36,18 @@ class MatchMinerFrame(OperatorFrame):
         self.innerRightLayout.addWidget(self.logSelectionLabel2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
         self.innerRightLayout.addWidget(self.attrSelectLabel, 4, 0)
-        self.innerRightLayout.addWidget(self.attrSelectcomboBox1, 4, 1)
-        self.innerRightLayout.addWidget(self.attrSelectcomboBox2, 5, 1)
-        self.innerRightLayout.addWidget(self.mergeEventsLabel, 6, 0)
-        self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 6, 1)
+        self.innerRightLayout.addWidget(self.attrSelectLabel1, 5, 0)
+        self.innerRightLayout.addWidget(self.attrSelectcomboBox1, 5, 1)
+        self.innerRightLayout.addWidget(self.attrSelectLabel2, 6, 0)
+        self.innerRightLayout.addWidget(self.attrSelectcomboBox2, 6, 1)
+        self.innerRightLayout.addWidget(self.mergeEventsLabel, 7, 0)
+        self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 7, 1)
 
         self.logSelectionLabel1.setText("Select first event log:")
         self.logSelectionLabel2.setText("Select second event log:")
         self.attrSelectLabel.setText("Select attribute(s) to match on:")
+        self.attrSelectLabel1.setText("Attribute of first log:")
+        self.attrSelectLabel2.setText("Attribute of first log:")
         self.mergeEventsLabel.setText("Merge all events from 2nd log:")
 
         self.refresh()
