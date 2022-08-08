@@ -162,30 +162,30 @@ class TransformationCenter(QtWidgets.QWidget):
         operatorSelectionScrollArea.setWidget(self.operatorSelectorScrollAreaWidgetContents)
 
         # we need to initialize a page for every supported operator
-        description = "Merge objects across logs based on matching attribute values and object relationships."
-        self.initOperatorPage("Match Miner", description, MatchMinerFrame)
-        description = "Merge objects across logs based on manual matchings of activities and object relationships of the logs."
-        self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
+        description = "Merge all events of two logs into one without merging any objects or events."
+        self.initOperatorPage("Concatenate Event Log", description, ConcatFrame)
+        description = "Aggregate events with matching activity names and timestamps. Objects of the matching events are merged into first occurence."
+        self.initOperatorPage("Aggregate Event Log", description, AggregateFrame)
         description = "Merge objects across logs based on matching activity names, timestamps, and object relationships."
         self.initOperatorPage("Union", description, UnionFrame)
         description = "Intersect set of objects for events with matching activity names and timestamps."
         self.initOperatorPage("Intersection", description, IntersectionFrame)
         description = "Remove objects from events with matching activity names and timestamps."
         self.initOperatorPage("Difference", description, DifferenceFrame)
+        description = "Merge objects across logs based on matching attribute values and object relationships."
+        self.initOperatorPage("Match Miner", description, MatchMinerFrame)
+        description = "Merge objects across logs based on manual matchings of activities and object relationships of the logs."
+        self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs as well as object relationships."
         self.initOperatorPage("Interleaved Miner", description, InterleavedMinerFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs (non-interleaved) as well as object relationships."
         self.initOperatorPage("Non-Interleaved Miner", description, NonInterleavedMinerFrame)
         description = "Filter event log based on activities, attributes, objects, object types, or timestamps."
         self.initOperatorPage("Filter Event Log", description, FilterFrame)
-        description = "Map all events to objects of one object type based on object relationships."
-        self.initOperatorPage("Flatten Event Log", description, FlattenFrame)
-        description = "Merge all events of two logs into one without merging any objects or events."
-        self.initOperatorPage("Concatenate Event Log", description, ConcatFrame)
-        description = "Aggregate events with matching activity names and timestamps. Objects of the matching events are merged into first occurence."
-        self.initOperatorPage("Aggregate Event Log", description, AggregateFrame)
         description = "Specify sequence of low-level events and turn them into one high-level event. Besides sequence of activity, specify sequence based on objects, types, attribute values, object relations, and more"
         self.initOperatorPage("Event Recipe", description, EventRecipeFrame)
+        description = "Map all events to objects of one object type based on object relationships."
+        self.initOperatorPage("Flatten Event Log", description, FlattenFrame)
 
         # set current page for stacked widget in the beginning to the operator selector page
         self.operatorSectionStackedWidget.setCurrentIndex(0)
@@ -572,6 +572,10 @@ class OperatorWorkerThread(QThread):
         self.newName = newName
 
     def run(self):
+        # just for testing/developing purposes...
+        result = self.operatorFrame.getNewLog(self.newName, self.parameters)
+
+
         try:
             result = self.operatorFrame.getNewLog(self.newName, self.parameters)
             if result:
