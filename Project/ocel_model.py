@@ -554,8 +554,8 @@ class OCEL_Model:
         object_relation = self.getObjRelationDict()
 
         # re-fromat dataframes so that we only have important columns and no multi-index columsn
-        eventsDf1 = eventsDf1[[("ocel:omap", "ocel:omap")] + list(matchOn.keys())]
-        eventsDf2 = eventsDf2[[("ocel:omap", "ocel:omap")] + list(matchOn.values())]
+        eventsDf1 = eventsDf1[[("ocel:omap", "ocel:omap")] + list(set(matchOn.keys()))]
+        eventsDf2 = eventsDf2[[("ocel:omap", "ocel:omap")] + list(set(matchOn.values()))]
         eventsDf1.columns = eventsDf1.columns.droplevel(0)
         eventsDf2.columns = eventsDf2.columns.droplevel(0)
         eventsDf1.reset_index(inplace=True)
@@ -600,7 +600,7 @@ class OCEL_Model:
 
 
 
-    def difference(self, name1, name2, newName):
+    def difference(self, name1, name2, matchOn={("ocel:timestamp", "ocel:timestamp"): ("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity"): ("ocel:activity", "ocel:activity")}, newName=""):
 
         # get logs
         eventsDf1 = self.getEventsDf(name1)
@@ -611,10 +611,10 @@ class OCEL_Model:
         newEventsDf = copy.deepcopy(eventsDf1)
 
         # first group by timestamp and activity
-        eventsDf2 = eventsDf2.groupby([("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity")])[[("ocel:omap", "ocel:omap")]].apply(sum)
+        eventsDf2 = eventsDf2.groupby(list(set(matchOn.values())))[[("ocel:omap", "ocel:omap")]].apply(sum)
 
         # join dataframes based on activity and timestamps
-        joined = pd.merge(eventsDf1, eventsDf2, how="left", on=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")])
+        joined = pd.merge(eventsDf1, eventsDf2, how="left", left_on=list(matchOn.keys()), right_on=list(matchOn.values()))
         
         # remove objects from second log from first log
         newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).difference(r[("ocel:omap_y", "ocel:omap_y")])) if not r[[("ocel:omap_x", "ocel:omap_x"), ("ocel:omap_y", "ocel:omap_y")]].isnull().values.any() else r[("ocel:omap_x", "ocel:omap_x")], axis=1)
@@ -629,7 +629,7 @@ class OCEL_Model:
 
 
 
-    def intersection(self, name1, name2, newName):
+    def intersection(self, name1, name2, matchOn={("ocel:timestamp", "ocel:timestamp"): ("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity"): ("ocel:activity", "ocel:activity")}, newName=""):
 
         # get logs
         eventsDf1 = self.getEventsDf(name1)
@@ -640,10 +640,10 @@ class OCEL_Model:
         newEventsDf = copy.deepcopy(eventsDf1)
 
         # first group by timestamp and activity
-        eventsDf2 = eventsDf2.groupby([("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity")])[[("ocel:omap", "ocel:omap")]].apply(sum)
+        eventsDf2 = eventsDf2.groupby(list(set(matchOn.values())))[[("ocel:omap", "ocel:omap")]].apply(sum)
 
         # join dataframes based on activity and timestamps
-        joined = pd.merge(eventsDf1, eventsDf2, how="left", on=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")])
+        joined = pd.merge(eventsDf1, eventsDf2, how="left", left_on=list(matchOn.keys()), right_on=list(matchOn.values()))
         
         # remove objects from second log from first log
         newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).intersection(r[("ocel:omap_y", "ocel:omap_y")])) if not r[[("ocel:omap_x", "ocel:omap_x"), ("ocel:omap_y", "ocel:omap_y")]].isnull().values.any() else r[("ocel:omap_x", "ocel:omap_x")], axis=1)

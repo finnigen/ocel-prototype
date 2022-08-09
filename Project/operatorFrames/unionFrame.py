@@ -45,7 +45,7 @@ class UnionFrame(OperatorFrame):
         self.logSelectionLabel2.setText("Select second event log:")
         self.objRelationsLabel.setText("Consider object relationships when merging:")
         self.mergeEventsLabel.setText("Merge all events from 2nd log:")
-        self.numOfMatchesLabel.setText("Select number of properties to match on:")
+        self.numOfMatchesLabel.setText("Select number of properties to match on: \n (Can only match columns of same type)")
         self.numOfMatchesLabel.setWordWrap(True)
 
         # scroll area for matching columns
