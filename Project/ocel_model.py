@@ -496,47 +496,27 @@ class OCEL_Model:
 
     
     # aggregate operator (merge objects of events with same activty / timestamp into first occurence)
-    def aggregate(self, name, newName=""):
-
+    def aggregate(self, name, aggregateBy=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")], newName=""):
         eventsDf = self.getEventsDf(name)
         objectsDf = self.getObjectsDf(name)
 
-        newEventsDf = copy.deepcopy(eventsDf)
+        aggregateBy = list(set(aggregateBy))
 
-        # find duplicate activity and timestamps
-        duplicateRowsDF = eventsDf[eventsDf.duplicated(subset=[("ocel:activity", "ocel:activity"), ("ocel:timestamp","ocel:timestamp")], keep=False)]
-        activity = ""
-        timestamp = ""
-        objects = {}
-        startIndex = 0
-        for index, row in duplicateRowsDF.iterrows():
-            act = row[("ocel:activity", "ocel:activity")]
-            time = row[("ocel:timestamp", "ocel:timestamp")]
-            obj = row[("ocel:omap", "ocel:omap")]
-            if act == activity and time == timestamp:
-                objects[startIndex] += obj
-            else:
-                startIndex = index
-                activity = act
-                timestamp = time
-                objects[startIndex] = obj
-
-        # aggregate objects of duplicate rows
-        for index, obj in objects.items():
-            newEventsDf.at[index, ("ocel:omap", "ocel:omap")] = list(set(obj))
-
-        # remove duplicate rows
-        toBeRemovedRows = eventsDf[eventsDf.duplicated(subset=[("ocel:activity", "ocel:activity"), ("ocel:timestamp","ocel:timestamp")], keep="first")].index
-        newEventsDf.drop(toBeRemovedRows, inplace=True)
+        omap = eventsDf.groupby(aggregateBy)[[("ocel:omap", "ocel:omap")]].apply(sum).reset_index()
+        newEventsDf = eventsDf.groupby(aggregateBy).first().reset_index()
         
-        # reset index of events dataframe
-        newEventsDf.reset_index(inplace=True, drop=True)
+        newEventsDf[("ocel:omap", "ocel:omap")] = omap[("ocel:omap", "ocel:omap")]
         
+        # reorder columns
+        columns = [("ocel:omap", "ocel:omap"), ("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")]
+        columns = columns + list(set(newEventsDf.columns).difference(columns))
+        newEventsDf = newEventsDf[columns]
+                
         # if no new name given, create own
         if newName == "":
             newName = "AGGREGATE(" + name + ")"
 
-        return self.addEventObjectDf(newName, newEventsDf, objectsDf)   
+        return self.addEventObjectDf(newName, newEventsDf, objectsDf)
 
     
     # union operator (merge objects of events with same activty / timestamp)
@@ -646,7 +626,7 @@ class OCEL_Model:
         joined = pd.merge(eventsDf1, eventsDf2, how="left", left_on=list(matchOn.keys()), right_on=list(matchOn.values()))
         
         # remove objects from second log from first log
-        newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).intersection(r[("ocel:omap_y", "ocel:omap_y")])) if not r[[("ocel:omap_x", "ocel:omap_x"), ("ocel:omap_y", "ocel:omap_y")]].isnull().values.any() else r[("ocel:omap_x", "ocel:omap_x")], axis=1)
+        newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).intersection(r[("ocel:omap_y", "ocel:omap_y")])) if not r[[("ocel:omap_x", "ocel:omap_x"), ("ocel:omap_y", "ocel:omap_y")]].isnull().values.any() else [], axis=1)
 
         newObjectsDf = pd.concat([objectsDf1, objectsDf2])
 
