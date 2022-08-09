@@ -126,6 +126,7 @@ class OCEL_Model:
         
         eventsDf.to_pickle(os.path.join(newPath, "eventsDf.pkl"))
         objectsDf.to_pickle(os.path.join(newPath, "objectsDf.pkl"))            
+        
         self.ocels.add(name)
 
         return True
@@ -157,6 +158,8 @@ class OCEL_Model:
     def alignEventsObjectsBeforeAdding(self, eventsDf, objectsDf):
         # remove objects that aren't mentioned in any events
         # remove objects from events that aren't mentioned in objectsDf
+
+        objectsDf = copy.deepcopy(objectsDf)
 
         eventsDf.reset_index(inplace=True, drop=True)
 
@@ -537,7 +540,8 @@ class OCEL_Model:
 
     
     # union operator (merge objects of events with same activty / timestamp)
-    def union(self, name1, name2, respectObjRelations=True, mergeEvents=False, newName=""):
+    # for attribute values, we take values of first log
+    def union(self, name1, name2, matchOn={("ocel:timestamp", "ocel:timestamp"): ("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity"): ("ocel:activity", "ocel:activity")}, respectObjRelations=True, mergeEvents=False, newName=""):
 
         eventsDf1 = self.getEventsDf(name1)
         objectsDf1 = self.getObjectsDf(name1)
@@ -550,8 +554,8 @@ class OCEL_Model:
         object_relation = self.getObjRelationDict()
 
         # re-fromat dataframes so that we only have important columns and no multi-index columsn
-        eventsDf1 = eventsDf1[[("ocel:omap", "ocel:omap"), ("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity")]]
-        eventsDf2 = eventsDf2[[("ocel:omap", "ocel:omap"), ("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity")]]
+        eventsDf1 = eventsDf1[[("ocel:omap", "ocel:omap")] + list(matchOn.keys())]
+        eventsDf2 = eventsDf2[[("ocel:omap", "ocel:omap")] + list(matchOn.values())]
         eventsDf1.columns = eventsDf1.columns.droplevel(0)
         eventsDf2.columns = eventsDf2.columns.droplevel(0)
         eventsDf1.reset_index(inplace=True)
@@ -559,8 +563,11 @@ class OCEL_Model:
         eventsDf2.rename(columns={"index": "index_y"}, inplace=True)
         eventsDf2["index_y"] = eventsDf2["index_y"].apply(lambda x : [x])
 
+        left_on = [column[1] for column in matchOn.keys()]
+        right_on = [column[1] for column in matchOn.values()]
+
         # merge based on matching activity names and timestamps
-        df = pd.merge(eventsDf1, eventsDf2, on=["ocel:activity", "ocel:timestamp"]).groupby("index")[["ocel:omap_x", "ocel:omap_y", "index_y"]].apply(sum)
+        df = pd.merge(eventsDf1, eventsDf2, left_on=left_on, right_on=right_on).groupby("index")[["ocel:omap_x", "ocel:omap_y", "index_y"]].apply(sum)
 
         if len(df) > 0:
             for index, row in df.iterrows():
@@ -639,7 +646,7 @@ class OCEL_Model:
         joined = pd.merge(eventsDf1, eventsDf2, how="left", on=[("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")])
         
         # remove objects from second log from first log
-        newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).intersection(r[("ocel:omap_y", "ocel:omap_y")])), axis=1)
+        newEventsDf[("ocel:omap", "ocel:omap")] = joined.apply(lambda r: list(set(r[("ocel:omap_x", "ocel:omap_x")]).intersection(r[("ocel:omap_y", "ocel:omap_y")])) if not r[[("ocel:omap_x", "ocel:omap_x"), ("ocel:omap_y", "ocel:omap_y")]].isnull().values.any() else r[("ocel:omap_x", "ocel:omap_x")], axis=1)
 
         newObjectsDf = pd.concat([objectsDf1, objectsDf2])
 

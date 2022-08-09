@@ -161,7 +161,7 @@ class PandasTableModel(QtGui.QStandardItemModel):
             for x in data[col].values:
                 item = QtGui.QStandardItem("{}".format(x))
                 # align item text to center
-                item.setTextAlignment(QtCore.Qt.AlignHCenter)
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
                 data_col.append(item)
             self.appendColumn(data_col)
         return

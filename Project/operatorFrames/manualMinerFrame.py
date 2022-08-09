@@ -80,9 +80,8 @@ class ManualMinerFrame(OperatorFrame):
         name2 = self.logSelectcomboBox2.currentText()
 
         # clear all to begin with
-        for tup in self.activityComboBoxes:
-            for i in tup:
-                i.setParent(None)
+        for i in reversed(range(self.scrollGridLayout.count())): 
+            self.scrollGridLayout.itemAt(i).widget().setParent(None)
 
         self.activityComboBoxes = []
         if self.numOfActComboBox.currentText():
