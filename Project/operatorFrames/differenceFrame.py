@@ -27,8 +27,8 @@ class DifferenceFrame(OperatorFrame):
         self.innerRightLayout.addWidget(self.numOfMatchesLabel, 4, 0)
         self.innerRightLayout.addWidget(self.numOfMatchesComboBox, 4, 1)
 
-        self.logSelectionLabel1.setText("Select first event log:")
-        self.logSelectionLabel2.setText("Select second event log:")
+        self.logSelectionLabel1.setText("Select 1st event log:")
+        self.logSelectionLabel2.setText("Select 2nd event log:")
         self.numOfMatchesLabel.setText("Select number of properties to match on: \n (Can only match columns of same type)")
         self.numOfMatchesLabel.setWordWrap(True)
 

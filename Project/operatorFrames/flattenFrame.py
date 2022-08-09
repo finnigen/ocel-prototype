@@ -15,7 +15,7 @@ class FlattenFrame(OperatorFrame):
         self.innerRightLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
         self.innerRightLayout.addWidget(self.objectTypeComboBox, 3, 1)
 
-        self.logSelectionLabel1.setText("Select first event log:")
+        self.logSelectionLabel1.setText("Select event log:")
         self.operatorSelectorLabel_2.setText("Select object type:")
 
         self.logSelectcomboBox1.activated.connect(self.initObjectTypes)

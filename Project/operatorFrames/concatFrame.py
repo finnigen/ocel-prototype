@@ -16,8 +16,8 @@ class ConcatFrame(OperatorFrame):
         self.innerRightLayout.addWidget(self.logSelectionLabel2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
 
-        self.logSelectionLabel1.setText("Select first event log:")
-        self.logSelectionLabel2.setText("Select second event log:")
+        self.logSelectionLabel1.setText("Select 1st event log:")
+        self.logSelectionLabel2.setText("Select 2nd event log:")
 
         self.refresh()
  

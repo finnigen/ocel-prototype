@@ -43,8 +43,8 @@ class UnionFrame(OperatorFrame):
         self.innerRightLayout.addWidget(self.numOfMatchesComboBox, 6, 1)
 
 
-        self.logSelectionLabel1.setText("Select first event log:")
-        self.logSelectionLabel2.setText("Select second event log:")
+        self.logSelectionLabel1.setText("Select 1st event log:")
+        self.logSelectionLabel2.setText("Select 2nd event log:")
         self.objRelationsLabel.setText("Consider object relationships when merging:")
         self.mergeEventsLabel.setText("Merge all events from 2nd log:")
         self.numOfMatchesLabel.setText("Select number of properties to match on:")
@@ -59,7 +59,7 @@ class UnionFrame(OperatorFrame):
 
         self.mergeEventsLabel.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
         self.mergeEventsCheckBox.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
-        self.scrollAreaWidgetContents.setToolTip("Select which attributes of 1st log (left) should be matched with attributes of 2nd log (right) (can only merge attributes of same type)")
+        self.scrollAreaWidgetContents.setToolTip("Select which attributes of 1st log (left) should be matched with attributes of 2nd log (right) (can only match attributes of same type)")
 
         self.propertyComboBoxes = []
 

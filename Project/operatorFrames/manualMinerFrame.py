@@ -53,6 +53,9 @@ class ManualMinerFrame(OperatorFrame):
         self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.innerRightLayout.addWidget(self.scrollArea, 6, 0, 1, 2)
     
+        self.mergeEventsLabel.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
+        self.mergeEventsCheckBox.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
+
         self.refresh()
 
 

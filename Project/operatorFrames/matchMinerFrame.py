@@ -43,12 +43,15 @@ class MatchMinerFrame(OperatorFrame):
         self.innerRightLayout.addWidget(self.mergeEventsLabel, 7, 0)
         self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 7, 1)
 
-        self.logSelectionLabel1.setText("Select first event log:")
-        self.logSelectionLabel2.setText("Select second event log:")
+        self.logSelectionLabel1.setText("Select 1st event log:")
+        self.logSelectionLabel2.setText("Select 2nd event log:")
         self.attrSelectLabel.setText("Select attribute(s) to match on:")
-        self.attrSelectLabel1.setText("Attribute of first log:")
-        self.attrSelectLabel2.setText("Attribute of first log:")
+        self.attrSelectLabel1.setText("Attribute of 1st log:")
+        self.attrSelectLabel2.setText("Attribute of 2nd log:")
         self.mergeEventsLabel.setText("Merge all events from 2nd log:")
+
+        self.mergeEventsLabel.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
+        self.mergeEventsCheckBox.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
 
         self.refresh()
 

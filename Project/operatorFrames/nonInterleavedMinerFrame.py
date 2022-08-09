@@ -22,8 +22,8 @@ class NonInterleavedMinerFrame(OperatorFrame):
         self.innerRightLayout.addWidget(self.mergeEventsLabel, 5, 0)
         self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 5, 1) 
 
-        self.logSelectionLabel1.setText("Select first event log:")
-        self.logSelectionLabel2.setText("Select second event log:")
+        self.logSelectionLabel1.setText("Select 1st event log:")
+        self.logSelectionLabel2.setText("Select 2nd event log:")
         self.mergeEventsLabel.setText("Merge all events from 2nd log:")
 
         self.refresh()
