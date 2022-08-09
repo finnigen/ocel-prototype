@@ -163,14 +163,14 @@ class TransformationCenter(QtWidgets.QWidget):
 
         # we need to initialize a page for every supported operator
         description = "Merge all events of two logs into one without merging any objects or events."
-        self.initOperatorPage("Concatenate Event Log", description, ConcatFrame)
-        description = "Aggregate events with matching activity names and timestamps. Objects of the matching events are merged into first occurence."
-        self.initOperatorPage("Aggregate Event Log", description, AggregateFrame)
-        description = "Merge objects across logs based on matching activity names, timestamps, and object relationships."
+        self.initOperatorPage("Concatenate", description, ConcatFrame)
+        description = "Aggegrate the objects related to events with matching attribute values. Objects of the matching events are merged into its first occurence."
+        self.initOperatorPage("Aggregate", description, AggregateFrame)
+        description = "Merge objects across logs based on matching attributes, activities, timestamps, and object relationships."
         self.initOperatorPage("Union", description, UnionFrame)
-        description = "Intersect set of objects for events with matching activity names and timestamps."
+        description = "Intersect set of objects for events with matching activity names, timestamps, and other attributes."
         self.initOperatorPage("Intersection", description, IntersectionFrame)
-        description = "Remove objects from events with matching activity names and timestamps."
+        description = "Remove objects from events of 1st log based on matching activity names, timestamps, and other attributes."
         self.initOperatorPage("Difference", description, DifferenceFrame)
         description = "Merge objects across logs based on matching attribute values and object relationships."
         self.initOperatorPage("Match Miner", description, MatchMinerFrame)
@@ -181,11 +181,11 @@ class TransformationCenter(QtWidgets.QWidget):
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs (non-interleaved) as well as object relationships."
         self.initOperatorPage("Non-Interleaved Miner", description, NonInterleavedMinerFrame)
         description = "Filter event log based on activities, attributes, objects, object types, or timestamps."
-        self.initOperatorPage("Filter Event Log", description, FilterFrame)
+        self.initOperatorPage("Filter", description, FilterFrame)
         description = "Specify sequence of low-level events and turn them into one high-level event. Besides sequence of activity, specify sequence based on objects, types, attribute values, object relations, and more"
         self.initOperatorPage("Event Recipe", description, EventRecipeFrame)
         description = "Map all events to objects of one object type based on object relationships."
-        self.initOperatorPage("Flatten Event Log", description, FlattenFrame)
+        self.initOperatorPage("Flatten", description, FlattenFrame)
 
         # set current page for stacked widget in the beginning to the operator selector page
         self.operatorSectionStackedWidget.setCurrentIndex(0)

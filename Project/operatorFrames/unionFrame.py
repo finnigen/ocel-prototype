@@ -6,6 +6,8 @@ class UnionFrame(OperatorFrame):
     def __init__(self, parent, ocel_model, title, description):
         super().__init__(parent, ocel_model, title, description)
 
+        self.innerRightLayout.setSpacing(20)
+
         self.logSelectcomboBox2 = QtWidgets.QComboBox(self.operatorFrame)
 
         self.logSelectionLabel2 = QtWidgets.QLabel(self.operatorFrame)
@@ -45,7 +47,7 @@ class UnionFrame(OperatorFrame):
         self.logSelectionLabel2.setText("Select second event log:")
         self.objRelationsLabel.setText("Consider object relationships when merging:")
         self.mergeEventsLabel.setText("Merge all events from 2nd log:")
-        self.numOfMatchesLabel.setText("Select number of properties to match on: \n (Can only match columns of same type)")
+        self.numOfMatchesLabel.setText("Select number of properties to match on:")
         self.numOfMatchesLabel.setWordWrap(True)
 
         # scroll area for matching columns
@@ -54,6 +56,10 @@ class UnionFrame(OperatorFrame):
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.innerRightLayout.addWidget(self.scrollArea, 7, 0, 1, 2)
+
+        self.mergeEventsLabel.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
+        self.mergeEventsCheckBox.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
+        self.scrollAreaWidgetContents.setToolTip("Select which attributes of 1st log (left) should be matched with attributes of 2nd log (right) (can only merge attributes of same type)")
 
         self.propertyComboBoxes = []
 

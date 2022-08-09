@@ -26,6 +26,9 @@ class AggregateFrame(OperatorFrame):
         self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.innerRightLayout.addWidget(self.scrollArea, 4, 0, 1, 2)
 
+        self.numOfMatchesLabel.setText("Select number of properties to aggregate on:")
+        self.scrollAreaWidgetContents.setToolTip("Objects related to events where all these specified attributes match will be merged into first occurence of event.")
+
         self.propertyComboBoxes = []
 
         self.refresh()

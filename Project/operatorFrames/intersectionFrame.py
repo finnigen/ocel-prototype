@@ -39,6 +39,8 @@ class IntersectionFrame(OperatorFrame):
         self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.innerRightLayout.addWidget(self.scrollArea, 5, 0, 1, 2)
 
+        self.scrollAreaWidgetContents.setToolTip("Select which attributes of 1st log (left) should be matched with attributes of 2nd log (right) (can only match attributes of same type)")
+
         self.propertyComboBoxes = []
 
         self.refresh()

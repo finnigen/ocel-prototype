@@ -119,7 +119,7 @@ class OCEL_Model:
         os.mkdir(newPath)
         
         # reset index of events dataframe and sort on timestamp
-        eventsDf = eventsDf.sort_values(by=[("ocel:timestamp", "ocel:timestamp")]).reset_index(drop=True)
+        eventsDf = eventsDf.sort_values(by=[("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity")]).reset_index(drop=True)
         
         # drop duplicate objects
         objectsDf = objectsDf[~objectsDf.index.duplicated(keep='first')]
