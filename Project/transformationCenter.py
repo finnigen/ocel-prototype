@@ -3,7 +3,6 @@
 import pickle
 from tableWindow import TableWindow
 from helpWindow import HelpWindow
-from operatorFrames.matchMinerFrame import MatchMinerFrame
 from operatorFrames.interleavedMinerFrame import InterleavedMinerFrame
 from operatorFrames.nonInterleavedMinerFrame import NonInterleavedMinerFrame
 from objRelationWindow import ObjectWindow
@@ -172,8 +171,6 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Intersection", description, IntersectionFrame)
         description = "Remove objects from events of 1st log based on matching activity names, timestamps, and other attributes."
         self.initOperatorPage("Difference", description, DifferenceFrame)
-        description = "Merge objects across logs based on matching attribute values and object relationships."
-        self.initOperatorPage("Match Miner", description, MatchMinerFrame)
         description = "Merge objects across logs based on manual matchings of activities and object relationships of the logs."
         self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs as well as object relationships."
