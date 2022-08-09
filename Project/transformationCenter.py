@@ -15,6 +15,7 @@ from operatorFrames.eventRecipeFrame import EventRecipeFrame
 from operatorFrames.unionFrame import UnionFrame
 from operatorFrames.differenceFrame import DifferenceFrame
 from operatorFrames.intersectionFrame import IntersectionFrame
+from operatorFrames.closestTimestampsFrame import ClosestTimestampsFrame
 
 
 from ocel_model import *
@@ -171,12 +172,14 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Intersection", description, IntersectionFrame)
         description = "Remove objects from events of 1st log based on matching activity names, timestamps, and other attributes."
         self.initOperatorPage("Difference", description, DifferenceFrame)
-        description = "Merge objects across logs based on manual matchings of activities and object relationships of the logs."
+        description = "Merge objects across logs based on object relationships and manual matchings of activity names of the logs."
         self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs as well as object relationships."
         self.initOperatorPage("Interleaved Miner", description, InterleavedMinerFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs (non-interleaved) as well as object relationships."
         self.initOperatorPage("Non-Interleaved Miner", description, NonInterleavedMinerFrame)
+        description = "Merge objects across logs based on interleaving timestamps of events in the two logs as well as object relationships. We merge objects of the closest events."
+        self.initOperatorPage("Closest Timestamps", description, ClosestTimestampsFrame)
         description = "Filter event log based on activities, attributes, objects, object types, or timestamps."
         self.initOperatorPage("Filter", description, FilterFrame)
         description = "Specify sequence of low-level events and turn them into one high-level event. Besides sequence of activity, specify sequence based on objects, types, attribute values, object relations, and more"
@@ -607,7 +610,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
 
                 # 'fileDf.pkl'
-    with open('fileBig.pkl', 'rb') as file:
+    with open('fileDf.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

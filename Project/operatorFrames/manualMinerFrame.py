@@ -32,10 +32,10 @@ class ManualMinerFrame(OperatorFrame):
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.logSelectionLabel2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
-        self.innerRightLayout.addWidget(self.numActLabel, 4, 0)
-        self.innerRightLayout.addWidget(self.numOfActComboBox, 4, 1)
-        self.innerRightLayout.addWidget(self.mergeEventsLabel, 5, 0)
-        self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 5, 1)        
+        self.innerRightLayout.addWidget(self.mergeEventsLabel, 4, 0)
+        self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 4, 1)   
+        self.innerRightLayout.addWidget(self.numActLabel, 5, 0)
+        self.innerRightLayout.addWidget(self.numOfActComboBox, 5, 1)     
         self.innerRightLayout.addWidget(self.selectActivitiesLabel, 6, 0)
 
         self.activityComboBoxes = []
@@ -55,6 +55,7 @@ class ManualMinerFrame(OperatorFrame):
     
         self.mergeEventsLabel.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
         self.mergeEventsCheckBox.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
+        self.scrollAreaWidgetContents.setToolTip("Select which activity names of 1st log (left) should be matched with activity names of 2nd log (right)")
 
         self.refresh()
 
