@@ -16,15 +16,24 @@ class ClosestTimestampsFrame(OperatorFrame):
         self.mergeEventsCheckBox = QtWidgets.QCheckBox(self.operatorFrame)
         self.mergeEventsCheckBox.setChecked(False)
 
+        self.onlyClosestLabel = QtWidgets.QLabel(self.operatorFrame)
+        self.onlyClosestLabel.setFont(self.normalFont)
+        self.onlyClosestCheckbox = QtWidgets.QCheckBox(self.operatorFrame)
+        self.onlyClosestCheckbox.setChecked(False)
+
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.logSelectionLabel2, 3, 0)
         self.innerRightLayout.addWidget(self.logSelectcomboBox2, 3, 1)
         self.innerRightLayout.addWidget(self.mergeEventsLabel, 5, 0)
         self.innerRightLayout.addWidget(self.mergeEventsCheckBox, 5, 1) 
+        self.innerRightLayout.addWidget(self.onlyClosestLabel, 6, 0)
+        self.innerRightLayout.addWidget(self.onlyClosestCheckbox, 6, 1) 
 
         self.logSelectionLabel1.setText("Select 1st event log:")
         self.logSelectionLabel2.setText("Select 2nd event log:")
         self.mergeEventsLabel.setText("Merge all events from 2nd log:")
+        self.onlyClosestLabel.setText("Only merge objects from events in 2nd log to closest event in 1st log:")
+        self.onlyClosestLabel.setWordWrap(True)
 
         self.refresh()
  
@@ -33,8 +42,9 @@ class ClosestTimestampsFrame(OperatorFrame):
         name1 = self.logSelectcomboBox1.currentText()
         name2 = self.logSelectcomboBox2.currentText()
         mergeEvents = self.mergeEventsCheckBox.isChecked()
+        onlyMergeClosest = self.mergeEventsCheckBox.isChecked()
 
-        return {"name1" : name1, "name2" : name2, "mergeEvents" : mergeEvents}
+        return {"name1" : name1, "name2" : name2, "mergeEvents" : mergeEvents, "onlyMergeClosest" : onlyMergeClosest}
 
     def getNewLog(self, newName, parameters={}):
         # returns new log that is created by applying given operator with selected parameters + name
@@ -46,8 +56,9 @@ class ClosestTimestampsFrame(OperatorFrame):
         name1 = parameters["name1"]
         name2 = parameters["name2"]
         mergeEvents = parameters["mergeEvents"]
+        onlyMergeClosest = parameters["onlyMergeClosest"]
 
-        return self.ocel_model.closestTimestamps(name1, name2, mergeEvents, newName=newName)
+        return self.ocel_model.closestTimestamps(name1, name2, onlyMergeClosest=onlyMergeClosest, mergeEvents=mergeEvents, newName=newName)
 
 
     def refresh(self):
