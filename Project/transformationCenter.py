@@ -16,6 +16,8 @@ from operatorFrames.unionFrame import UnionFrame
 from operatorFrames.differenceFrame import DifferenceFrame
 from operatorFrames.intersectionFrame import IntersectionFrame
 from operatorFrames.closestTimestampsFrame import ClosestTimestampsFrame
+from operatorFrames.importOCELFrame import ImportOCELFrame
+
 
 
 from ocel_model import *
@@ -126,6 +128,7 @@ class TransformationCenter(QtWidgets.QWidget):
 
         # keep track of worker threads for operators
         self.operatorWorkers = {}
+        self.exportWorkers = {}
 
         # stacked widget for multiple different views (e.g. operators overview, specific operator page...)
         self.operatorSectionStackedWidget = QtWidgets.QStackedWidget(self.rightFrame)
@@ -162,6 +165,8 @@ class TransformationCenter(QtWidgets.QWidget):
         operatorSelectionScrollArea.setWidget(self.operatorSelectorScrollAreaWidgetContents)
 
         # we need to initialize a page for every supported operator
+        description = "Import additional object-centric event log from files. Can be used to flatten and export OCEL to Celonis or apply additional operators to existing log from computer."
+        self.initOperatorPage("Import OCEL", description, ImportOCELFrame)
         description = "Merge all events of two logs into one without merging any objects or events."
         self.initOperatorPage("Concatenate", description, ConcatFrame)
         description = "Aggegrate the objects related to events with matching attribute values. Objects of the matching events are merged into its first occurence."
@@ -387,8 +392,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.openedWindows[name].show()
 
 
-    def viewObjectRelations(self):
-        if "objRelationshipWindow" not in self.openedWindows:
+    def viewObjectRelations(self):        
+        if "objRelationshipWindow" not in self.openedWindows or self.ocel_model.objRelationDict is None:
             newWindow = QtWidgets.QMainWindow()
             ui = ObjectWindow(self.ocel_model.getObjRelationDict())
             ui.setupUi(newWindow)
@@ -415,15 +420,16 @@ class TransformationCenter(QtWidgets.QWidget):
 
             self.ocelSideBarDeleteButtons[name].setEnabled(False)
             self.ocelSideBarExportButtons[name].setEnabled(False)
-            self.ocelSideBarExportButtons[name].setText("Exporting...")
+            self.ocelSideBarExportButtons[name].setText("Exporting... (don't close application)")
+            self.ocelSideBarExportButtons[name].setToolTip("Depending on the size of the log and number of object types, this can take a while")
             self.ocelSideBarExportButtons[name].setStyleSheet("background-color: red")
 
             # create thread so that GUI stays responsive while exporting
-            self.exportWorker = ExportWorkerThread(name, filePath, self.url, self.api, parameters[0], parameters[1], parameters[2], parameters[3])
-            self.exportWorker.exportDone.connect(self.exportDone)
-            self.exportWorker.finished.connect(self.exportWorker.quit)
-            self.exportWorker.finished.connect(self.exportWorker.deleteLater)
-            self.exportWorker.start()
+            self.exportWorkers[name] = ExportWorkerThread(name, filePath, self.url, self.api, parameters[0], parameters[1], parameters[2], parameters[3])
+            self.exportWorkers[name].exportDone.connect(self.exportDone)
+            self.exportWorkers[name].finished.connect(self.exportWorkers[name].quit)
+            self.exportWorkers[name].finished.connect(self.exportWorkers[name].deleteLater)
+            self.exportWorkers[name].start()
 
 
     def exportDone(self, name, success):
@@ -434,6 +440,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarExportButtons[name].setEnabled(True)
         self.ocelSideBarExportButtons[name].setText("Export")
         self.ocelSideBarExportButtons[name].setStyleSheet("")
+        self.ocelSideBarExportButtons[name].setToolTip("Prepare export back to Celonis")
         self.ocelSideBarDeleteButtons[name].setEnabled(True)
 
 

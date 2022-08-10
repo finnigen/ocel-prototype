@@ -13,7 +13,7 @@ import pandas as pd
 from pycelonis import get_celonis
 from pandas import json_normalize
 from datetime import timedelta
-
+from itertools import product
 
 
 class EmptyLogException(Exception):
@@ -123,6 +123,11 @@ class OCEL_Model:
         # reset index of events dataframe and sort on timestamp
         eventsDf = eventsDf.sort_values(by=[("ocel:timestamp", "ocel:timestamp"), ("ocel:activity", "ocel:activity")]).reset_index(drop=True)
         
+        # ensure columsn in right order
+        columns = [("ocel:omap", "ocel:omap"), ("ocel:activity", "ocel:activity"), ("ocel:timestamp", "ocel:timestamp")]
+        columns = columns + list(set(eventsDf.columns).difference(columns))
+        eventsDf = eventsDf[columns]
+
         # drop duplicate objects
         objectsDf = objectsDf[~objectsDf.index.duplicated(keep='first')]
         
@@ -170,7 +175,7 @@ class OCEL_Model:
         
         # remove objects from events (and delete events without objects)
         toBeRemoved = []
-        
+
         for index, row in eventsDf.iterrows():
             relatedObjects = objects.intersection(row["ocel:omap"]["ocel:omap"])
             if len(relatedObjects) == 0:
@@ -180,6 +185,7 @@ class OCEL_Model:
         
         # drop rows
         eventsDf.drop(toBeRemoved, inplace=True)
+
         # reset index of events dataframe
         eventsDf.reset_index(inplace=True, drop=True)
         
@@ -330,17 +336,44 @@ class OCEL_Model:
                 ocel = json.load(json_file)
         else:
             ocel = ocel
-        eventDf = self.transformDictToDf(ocel["ocel:events"])
-        objectDf = self.transformDictToDf(ocel["ocel:objects"])
+        eventsDf = self.transformDictToDf(ocel["ocel:events"])
+        objectsDf = self.transformDictToDf(ocel["ocel:objects"])
         
         name = ocelFile
-        self.addEventObjectDf(name, eventDf, objectDf)
-        return (eventDf, objectDf)
+
+        return (eventsDf, objectsDf)
 
     
     ############################   OPERATORS:   ############################
 
+    
+    def importOCEL(self, path, addObjectRelations=False, newName=""):
+        eventsDf, objectsDf = self.transformOcelToEventDfObjectDf(path,ocel=False)
+
+        # prepend objects with object types to avoid same object identifiers referring to different objects (with different type)
+        # only do so if objects aren't prefixed with type already:
+        if False in list(objectsDf.index.map(lambda x : x.split(":")[0]) == objectsDf[("ocel:type", "ocel:type")]):
+            eventsDf[("ocel:omap", "ocel:omap")] = eventsDf[("ocel:omap", "ocel:omap")].apply(lambda x : [objectsDf.loc[obj][("ocel:type", "ocel:type")] + ":" + obj for obj in x])
+            objectsDf.index = objectsDf.index.map(lambda x : objectsDf.loc[x][("ocel:type", "ocel:type")] + ":" + x)
+
+        toAddedRelations = set([(obj, obj) for obj in objectsDf.index])
+
+        if addObjectRelations:
+            for objects in eventsDf[("ocel:omap", "ocel:omap")]:
+                prod = product(set(objects), set(objects))
+                
+                toAddedRelations = toAddedRelations.union(prod)
+
+        self.addToRelation(toAddedRelations)
+        self.objRelationDict = None
+
+        self.addEventObjectDf(newName, eventsDf, objectsDf)
+
+        return True
+
         
+
+
     # input: 2 ocels, object relationship, activity relationship
     # output: 1 ocel, objects from log2 merged into log1 based on object and activity relation
     def manualMiner(self, name1, name2, activity_relation, mergeEvents=False, newName=""):
@@ -911,7 +944,7 @@ class OCEL_Model:
 
 
     # onlyMergeClosest: instead of merging objects of predecessor events and successor events in log2, we only merge closest one
-    def closestTimestamps(self, name1, name2, onlyMergeClosest=False, mergeEvents=False, newName=""):
+    def closestTimestamps(self, name1, name2, onlyMergeClosest=True, mergeEvents=False, newName=""):
 
         newEventsDf = self.getEventsDf(name1)
 

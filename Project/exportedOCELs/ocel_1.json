@@ -1,407 +1,410 @@
 {
   "ocel:global-event": {
     "ocel:activity": [
-      "remove item",
+      "item out of stock",
+      "pack item",
       "add item to package",
       "select item",
-      "item out of stock",
-      "pay item",
-      "pack item"
+      "remove item",
+      "pay item"
     ]
   },
   "ocel:global-object": {
     "ocel:type": [
-      "itemsCases_csv:i1",
-      "itemsCases_csv:i4",
-      "itemsCases_csv:i5",
-      "ordersCases_csv:o2",
-      "ordersCases_csv:o1",
-      "itemsCases_csv:i2",
-      "itemsCases_csv:i3",
-      "itemsCases_csv:i6"
+      "CASE_ORDERS:o1",
+      "CASE_ITEMS:i3",
+      "CASE_ORDERS:o2",
+      "CASE_ITEMS:i6",
+      "CASE_ITEMS:i5",
+      "CASE_ITEMS:i2",
+      "CASE_ITEMS:i1",
+      "CASE_ITEMS:i4"
     ]
   },
   "ocel:global-log": {
     "ocel:attribute-names": [
+      "PRICE",
       "WEIGHT",
-      "PACKAGENUMBER",
-      "PRICE"
+      "PACKAGENUMBER"
     ]
   },
   "ocel:object-types": [
-    "ordersCases_csv",
-    "itemsCases_csv"
+    "CASE_ITEMS",
+    "CASE_ORDERS"
   ],
   "ocel:events": {
     "0": {
       "ocel:omap": [
-        "itemsCases_csv:i3"
+        "CASE_ITEMS:i3"
       ],
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-15T12:54:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "1": {
       "ocel:omap": [
-        "itemsCases_csv:i3"
+        "CASE_ITEMS:i3"
       ],
       "ocel:activity": "remove item",
       "ocel:timestamp": "2020-07-15T12:55:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "2": {
       "ocel:omap": [
-        "itemsCases_csv:i1"
+        "CASE_ORDERS:o1",
+        "CASE_ITEMS:i1"
       ],
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-15T13:00:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "3": {
       "ocel:omap": [
-        "itemsCases_csv:i2"
+        "CASE_ITEMS:i2",
+        "CASE_ORDERS:o1"
       ],
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-15T13:00:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "4": {
       "ocel:omap": [
-        "itemsCases_csv:i3"
+        "CASE_ORDERS:o1",
+        "CASE_ITEMS:i3"
       ],
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-15T13:00:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "5": {
       "ocel:omap": [
-        "itemsCases_csv:i1",
-        "ordersCases_csv:o1"
+        "CASE_ORDERS:o1",
+        "CASE_ITEMS:i1"
       ],
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-15T14:00:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "6": {
       "ocel:omap": [
-        "ordersCases_csv:o1",
-        "itemsCases_csv:i2"
+        "CASE_ITEMS:i2",
+        "CASE_ORDERS:o1"
       ],
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-15T14:00:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "7": {
       "ocel:omap": [
-        "itemsCases_csv:i3",
-        "ordersCases_csv:o1"
+        "CASE_ORDERS:o1",
+        "CASE_ITEMS:i3"
       ],
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-15T14:00:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "8": {
       "ocel:omap": [
-        "itemsCases_csv:i1",
-        "ordersCases_csv:o1"
+        "CASE_ITEMS:i1"
       ],
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-15T14:10:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "9": {
       "ocel:omap": [
-        "itemsCases_csv:i3",
-        "ordersCases_csv:o1"
+        "CASE_ITEMS:i3"
       ],
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-15T14:10:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "10": {
       "ocel:omap": [
-        "ordersCases_csv:o1",
-        "itemsCases_csv:i2"
+        "CASE_ITEMS:i2"
       ],
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-15T14:10:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "11": {
       "ocel:omap": [
-        "itemsCases_csv:i2"
+        "CASE_ITEMS:i2",
+        "CASE_ORDERS:o1"
       ],
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-15T14:30:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "12": {
       "ocel:omap": [
-        "itemsCases_csv:i3"
+        "CASE_ORDERS:o1",
+        "CASE_ITEMS:i3"
       ],
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-15T14:30:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "13": {
       "ocel:omap": [
-        "itemsCases_csv:i1"
+        "CASE_ORDERS:o1",
+        "CASE_ITEMS:i1"
       ],
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-15T14:30:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p1"
       }
     },
     "14": {
       "ocel:omap": [
-        "itemsCases_csv:i4"
+        "CASE_ORDERS:o2",
+        "CASE_ITEMS:i4"
       ],
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-16T09:21:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p2"
       }
     },
     "15": {
       "ocel:omap": [
-        "ordersCases_csv:o2",
-        "itemsCases_csv:i4"
+        "CASE_ORDERS:o2",
+        "CASE_ITEMS:i4"
       ],
       "ocel:activity": "item out of stock",
       "ocel:timestamp": "2020-07-16T10:12:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p2"
       }
     },
     "16": {
       "ocel:omap": [
-        "itemsCases_csv:i5"
+        "CASE_ITEMS:i5"
       ],
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-20T10:29:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p2"
       }
     },
     "17": {
       "ocel:omap": [
-        "ordersCases_csv:o2",
-        "itemsCases_csv:i4"
+        "CASE_ITEMS:i4"
       ],
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-20T10:30:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p2"
       }
     },
     "18": {
       "ocel:omap": [
-        "ordersCases_csv:o2",
-        "itemsCases_csv:i5"
+        "CASE_ITEMS:i5"
       ],
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-20T10:30:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p2"
       }
     },
     "19": {
       "ocel:omap": [
-        "ordersCases_csv:o2",
-        "itemsCases_csv:i4"
+        "CASE_ORDERS:o2",
+        "CASE_ITEMS:i4"
       ],
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-20T10:31:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p2"
       }
     },
     "20": {
       "ocel:omap": [
-        "ordersCases_csv:o2",
-        "itemsCases_csv:i5"
+        "CASE_ITEMS:i5",
+        "CASE_ORDERS:o2"
       ],
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-20T10:31:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p2"
       }
     },
     "21": {
       "ocel:omap": [
-        "itemsCases_csv:i4"
+        "CASE_ORDERS:o2",
+        "CASE_ITEMS:i4"
       ],
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-20T12:44:20",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p2"
       }
     },
     "22": {
       "ocel:omap": [
-        "itemsCases_csv:i5"
+        "CASE_ITEMS:i5",
+        "CASE_ORDERS:o2"
       ],
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-20T12:44:20",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p2"
       }
     },
     "23": {
       "ocel:omap": [
-        "itemsCases_csv:i6"
+        "CASE_ITEMS:i6"
       ],
       "ocel:activity": "select item",
       "ocel:timestamp": "2020-07-20T17:20:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p3"
       }
     },
     "24": {
       "ocel:omap": [
-        "itemsCases_csv:i6"
+        "CASE_ITEMS:i6"
       ],
       "ocel:activity": "pay item",
       "ocel:timestamp": "2020-07-20T17:20:33",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p3"
       }
     },
     "25": {
       "ocel:omap": [
-        "ordersCases_csv:o2",
-        "itemsCases_csv:i6"
+        "CASE_ITEMS:i6"
       ],
       "ocel:activity": "pack item",
       "ocel:timestamp": "2020-07-20T17:22:10",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p3"
       }
     },
     "26": {
       "ocel:omap": [
-        "ordersCases_csv:o2",
-        "itemsCases_csv:i6"
+        "CASE_ORDERS:o2",
+        "CASE_ITEMS:i6"
       ],
       "ocel:activity": "add item to package",
       "ocel:timestamp": "2020-07-20T17:24:00",
       "ocel:vmap": {
-        "WEIGHT": null,
         "PRICE": null,
+        "WEIGHT": null,
         "PACKAGENUMBER": "p3"
       }
     }
   },
   "ocel:objects": {
-    "itemsCases_csv:i1": {
-      "ocel:type": "itemsCases_csv",
+    "CASE_ITEMS:i1": {
+      "ocel:type": "CASE_ITEMS",
       "ocel:ovmap": {}
     },
-    "itemsCases_csv:i2": {
-      "ocel:type": "itemsCases_csv",
+    "CASE_ITEMS:i2": {
+      "ocel:type": "CASE_ITEMS",
       "ocel:ovmap": {}
     },
-    "itemsCases_csv:i3": {
-      "ocel:type": "itemsCases_csv",
+    "CASE_ITEMS:i3": {
+      "ocel:type": "CASE_ITEMS",
       "ocel:ovmap": {}
     },
-    "itemsCases_csv:i4": {
-      "ocel:type": "itemsCases_csv",
+    "CASE_ITEMS:i4": {
+      "ocel:type": "CASE_ITEMS",
       "ocel:ovmap": {}
     },
-    "itemsCases_csv:i5": {
-      "ocel:type": "itemsCases_csv",
+    "CASE_ITEMS:i5": {
+      "ocel:type": "CASE_ITEMS",
       "ocel:ovmap": {}
     },
-    "itemsCases_csv:i6": {
-      "ocel:type": "itemsCases_csv",
+    "CASE_ITEMS:i6": {
+      "ocel:type": "CASE_ITEMS",
       "ocel:ovmap": {}
     },
-    "ordersCases_csv:o2": {
-      "ocel:type": "ordersCases_csv",
+    "CASE_ORDERS:o1": {
+      "ocel:type": "CASE_ORDERS",
       "ocel:ovmap": {}
     },
-    "ordersCases_csv:o1": {
-      "ocel:type": "ordersCases_csv",
+    "CASE_ORDERS:o2": {
+      "ocel:type": "CASE_ORDERS",
       "ocel:ovmap": {}
     }
   }

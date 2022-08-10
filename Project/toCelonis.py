@@ -20,6 +20,12 @@ class OcelCelonisTransf:
         for table in self.tables:
             self.tables[table] = list(dict(x) for x in self.tables[table])
             self.tables[table] = pd.DataFrame(self.tables[table])
+            columns = self.tables[table].columns
+
+            # remove EVID_ labels since can lead to duplicates after re-used of software (e.g. flatten OCEL, import, flatten again etc.)
+            if "EVID_general" in columns:
+                toDrop = [c for c in columns if "EVID_" == c[:5]]
+                self.tables[table].drop(toDrop, inplace=True, axis=1)
 
 
 def __add_row_to_table(oct, table, row):
