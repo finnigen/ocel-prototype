@@ -242,11 +242,6 @@ class TransformationCenter(QtWidgets.QWidget):
                 duplicate = True
         newName=text
 
-#        result = self.operatorFrames[pageNum].getNewLog(newName)
-#        if not result:
-#            return
-
-
         currentFrame = self.operatorFrames[pageNum]
         parameters = currentFrame.getParameters()
         # create thread so that GUI stays responsive while exporting
@@ -270,19 +265,6 @@ class TransformationCenter(QtWidgets.QWidget):
         generatingLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.ocelSideBarFrames[newName].layout().addWidget(generatingLabel)
         self.ocelSideBargeneratingLabels[newName] = generatingLabel
-
-        # add cancel button so we can stop long running operations
-#        cancelButton = QtWidgets.QPushButton(self.ocelSideBarFrames[newName])
-#        cancelButton.setText("Cancel Operation")
-#        cancelButton.clicked.connect(lambda checked, x=newName: self.cancelOperator(x))
-#        self.ocelSideBarCancelButtons[newName] = cancelButton
-#        self.ocelSideBarFrames[newName].layout().addWidget(cancelButton)
-
-
-#    def cancelOperator(self, name):
-#        # cancelling Operator mid-way does not work...
-#        self.operatorWorkers[name].exit()
-#        self.removeFromLogs(name)
 
 
     def operatorDone(self, name, outcome):
@@ -356,6 +338,8 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarViewButtons[name].setText("View")
         self.ocelSideBarExportButtons[name].setText("Export")
         self.ocelSideBarDeleteButtons[name].setText("Delete")
+
+        self.ocelSideBarExportButtons[name].setToolTip("Prepare export back to Celonis")
 
         sidebarOCELTitle.setText(name)
         sidebarOCELTitle.setMaximumWidth(350)
@@ -606,7 +590,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
 
                 # 'fileDf.pkl'
-    with open('fileDf.pkl', 'rb') as file:
+    with open('fileBig.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

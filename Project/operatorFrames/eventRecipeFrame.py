@@ -46,8 +46,9 @@ class EventRecipeFrame(OperatorFrame):
         self.timedeltaCheckLabel.setFont(font)
         self.timedeltaCheckLabel.setText("Max time between 1st and last event (in hours)")
         self.timedeltaCheckText = QtWidgets.QLineEdit(self.outerScrollAreaWidgetContents)
-
         self.timedeltaCheckText.setValidator(QtGui.QDoubleValidator(0.99,99.99,2))
+        self.timedeltaCheckText.setEnabled(False)
+        self.timedeltaCheckbox.stateChanged.connect(lambda checked : self.timedeltaCheckText.setEnabled(not self.timedeltaCheckText.isEnabled()))
 
         self.matchObjectTypesCheckbox = QtWidgets.QCheckBox(self.outerScrollAreaWidgetContents)
         self.matchObjectTypesCheckbox.setChecked(False)
