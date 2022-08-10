@@ -24,11 +24,13 @@ class FilterFrame(OperatorFrame):
         # add all labels, buttons etc to right layout
         self.innerRightLayout.addWidget(self.operatorSelectorLabel_2, 3, 0)
         self.innerRightLayout.addWidget(self.modeSelectionComboBox, 3, 1)
-        self.innerRightLayout.addWidget(self.parameterLabel, 4, 0)
+        self.innerRightLayout.addWidget(self.parameterLabel, 4, 0, 1, 2)
 
         self.logSelectionLabel1.setText("Select event log:")
         self.operatorSelectorLabel_2.setText("Select based on what you want to filter:")
-        self.parameterLabel.setText("Specify filter criteria")
+        self.parameterLabel.setText("Specify filter criteria (only keep events matching the checked properties)")
+        self.parameterLabel.setWordWrap(True)
+    
 
         # scroll area for parameter selection
         self.scrollArea = QtWidgets.QScrollArea(self.operatorFrame)
@@ -209,8 +211,16 @@ class FilterFrame(OperatorFrame):
         self.endDate.setDateTime(maxi)
         self.startDate.setDisplayFormat("yyyy-MM-dd hh:mm:ss")
         self.endDate.setDisplayFormat("yyyy-MM-dd hh:mm:ss")
-        self.scrollGridLayout.addWidget(self.startDate, 6, 0)
-        self.scrollGridLayout.addWidget(self.endDate, 6, 1)
+
+        startLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+        startLabel.setText("Select start date")
+        endLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+        endLabel.setText("Select end date")
+
+        self.scrollGridLayout.addWidget(startLabel, 5, 0,  QtCore.Qt.AlignCenter)
+        self.scrollGridLayout.addWidget(endLabel, 5, 1,  QtCore.Qt.AlignCenter)
+        self.scrollGridLayout.addWidget(self.startDate, 6, 0,  QtCore.Qt.AlignCenter)
+        self.scrollGridLayout.addWidget(self.endDate, 6, 1,  QtCore.Qt.AlignCenter)
 
 
     def resetParameters(self):

@@ -120,6 +120,25 @@ class EventRecipeFrame(OperatorFrame):
         self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.outerScrollGridLayout.addWidget(self.scrollArea, 15, 0, 1, 4)
         
+        # tool tips
+        self.newActivityNameLabel.setToolTip("Events that match specified pattern will be replaced by new event with this activity.")
+        self.newActivityNameText.setToolTip("Events that match specified pattern will be replaced by new event with this activity.")
+        self.timedeltaCheckLabel.setToolTip("This is the time maximum that is allowed between the 1st and last event in the sequence specified below.")
+        self.timedeltaCheckText.setToolTip("This is the maximum time that is allowed between the 1st and last event in the sequence specified below.")
+        self.timedeltaCheckbox.setToolTip("Check this to activate the time filter.")
+        self.matchObjectTypesLabel.setToolTip("Ell events in sequence must have at least one of the same objects of each specified object type.")
+        self.objectTypeFrame.setToolTip("Ell events in sequence must have at least one of the same objects of each specified object type.")
+        self.matchObjectTypesCheckbox.setToolTip("Check this to activate object type filter.") 
+        self.matchAttributesLabel.setToolTip("All events in sequence must have matching values for the specified attributes.")
+        self.attributeFrame.setToolTip("All events in sequence must have matching values for the specified attributes.")
+        self.matchAttributesCheckbox.setToolTip("Check this to activate attribute filter.")
+        self.findAllLabel.setToolTip("If unchecked, an event may only be used to form a sequence once. If checked, events can be re-used to form multiple sequences. Note that checking this, can lead to long waiting times.")
+        self.findAllCheckbox.setToolTip("If unchecked, an event may only be used to form a sequence once. If checked, events can be re-used to form multiple sequences. Note that checking this, can lead to long waiting times.")
+        self.directlyFollowsLabel.setToolTip("If checked, events must be directly following each other. If unchecked, other events may occur inbetween.")
+        self.directlyFollowsCheckbox.setToolTip("If checked, events must be directly following each other. If unchecked, other events may occur inbetween.")
+        self.parameterLabel.setToolTip("Specify sequence of activities used to identify events.")
+        self.seqLengthComboBox.setToolTip("Longer sequences can be computationally expensive. Longer waiting times are to be expected.")
+
         self.refresh()
 
     def initAttributeSelection(self):
@@ -191,6 +210,8 @@ class EventRecipeFrame(OperatorFrame):
             seqFrameLayout.addWidget(label, 0, 0, 1, 1)
             
             leftActivityComboBox = QtWidgets.QComboBox(seqFrame)
+            leftActivityComboBox.setToolTip("Specify which activity this event has.")
+
             seqFrameLayout.addWidget(leftActivityComboBox, 0, 1, 1, 3)
             for j in range(len(activities)):
                 leftActivityComboBox.addItem("")
@@ -206,6 +227,11 @@ class EventRecipeFrame(OperatorFrame):
                 checkbox.setChecked(False)
                 seqFrameLayout.addWidget(label, j, 4, QtCore.Qt.AlignCenter)
                 seqFrameLayout.addWidget(checkbox, j, 5, QtCore.Qt.AlignCenter)
+
+                # set tool tips
+                label.setToolTip("Check this to ensure that this event contains at least one object of type " + objectTypes[j])
+                checkbox.setToolTip("Check this to ensure that this event contains at least one object of type " + objectTypes[j])
+
                 # save activity and checkbox so we can check state later
                 objectBoxes.append((label, checkbox))
 

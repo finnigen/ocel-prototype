@@ -175,12 +175,12 @@ class TransformationCenter(QtWidgets.QWidget):
         description = "Merge objects across logs based on object relationships and manual matchings of activity names of the logs."
         self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs as well as object relationships."
-        self.initOperatorPage("Timestamp Interleavings", description, ClosestTimestampsFrame)
+        self.initOperatorPage("Interleaved Timestamps", description, ClosestTimestampsFrame)
         description = "Filter event log based on activities, attributes, objects, object types, or timestamps."
         self.initOperatorPage("Filter", description, FilterFrame)
-        description = "Specify sequence of low-level events and turn them into one high-level event. Besides sequence of activity, specify sequence based on objects, types, attribute values, object relations, and more"
+        description = "Specify sequence of low-level events and turn them into one high-level event. Besides sequence of activity, specify sequence based on objects, types, attribute values, object relations, and more. Specify sequence of length 1 to simply rename activities."
         self.initOperatorPage("Event Recipe", description, EventRecipeFrame)
-        description = "Map all events to objects of one object type based on object relationships."
+        description = "For each event, replace objects with related objects of the desired object type."
         self.initOperatorPage("Flatten", description, FlattenFrame)
 
         # set current page for stacked widget in the beginning to the operator selector page

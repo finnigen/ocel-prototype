@@ -32,9 +32,11 @@ class ClosestTimestampsFrame(OperatorFrame):
         self.logSelectionLabel1.setText("Select 1st event log:")
         self.logSelectionLabel2.setText("Select 2nd event log:")
         self.mergeEventsLabel.setText("Merge all events from 2nd log:")
-        self.onlyClosestLabel.setText("Only merge objects from events in 2nd log to closest event in 1st log:")
+        self.onlyClosestLabel.setText("Only merge objects from events in 2nd log to closest event in 1st log (if unchecked, we merge objects of events in 2nd log to both predecessor and successor in 1st log, regardless of which one is closer):")
         self.onlyClosestLabel.setWordWrap(True)
 
+        self.mergeEventsLabel.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
+        self.mergeEventsCheckBox.setToolTip("Also add (without merging) the events of 2nd log that do not find any matches in 1st log")
         self.refresh()
  
 
