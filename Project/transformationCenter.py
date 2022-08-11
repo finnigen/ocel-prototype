@@ -22,7 +22,7 @@ from operatorFrames.importOCELFrame import ImportOCELFrame
 
 from ocel_model import *
 
-import ocel as ocel_lib
+from ocel import export_log
 from exportDialogBox import ExportDialog
 from toCelonis import cli
 
@@ -408,7 +408,7 @@ class TransformationCenter(QtWidgets.QWidget):
 
         ocelDict = self.ocel_model.transformEventDfObjectDfToOcel(name)
 
-        ocel_lib.export_log(ocelDict, filePath)
+        export_log(ocelDict, filePath)
         dialog = ExportDialog(filePath, self.url, self.api)
         if dialog.exec():
             parameters = dialog.getInputs()

@@ -1,6 +1,6 @@
 import json
 import networkx as nx
-import ocel as ocel_lib
+# import ocel as ocel_lib
 import pickle
 
 import pandas as pd

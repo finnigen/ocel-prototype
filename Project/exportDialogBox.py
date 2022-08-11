@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QApplication, QLineEdit, QDialogButtonBox, QFormLayo
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from pycelonis import get_celonis
-import ocel
+from ocel import import_log
 
 
 # dialog box that opens once export button is pressed
@@ -64,7 +64,7 @@ class ExportDialog(QDialog):
         self.scrollGridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         layout.addWidget(self.scrollArea, 3, 0, 1, 2)
 
-        log = ocel.import_log(self.ocelPath)
+        log = import_log(self.ocelPath)
         object_types = set()
         for ev_id, ev in log["ocel:events"].items():
             for obj_id in ev["ocel:omap"]:

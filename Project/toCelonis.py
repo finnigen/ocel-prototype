@@ -4,7 +4,7 @@ import shutil
 import frozendict
 import pandas as pd
 import traceback
-import ocel
+from ocel import import_log
 from pycelonis import get_celonis
 from statistics import Counter
 
@@ -209,7 +209,7 @@ def cli(ocelPath, url, api, dataPool, dataModel, selected_object_types, allowed_
     try:
         print("\nStarting export")
         log_path = ocelPath
-        log = ocel.import_log(log_path)
+        log = import_log(log_path)
 
         if len(allowed_transitions) == 0:
             allowed_transitions = None
