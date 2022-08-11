@@ -344,7 +344,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarExportButtons[name].setText("Export")
         self.ocelSideBarDeleteButtons[name].setText("Delete")
 
-        self.ocelSideBarExportButtons[name].setToolTip("Prepare export back to Celonis")
+        self.ocelSideBarExportButtons[name].setToolTip("Export to OCEL JSON file, flatten, and export to Celonis")
 
         sidebarOCELTitle.setText(name)
         sidebarOCELTitle.setMaximumWidth(350)
@@ -402,14 +402,17 @@ class TransformationCenter(QtWidgets.QWidget):
 
 
     def export(self, name):
+
+        fileName = self.saveFileDialog(name)
+        if not fileName:
+            return
+
         print("exporting " + name)
-        fileName = 'ocel_' + name + '.json'
-        filePath = "exportedOCELs/" + fileName
 
         ocelDict = self.ocel_model.transformEventDfObjectDfToOcel(name)
 
-        export_log(ocelDict, filePath)
-        dialog = ExportDialog(filePath, self.url, self.api)
+        export_log(ocelDict, fileName)
+        dialog = ExportDialog(fileName, self.url, self.api)
         if dialog.exec():
             parameters = dialog.getInputs()
             # parameters of shape (datapool, datamode, objectTypes, transitions)
@@ -425,7 +428,7 @@ class TransformationCenter(QtWidgets.QWidget):
             self.ocelSideBarExportButtons[name].setStyleSheet("background-color: red")
 
             # create thread so that GUI stays responsive while exporting
-            self.exportWorkers[name] = ExportWorkerThread(name, filePath, self.url, self.api, parameters[0], parameters[1], parameters[2], parameters[3])
+            self.exportWorkers[name] = ExportWorkerThread(name, fileName, self.url, self.api, parameters[0], parameters[1], parameters[2], parameters[3])
             self.exportWorkers[name].exportDone.connect(self.exportDone)
             self.exportWorkers[name].finished.connect(self.exportWorkers[name].quit)
             self.exportWorkers[name].finished.connect(self.exportWorkers[name].deleteLater)
@@ -440,8 +443,15 @@ class TransformationCenter(QtWidgets.QWidget):
         self.ocelSideBarExportButtons[name].setEnabled(True)
         self.ocelSideBarExportButtons[name].setText("Export")
         self.ocelSideBarExportButtons[name].setStyleSheet("")
-        self.ocelSideBarExportButtons[name].setToolTip("Prepare export back to Celonis")
+        self.ocelSideBarExportButtons[name].setToolTip("Export to OCEL JSON file, flatten, and export to Celonis")
         self.ocelSideBarDeleteButtons[name].setEnabled(True)
+
+
+    def saveFileDialog(self, name):
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Choose location for OCEL file",str(name) + ".json","All Files (*)", options=options)
+        return fileName
 
 
     def switchPage(self, pageNum, toOverview=False):
