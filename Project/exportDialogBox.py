@@ -14,8 +14,9 @@ class ExportDialog(QDialog):
         try:
             self.celonis = get_celonis(url, api, key_type="USER_KEY")
         except:
-            print("Invalid login info. Try again")
+            print("Connection failed")
             return
+
 
         self.setWindowTitle("Export Center")
 
@@ -25,6 +26,15 @@ class ExportDialog(QDialog):
 
         layout = QtWidgets.QGridLayout()
         self.setLayout(layout)
+
+        if len(self.celonis.pools) == 0:
+            connectionErrorLabel = QLabel(self)
+            connectionErrorLabel.setText("Connection failed: no data pool found")
+            layout.addWidget(connectionErrorLabel, 0, 0)
+            buttonBox = QDialogButtonBox(QDialogButtonBox.Ok, self)
+            layout.addWidget(buttonBox, 6, 0, 1, 2, QtCore.Qt.AlignCenter)
+            buttonBox.accepted.connect(lambda : self.close())
+            return
 
         self.dataPool = QComboBox()
         self.dataModel = QLineEdit()
