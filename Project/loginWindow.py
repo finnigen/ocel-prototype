@@ -26,7 +26,7 @@ class Ui_LoginWindow(object):
         self.middleFont = font
         
         # size and central widget
-        LoginWindow.resize(700, 400)
+        LoginWindow.resize(900, 400)
         self.centralwidget = QtWidgets.QWidget(LoginWindow)
         self.formLayout = QtWidgets.QFormLayout(self.centralwidget)
 
@@ -63,6 +63,15 @@ class Ui_LoginWindow(object):
         self.loginLabel.setScaledContents(False)
         self.loginLabel.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
         self.formLayout.setWidget(5, QtWidgets.QFormLayout.FieldRole, self.loginLabel)
+
+        # error label
+        self.errorLabel = QtWidgets.QLabel(self.centralwidget)
+        self.errorLabel.setFont(self.middleFont)
+        self.errorLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.errorLabel.setScaledContents(False)
+        self.errorLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.formLayout.setWidget(18, QtWidgets.QFormLayout.FieldRole, self.errorLabel)
+
         # separator line
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
@@ -106,18 +115,26 @@ class Ui_LoginWindow(object):
         self.dataPoolComboBox.activated.connect(self.initModelBox)
         self.conversionButton.clicked.connect(self.startConversion)
 
-        # waiti label
+        # wait label
         self.waitLabel = QtWidgets.QLabel(self.centralwidget)
         self.waitLabel.setFont(self.middleFont)
         self.waitLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.formLayout.setWidget(27, QtWidgets.QFormLayout.FieldRole, self.waitLabel)  
 
+        # conversion error label
+        self.conversionErrorLabel = QtWidgets.QLabel(self.centralwidget)
+        self.conversionErrorLabel.setFont(self.middleFont)
+        self.conversionErrorLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.formLayout.setWidget(28, QtWidgets.QFormLayout.FieldRole, self.conversionErrorLabel)  
+
         # loading symbol for conversion
         self.spinnerLabel = QtWidgets.QLabel(self.centralwidget)
         self.spinnerLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.formLayout.setWidget(28, QtWidgets.QFormLayout.FieldRole, self.spinnerLabel)  
+        self.formLayout.setWidget(29, QtWidgets.QFormLayout.FieldRole, self.spinnerLabel)  
         self.spinner = QtGui.QMovie("loading2.gif")
         self.spinnerLabel.setMovie(self.spinner)
+
+        self.newWindow = None
 
         self.retranslateUi(LoginWindow)
         QtCore.QMetaObject.connectSlotsByName(LoginWindow)
@@ -128,11 +145,15 @@ class Ui_LoginWindow(object):
         self.celonisTokenLabel.setText("Enter your Celonis API token:")
         self.loginButton.setText("Login")
         self.loginLabel.setText("Login to Celonis")
+        self.errorLabel.setText("Connection failed: no data pools found. Please double check the login info and try again.")
         self.dataPoolLabel.setText("Select a data pool:")
         self.dataModelLabel.setText("Select a data model:")
         self.conversionButton.setText("Start Conversion")
-        self.waitLabel.setText("Pease be patient. This can take a few minutes...")
+        self.waitLabel.setText("Please be patient. This can take a few minutes...")
+        self.conversionErrorLabel.setText("Conversion failed: Is the data pool loaded and non-empty?")
         self.waitLabel.hide()
+        self.errorLabel.hide()
+        self.conversionErrorLabel.hide()
 
     def login(self):
         self.url = self.celonisURLText.text()
@@ -153,8 +174,16 @@ class Ui_LoginWindow(object):
         try:
             self.celonis = get_celonis(self.url, self.token, key_type="USER_KEY")
         except:
-            print("Invalid login info. Try again")
+            print("Failed to connect")
+            self.errorLabel.show()
             return
+
+        if len(self.celonis.pools) == 0:
+            print("Connection failed: no data pools found. Please double check the login info and try again.")
+            self.errorLabel.show()
+            return
+
+        self.errorLabel.hide()
         self.initRest()
     
 
@@ -182,16 +211,26 @@ class Ui_LoginWindow(object):
         for i in range(len(pool.datamodels)):
             self.dataModelComboBox.addItem("")
             self.dataModelComboBox.setItemText(i, pool.datamodels[i].name) 
-        self.conversionButton.setEnabled(True)
 
+        self.conversionButton.setEnabled(True)
 
     def startConversion(self):
         print("Opening Transformation Center...")
+        self.conversionErrorLabel.hide()
   
+        if self.newWindow is not None:
+            try:
+                self.newWindow.deleteLater()
+            except:
+                pass
+        self.newWindow = None
+
         self.waitLabel.show()
         self.conversionButton.setEnabled(False)
         self.dataPoolComboBox.setEnabled(False)
         self.dataModelComboBox.setEnabled(False)
+        self.celonisTokenText.setEnabled(False)
+        self.celonisURLText.setEnabled(False)
         self.loginButton.setEnabled(False)
 
         # find data model
@@ -212,31 +251,40 @@ class Ui_LoginWindow(object):
         self.worker.start()
 
     def conversionComplete(self, ocel_model):
-        # open new window of transformation center
-        self.newWindow = QtWidgets.QMainWindow()
-        ui = TransformationCenter(ocel_model, self.url, self.token)
-        ui.setupUi(self.newWindow)
-        self.newWindow.show()
+        if ocel_model is not None:
+            # open new window of transformation center
+            self.newWindow = QtWidgets.QMainWindow()
+            ui = TransformationCenter(ocel_model, self.url, self.token)
+            ui.setupUi(self.newWindow)
+            self.newWindow.show()
+        else:
+            self.conversionErrorLabel.show()
 
         # reset visuals
         self.conversionButton.setEnabled(True)
         self.dataPoolComboBox.setEnabled(True)
         self.dataModelComboBox.setEnabled(True)
+        self.celonisTokenText.setEnabled(True)
+        self.celonisURLText.setEnabled(True)
         self.loginButton.setEnabled(True)
-        self.waitLabel.hide()
         self.spinnerLabel.hide()
         self.spinner.stop()
+        self.waitLabel.hide()
 
 
 class WorkerThread(QThread):
-    updateOCEL = pyqtSignal(OCEL_Model)
+    updateOCEL = pyqtSignal(object)
     def __init__(self, pool, data_model):
         super().__init__()
         self.data_model = data_model
         self.data_pool = pool
 
     def run(self):
-        ocel_model = convertToOcelModel("", "", self.data_pool, self.data_model, skipConnection=True)
+        try:
+            ocel_model = convertToOcelModel("", "", self.data_pool, self.data_model, skipConnection=True)
+        except Exception as e:
+            print(e)
+            ocel_model = None
 
         # for presentation...
 #        time.sleep(10)

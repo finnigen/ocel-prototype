@@ -27,11 +27,9 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         data_pool = celonis.pools.find(data_pool)
         data_model = data_pool.datamodels.find(data_model)
 
-        
     # create ocel_Model object
-    ocel_model = OCEL_Model(newFolderName = data_pool.name + "__" + data_model.name)
+    ocel_model = OCEL_Model(newFolderName = data_pool.name + "__" + data_model.name, ocels=set(), obj_relation=set())
 
-        
     tables = {}
     all_data = {}
     case_table_case_column = {} # keep track of case table's case column
@@ -56,7 +54,6 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         case_table_name = tables[table_name].case_table.name
         all_data[case_table_name] = tables[table_name].case_table.get_data_frame()
 
-    
     for table_name in tables:
         print("Transforming " + str(table_name) + " table...")
         
@@ -92,13 +89,15 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         objType = objectsDf[("ocel:type", "ocel:type")].iloc[0]
         objectsDf.set_index(objType + ":" + objectsDf.index.astype(str), inplace=True)
         eventsDf[("ocel:omap", "ocel:omap")] = eventsDf[("ocel:omap", "ocel:omap")].apply(lambda x : [objType + ":" + str(x[0])])
-        
+
         # add OCEL-based events and object dataframes to ocel_model
         try:
             ocel_model.addEventObjectDf(table_name, eventsDf, objectsDf)
         except EmptyLogException:
-            print(table_name + " not added since it is empty")      
-
+            print(table_name + " not added since it is empty")
+        except Exception as e:
+            print(e)
+        
     print("Generating object relationships...")
         
     # prefix column names of all columns to ensure uniqueness. We do this before joining tables to compute obj relationships

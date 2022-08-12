@@ -53,7 +53,6 @@ class ImportOCELFrame(QtWidgets.QFrame):
         self.extractObjRelLabel.setToolTip("If unchecked, we only add reflexive relation. If checked, we consider all objects named in same events in relation with each other.")
         self.extractObjRelCheckbox.setToolTip("If unchecked, we only add reflexive relation. If checked, we consider all objects named in same events in relation with each other.")
 
-
         self.ocelPathText = QtWidgets.QLineEdit(self.operatorFrame)
         self.ocelPathText.setReadOnly(True)
         self.ocelPathButton = QtWidgets.QPushButton(self.operatorFrame)

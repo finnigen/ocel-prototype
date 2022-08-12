@@ -76,7 +76,7 @@ def convertCelonisCaseDfToObjectDf(tableDf, caseColumn, table_name):
 #    format: OCEL_Models is root folder, contains folder for data_model. 
 #            data_model folder contains a folder for each activity table in Celonis with an event and object table
 class OCEL_Model:
-    def __init__(self, newFolderName, ocels=set(), obj_relation=set()):
+    def __init__(self, newFolderName, ocels=None, obj_relation=None):
         self.rootFolder = "OCEL_Models"
         newPath = os.path.join(self.rootFolder, newFolderName)
         
@@ -86,8 +86,8 @@ class OCEL_Model:
         os.mkdir(newPath)
         
         self.folder = newPath # save dataframes as pql here
-        self.ocels = ocels # format: set(name1, name2, ...)
-        self.obj_relation = obj_relation
+        self.ocels = ocels if ocels is not None else set() # format: set(name1, name2, ...)
+        self.obj_relation = obj_relation if obj_relation is not None else set()
         self.objRelationDict = None
     
 
@@ -110,7 +110,12 @@ class OCEL_Model:
 
         # make sure events and objects dataframes are aligned (no conflicts in which objects mentioned where...)
         eventsDf, objectsDf = self.alignEventsObjectsBeforeAdding(eventsDf, objectsDf)
-        if len(eventsDf) == 0:
+
+        # drop empty columns
+        eventsDf.dropna(how='all', axis=1, inplace=True)
+        objectsDf.dropna(how='all', axis=1, inplace=True)
+
+        if len(eventsDf) == 0 or len(objectsDf) == 0:
             raise EmptyLogException('Event log empty')
 
         newPath = os.path.join(self.folder, name)
