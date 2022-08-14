@@ -413,6 +413,7 @@ class TransformationCenter(QtWidgets.QWidget):
         ocelDict = self.ocel_model.transformEventDfObjectDfToOcel(name)
 
         export_log(ocelDict, fileName)
+        
         dialog = ExportDialog(fileName, self.url, self.api)
         if dialog.exec():
             parameters = dialog.getInputs()
@@ -608,7 +609,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
 
                 # 'fileDf.pkl'
-    with open('fileBig.pkl', 'rb') as file:
+    with open('fileDf.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
 

@@ -72,8 +72,8 @@ def read_event(log, oct, ev_id, event, allowed_object_types=None, allowed_transi
             ob = {"CASE_" + objtype: objid}
             for att in obj["ocel:ovmap"]:
                 ob["ATT_" + objtype + "_" + att] = obj["ocel:ovmap"][att]
-            __add_row_to_table(oct, objtype + "_CASES", ob)
-            __add_foreign_key(oct, objtype + "_EVENTS", "CASE_"+objtype, objtype + "_CASES", "CASE_"+objtype)
+            __add_row_to_table(oct, objtype, ob)
+            __add_foreign_key(oct, objtype + "_EVENTS", "CASE_"+objtype, objtype, "CASE_"+objtype)
             for objid2 in event["ocel:omap"]:
                 if objid != objid2:
                     obj2 = log["ocel:objects"][objid2]
@@ -88,8 +88,8 @@ def read_event(log, oct, ev_id, event, allowed_object_types=None, allowed_transi
                             if objtype != objtype2:
                                 if allowed_transitions is None or (objtype, objtype2) in allowed_transitions:
                                     oct.transitions.add((objtype, objtype2))
-                                    __add_foreign_key(oct, "CONNECT_" + objtype + "_CASES_" + objtype2 + "_CASES", "SOURCE_CASE_" + objtype, objtype + "_CASES", "CASE_" + objtype)
-                                    __add_foreign_key(oct, "CONNECT_" + objtype + "_CASES_" + objtype2 + "_CASES", "TARGET_CASE_" + objtype2, objtype2 + "_CASES", "CASE_" + objtype2)
+                                    __add_foreign_key(oct, "CONNECT_" + objtype + "_CASES_" + objtype2 + "_CASES", "SOURCE_CASE_" + objtype, objtype, "CASE_" + objtype)
+                                    __add_foreign_key(oct, "CONNECT_" + objtype + "_CASES_" + objtype2 + "_CASES", "TARGET_CASE_" + objtype2, objtype2, "CASE_" + objtype2)
 
 
 def fix_foreign_keys(oct):
@@ -103,7 +103,7 @@ def fix_foreign_keys(oct):
             target_object_type = fk[2].split("_CASES")[0]
             if target_type_counter[target_object_type] > 0:
                 # must replicate the table
-                oct.tables[target_object_type+"_CASES_"+str(target_type_counter[target_object_type])] = oct.tables[target_object_type+"_CASES"]
+                oct.tables[target_object_type+"_CASES_"+str(target_type_counter[target_object_type])] = oct.tables[target_object_type]
                 new_keys.append((target_object_type+"_EVENTS", "CASE_"+target_object_type, target_object_type+"_CASES_"+str(target_type_counter[target_object_type]), "CASE_"+target_object_type))
                 fk[2] = target_object_type+"_CASES_"+str(target_type_counter[target_object_type])
             target_type_counter[target_object_type] += 1
@@ -195,7 +195,7 @@ def upload_to_celonis(oct, data_pool, data_model):
             traceback.print_exc()
     for objtype in oct.object_types:
         try:
-            data_model.create_process_configuration(case_table=objtype+"_CASES", activity_table=objtype+"_EVENTS", case_column="CASE_"+objtype, activity_column="ACT_"+objtype, timestamp_column="TIME_"+objtype, sorting_column="SORT_TIME_"+objtype)
+            data_model.create_process_configuration(case_table=objtype, activity_table=objtype+"_EVENTS", case_column="CASE_"+objtype, activity_column="ACT_"+objtype, timestamp_column="TIME_"+objtype, sorting_column="SORT_TIME_"+objtype)
         except:
             traceback.print_exc()
     try:

@@ -288,7 +288,9 @@ class OCEL_Model:
                 if multiColumn[0] == "ocel:vmap" or multiColumn[0] == "ocel:ovmap":
                     innerdict = {}
                     for attrKey in row[multiColumn[0]].keys():
-                        innerdict[attrKey] = row[multiColumn[0]][attrKey]
+                        value = row[multiColumn[0]][attrKey]
+                        if value is not np.nan:
+                            innerdict[attrKey] = str(value)
                     outerdict[multiColumn[0]] = innerdict
                 else:
                     outerdict[multiColumn[0]] = row[multiColumn[0]][multiColumn[1]]
@@ -474,8 +476,8 @@ class OCEL_Model:
 
         aggregateBy = list(set(aggregateBy))
 
-        omap = eventsDf.groupby(aggregateBy)[[("ocel:omap", "ocel:omap")]].apply(sum).reset_index()
-        newEventsDf = eventsDf.groupby(aggregateBy).first().reset_index()
+        omap = eventsDf.groupby(aggregateBy, dropna=False)[[("ocel:omap", "ocel:omap")]].apply(sum).reset_index()
+        newEventsDf = eventsDf.groupby(aggregateBy, dropna=False).first().reset_index()
         
         newEventsDf[("ocel:omap", "ocel:omap")] = omap[("ocel:omap", "ocel:omap")]
         
@@ -519,7 +521,7 @@ class OCEL_Model:
         right_on = [column[1] for column in matchOn.values()]
 
         # merge based on matching activity names and timestamps
-        df = pd.merge(eventsDf1, eventsDf2, left_on=left_on, right_on=right_on).groupby("index")[["ocel:omap_x", "ocel:omap_y", "index_y"]].apply(sum)
+        df = pd.merge(eventsDf1, eventsDf2, left_on=left_on, right_on=right_on).groupby("index", dropna=False)[["ocel:omap_x", "ocel:omap_y", "index_y"]].apply(sum)
 
         if len(df) > 0:
             for index, row in df.iterrows():
@@ -563,7 +565,7 @@ class OCEL_Model:
         newEventsDf = copy.deepcopy(eventsDf1)
 
         # first group by timestamp and activity
-        eventsDf2 = eventsDf2.groupby(list(set(matchOn.values())))[[("ocel:omap", "ocel:omap")]].apply(sum)
+        eventsDf2 = eventsDf2.groupby(list(set(matchOn.values())), dropna=False)[[("ocel:omap", "ocel:omap")]].apply(sum)
 
         # join dataframes based on activity and timestamps
         joined = pd.merge(eventsDf1, eventsDf2, how="left", left_on=list(matchOn.keys()), right_on=list(matchOn.values()))
@@ -592,7 +594,7 @@ class OCEL_Model:
         newEventsDf = copy.deepcopy(eventsDf1)
 
         # first group by timestamp and activity
-        eventsDf2 = eventsDf2.groupby(list(set(matchOn.values())))[[("ocel:omap", "ocel:omap")]].apply(sum)
+        eventsDf2 = eventsDf2.groupby(list(set(matchOn.values())), dropna=False)[[("ocel:omap", "ocel:omap")]].apply(sum)
 
         # join dataframes based on activity and timestamps
         joined = pd.merge(eventsDf1, eventsDf2, how="left", left_on=list(matchOn.keys()), right_on=list(matchOn.values()))
@@ -829,7 +831,7 @@ class OCEL_Model:
         tempDf[("index", "index")] = tempDf["index"].apply(lambda x: [x])
 
         # group by timestamp since we want transition from all events in case they have same timestamp
-        tempDf = tempDf.groupby([("ocel:timestamp", "ocel:timestamp"), ("log", "log")])[[("ocel:omap", "ocel:omap"), ("index", "index")]].apply(sum)
+        tempDf = tempDf.groupby([("ocel:timestamp", "ocel:timestamp"), ("log", "log")], dropna=False)[[("ocel:omap", "ocel:omap"), ("index", "index")]].apply(sum)
 
         allAddedObjects = set()
 
@@ -901,7 +903,7 @@ class OCEL_Model:
         tempDf[("index", "index")] = tempDf["index"].apply(lambda x: [x])
 
         # group by timestamp since we want transition from all events in case they have same timestamp
-        tempDf = tempDf.groupby([("ocel:timestamp", "ocel:timestamp"), ("log", "log")])[[("ocel:omap", "ocel:omap"), ("index", "index")]].apply(sum)
+        tempDf = tempDf.groupby([("ocel:timestamp", "ocel:timestamp"), ("log", "log")], dropna=False)[[("ocel:omap", "ocel:omap"), ("index", "index")]].apply(sum)
 
         allAddedObjects = set()
 
@@ -975,7 +977,7 @@ class OCEL_Model:
         tempDf[("index", "index")] = tempDf["index"].apply(lambda x: [x])
 
         # group by timestamp since we want transition from all events in case they have same timestamp
-        tempDf = tempDf.groupby([("ocel:timestamp", "ocel:timestamp"), ("log", "log")])[[("ocel:omap", "ocel:omap"), ("index", "index")]].apply(sum)
+        tempDf = tempDf.groupby([("ocel:timestamp", "ocel:timestamp"), ("log", "log")], dropna=False)[[("ocel:omap", "ocel:omap"), ("index", "index")]].apply(sum)
 
         allAddedObjects = set()
         
