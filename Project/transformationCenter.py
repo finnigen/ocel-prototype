@@ -409,6 +409,7 @@ class TransformationCenter(QtWidgets.QWidget):
 
         print("exporting " + name)
 
+        # transform DataFrame format to dictionary/JSON standard of OCEL
         ocelDict = self.ocel_model.transformEventDfObjectDfToOcel(name)
 
         export_log(ocelDict, fileName)

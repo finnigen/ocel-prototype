@@ -83,7 +83,7 @@ class ImportOCELFrame(QtWidgets.QFrame):
     def openFileNameDialog(self):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,"Choose OCEL File", "","JSON Files (*.json);;JSONOCEL Files (*.jsonocel)", options=options)
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,"Choose OCEL File", "","JSON Files (*.json); JSONOCEL Files (*.jsonocel)", options=options)
         if fileName:
             self.ocelPathText.setText(fileName)
 

@@ -37,7 +37,8 @@ class TableWindow(QtWidgets.QMainWindow):
             self.objectsDf[ot + " objects"] = self.objectsDf["OBJECT"].apply(lambda x : x if x.split(":")[0] == ot else "-")
         self.objectsDf.drop(["OBJECT", "ocel:type"], axis=1, inplace=True)
         # re-order columns
-        columns = columns + list(set(self.objectsDf.columns).difference(columns))
+        columns.sort()
+        columns = columns + sorted(list(set(self.objectsDf.columns).difference(columns)))
         self.objectsDf = self.objectsDf[columns]
 
         # transform format of eventsDf so that we have a column for each object type
@@ -47,8 +48,9 @@ class TableWindow(QtWidgets.QMainWindow):
             self.eventsDf[ot + " objects"] = self.eventsDf["Object"].apply(lambda x : [o for o in x if o.split(":")[0] == ot])
         self.eventsDf.drop(["Object"], axis=1, inplace=True)
         # re-order columns
+        columns = ["ID"] + sorted(columns[1:])
         columns += ["Activity", "Timestamp"]
-        columns = columns + list(set(self.eventsDf.columns).difference(columns))
+        columns = columns + sorted(list(set(self.eventsDf.columns).difference(columns)))
         self.eventsDf = self.eventsDf[columns]
 
 
