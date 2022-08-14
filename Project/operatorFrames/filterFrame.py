@@ -98,8 +98,8 @@ class FilterFrame(OperatorFrame):
             textLeft.setValidator(QtGui.QDoubleValidator(0.99,99.99,2))
             textRight.setValidator(QtGui.QDoubleValidator(0.99,99.99,2))
 
-            mini = min(attributesDf[numericAttributes[i]])
-            maxi = max(attributesDf[numericAttributes[i]])
+            mini = min(attributesDf[numericAttributes[i]].dropna())
+            maxi = max(attributesDf[numericAttributes[i]].dropna())
 
             # round to fit double format
             mini = math.floor(mini * 100)/100.0

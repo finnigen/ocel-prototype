@@ -342,10 +342,10 @@ class OCEL_Model:
         else:
             ocel = ocel
         eventsDf = self.transformDictToDf(ocel["ocel:events"])
+        eventsDf[("ocel:timestamp", "ocel:timestamp")] = pd.to_datetime(eventsDf[("ocel:timestamp", "ocel:timestamp")])
+
         objectsDf = self.transformDictToDf(ocel["ocel:objects"])
         
-        name = ocelFile
-
         return (eventsDf, objectsDf)
 
     
