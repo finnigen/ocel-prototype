@@ -965,7 +965,7 @@ class OCEL_Model:
 
 
     # onlyMergeClosest: instead of merging objects of predecessor events and successor events in log2, we only merge closest one
-    def closestTimestamps(self, name1, name2, onlyMergeClosest=True, mergeEvents=False, newName=""):
+    def closestTimestamps(self, name1, name2, onlyMergeClosest=True, considerObjRelations=False, mergeEvents=False, newName=""):
 
         newEventsDf = self.getEventsDf(name1)
 
@@ -998,7 +998,7 @@ class OCEL_Model:
         # loop through tempDf and keep track of previous index
         # in case we switch to log 2, we merge the objects from that into omap of event referred to in previous index
         previousIndex = None
-        counter = -1
+        counter = 0
         for index, row in tempDf.iterrows():
             before = False
             after = False
@@ -1022,12 +1022,12 @@ class OCEL_Model:
                         
                         if onlyMergeClosest:
                             if previousIndex[1] == 1:
-                                before = timedelta(index[0] - previousIndex[0])
-                                after = timedelta(nextIndex[0] - index[0])
-                                if before == after:
+                                timeBefore = index[0] - previousIndex[0]
+                                timeAfter = nextIndex[0] - index[0]
+                                if timeBefore == timeAfter:
                                     before = True
                                     after = True
-                                elif before < after:
+                                elif timeBefore < timeAfter:
                                     after = False
                                 else:
                                     before = False
@@ -1036,11 +1036,17 @@ class OCEL_Model:
                     thisRoundObjects = set()
                     for ev_id in tempDf.loc[previousIndex][("index", "index")]:
                         toBeAddedObjects = set()
-                        for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
-                            intersec = set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1])
-                            allAddedObjects = allAddedObjects.union(intersec)
-                            toBeAddedObjects = toBeAddedObjects.union(intersec)
-                            thisRoundObjects = thisRoundObjects.union(intersec)
+                        if considerObjRelations:
+                            for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
+                                intersec = set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1])
+                                allAddedObjects = allAddedObjects.union(intersec)
+                                toBeAddedObjects = toBeAddedObjects.union(intersec)
+                                thisRoundObjects = thisRoundObjects.union(intersec)
+                        else:
+                            objects = set(row[("ocel:omap", "ocel:omap")])
+                            allAddedObjects = allAddedObjects.union(objects)
+                            toBeAddedObjects = toBeAddedObjects.union(objects)
+                            thisRoundObjects = thisRoundObjects.union(objects)
                         newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(toBeAddedObjects.union(newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]))
                     # remove objects from events in case we want to merge events
                     if mergeEvents:
@@ -1051,11 +1057,17 @@ class OCEL_Model:
                     thisRoundObjects = set()
                     for ev_id in tempDf.loc[nextIndex][("index", "index")]:
                         toBeAddedObjects = set()
-                        for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
-                            intersec = set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1])
-                            allAddedObjects = allAddedObjects.union(intersec)
-                            toBeAddedObjects = toBeAddedObjects.union(intersec)
-                            thisRoundObjects = thisRoundObjects.union(intersec)
+                        if considerObjRelations:
+                            for obj1 in newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]:
+                                intersec = set(row[("ocel:omap", "ocel:omap")]).intersection(object_relation[obj1])
+                                allAddedObjects = allAddedObjects.union(intersec)
+                                toBeAddedObjects = toBeAddedObjects.union(intersec)
+                                thisRoundObjects = thisRoundObjects.union(intersec)
+                        else:
+                            objects = set(row[("ocel:omap", "ocel:omap")])
+                            allAddedObjects = allAddedObjects.union(objects)
+                            toBeAddedObjects = toBeAddedObjects.union(objects)
+                            thisRoundObjects = thisRoundObjects.union(objects)
                         newEventsDf.at[ev_id, ("ocel:omap", "ocel:omap")] = list(toBeAddedObjects.union(newEventsDf.loc[ev_id][("ocel:omap", "ocel:omap")]))
                     # remove objects from events in case we want to merge events
                     if mergeEvents:
