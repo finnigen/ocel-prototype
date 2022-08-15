@@ -153,7 +153,7 @@ class Ui_LoginWindow(object):
         self.dataPoolLabel.setText("Select a data pool:")
         self.dataModelLabel.setText("Select a data model:")
         self.conversionButton.setText("Start Conversion")
-        self.waitLabel.setText("Please be patient. This can take a few minutes...")
+        self.waitLabel.setText("Please be patient. This can take some time...")
         self.conversionErrorLabel.setText("Conversion failed: Is the data pool loaded and non-empty?")
         self.waitLabel.hide()
         self.errorLabel.hide()

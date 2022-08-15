@@ -374,6 +374,9 @@ class OCEL_Model:
             eventsDf[("ocel:omap", "ocel:omap")] = eventsDf[("ocel:omap", "ocel:omap")].apply(lambda x : [objectsDf.loc[obj][("ocel:type", "ocel:type")] + ":" + obj for obj in x])
             objectsDf.index = objectsDf.index.map(lambda x : objectsDf.loc[x][("ocel:type", "ocel:type")] + ":" + x)
 
+        # align before adding anything to relation
+        eventsDf, objectsDf = self.alignEventsObjectsBeforeAdding(eventsDf, objectsDf)
+
         toAddedRelations = set([(obj, obj) for obj in objectsDf.index])
 
         if addObjectRelations:
