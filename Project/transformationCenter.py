@@ -101,6 +101,7 @@ class TransformationCenter(QtWidgets.QWidget):
         # add title to sidebar (adjust font first)
         sidebarTitlelabel = QtWidgets.QLabel(self.OCEL_list_frame)
         sidebarTitlelabel.setFont(self.titleFont)
+        sidebarTitlelabel.setWordWrap(True)
         sidebarTitlelabel.setText("Object-Centric Event Logs")
 
         OCEL_list_scrollArea.setWidget(self.OCEL_list_frame)
@@ -559,7 +560,6 @@ class ExportWorkerThread(QThread):
             self.exportDone.emit(self.name, True)
         except:
             self.exportDone.emit(self.name, False)
-
 
 
 class OperatorWorkerThread(QThread):

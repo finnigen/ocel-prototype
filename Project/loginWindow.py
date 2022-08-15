@@ -32,6 +32,7 @@ class Ui_LoginWindow(object):
 
         # celonis url text and label
         self.celonisURLText = QtWidgets.QLineEdit(self.centralwidget)
+        self.celonisURLText.setFont(self.middleFont)
         self.formLayout.setWidget(10, QtWidgets.QFormLayout.FieldRole, self.celonisURLText)
 
         self.celonisURLLabel = QtWidgets.QLabel(self.centralwidget)
@@ -41,6 +42,7 @@ class Ui_LoginWindow(object):
         
         # celonis token text and label
         self.celonisTokenText = QtWidgets.QLineEdit(self.centralwidget)
+        self.celonisTokenText.setFont(self.middleFont)
         self.formLayout.setWidget(12, QtWidgets.QFormLayout.FieldRole, self.celonisTokenText)
         
         self.celonisTokenLabel = QtWidgets.QLabel(self.centralwidget)
@@ -86,6 +88,7 @@ class Ui_LoginWindow(object):
         
         self.dataPoolComboBox = QtWidgets.QComboBox(self.centralwidget)
         self.dataPoolComboBox.setEnabled(False)
+        self.dataPoolComboBox.setFont(self.middleFont)
         self.formLayout.setWidget(21, QtWidgets.QFormLayout.FieldRole, self.dataPoolComboBox)
         # data model label and combobox
         self.dataModelLabel = QtWidgets.QLabel(self.centralwidget)
@@ -96,6 +99,7 @@ class Ui_LoginWindow(object):
         
         self.dataModelComboBox = QtWidgets.QComboBox(self.centralwidget)
         self.dataModelComboBox.setEnabled(False)
+        self.dataModelComboBox.setFont(self.middleFont)
         self.formLayout.setWidget(23, QtWidgets.QFormLayout.FieldRole, self.dataModelComboBox)
         # set conversion button
         self.conversionButton = QtWidgets.QPushButton(self.centralwidget)
@@ -162,12 +166,12 @@ class Ui_LoginWindow(object):
         ########################### only for development
 
         # my personal acc
-        self.url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
-        self.token = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
+    #    self.url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
+    #    self.token = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
 
         # BA acc
-        self.url = "https://students-pads.eu-1.celonis.cloud"
-        self.token = "MmRlZTU4M2MtNjg5NS00YTU4LTlhOWEtODQ1ZDAxYTUzNTcxOmNaUjhMUllkSUQ4Y0E2cG9uRERkSWJSY2FtdVp0NkxLTVhuTm92TGk0Q0Fi"
+    #    self.url = "https://students-pads.eu-1.celonis.cloud"
+    #    self.token = "MmRlZTU4M2MtNjg5NS00YTU4LTlhOWEtODQ1ZDAxYTUzNTcxOmNaUjhMUllkSUQ4Y0E2cG9uRERkSWJSY2FtdVp0NkxLTVhuTm92TGk0Q0Fi"
 
         ###########################
 

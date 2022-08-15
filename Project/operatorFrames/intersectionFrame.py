@@ -29,7 +29,7 @@ class IntersectionFrame(OperatorFrame):
 
         self.logSelectionLabel1.setText("Select 1st event log:")
         self.logSelectionLabel2.setText("Select 2nd event log:")
-        self.numOfMatchesLabel.setText("Select number of properties to match on: \n (Can only match columns of same type)")
+        self.numOfMatchesLabel.setText("Select number of properties to match on:")
         self.numOfMatchesLabel.setWordWrap(True)
 
         # scroll area for matching columns
