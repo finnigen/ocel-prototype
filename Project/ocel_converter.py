@@ -86,9 +86,11 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         objectsDf = convertCelonisCaseDfToObjectDf(case_table, case_table_case_column[table_name], tables[table_name].case_table.name)
 
         # prepend object identifiers with object type to ensure uniquness across tables
-        objType = objectsDf[("ocel:type", "ocel:type")].iloc[0]
-        objectsDf.set_index(objType + ":" + objectsDf.index.astype(str), inplace=True)
-        eventsDf[("ocel:omap", "ocel:omap")] = eventsDf[("ocel:omap", "ocel:omap")].apply(lambda x : [objType + ":" + str(x[0])])
+        prepend = False in list(objectsDf.index.map(lambda x : x.split(":")[0]) == objectsDf[("ocel:type", "ocel:type")])
+        if prepend:
+            objType = objectsDf[("ocel:type", "ocel:type")].iloc[0]
+            objectsDf.set_index(objType + ":" + objectsDf.index.astype(str), inplace=True)
+            eventsDf[("ocel:omap", "ocel:omap")] = eventsDf[("ocel:omap", "ocel:omap")].apply(lambda x : [objType + ":" + str(x[0])])
 
         # add OCEL-based events and object dataframes to ocel_model
         try:
@@ -201,10 +203,11 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         df.reset_index(drop=True, inplace=True)
         
         # prefix objects with case table names (object type)
-        column_name = table1 + case_table_case_column[ev_table1]
-        df[column_name] = df[column_name].apply(lambda x : table1 + ":" + str(x))
-        column_name = table2 + case_table_case_column[ev_table2]
-        df[column_name] = df[column_name].apply(lambda x : table2 + ":" + str(x))
+        if prepend:
+            column_name = table1 + case_table_case_column[ev_table1]
+            df[column_name] = df[column_name].apply(lambda x : table1 + ":" + str(x))
+            column_name = table2 + case_table_case_column[ev_table2]
+            df[column_name] = df[column_name].apply(lambda x : table2 + ":" + str(x))
 
 
         total_relation = set()

@@ -112,6 +112,8 @@ class OCEL_Model:
         eventsDf, objectsDf = self.alignEventsObjectsBeforeAdding(eventsDf, objectsDf)
 
         # drop empty columns
+        eventsDf.replace('nan', np.nan, inplace=True)
+        objectsDf.replace('nan', np.nan, inplace=True)
         eventsDf.dropna(how='all', axis=1, inplace=True)
         objectsDf.dropna(how='all', axis=1, inplace=True)
 
