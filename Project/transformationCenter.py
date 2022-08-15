@@ -572,7 +572,7 @@ class OperatorWorkerThread(QThread):
 
     def run(self):
         # just for testing/developing purposes...
-#        result = self.operatorFrame.getNewLog(self.newName, self.parameters)
+    #    result = self.operatorFrame.getNewLog(self.newName, self.parameters)
 
         try:
             result = self.operatorFrame.getNewLog(self.newName, self.parameters)

@@ -120,6 +120,15 @@ class OCEL_Model:
         if len(eventsDf) == 0 or len(objectsDf) == 0:
             raise EmptyLogException('Event log empty')
 
+        # convert possible values to numeric
+        for col in eventsDf.columns:
+            eventsDf[col] = pd.to_numeric(eventsDf[col], errors="ignore")
+        for col in objectsDf.columns:
+            objectsDf[col] = pd.to_numeric(objectsDf[col], errors="ignore")
+        
+        # convert timestamp column to datetime
+        eventsDf[("ocel:timestamp", "ocel:timestamp")] = pd.to_datetime(eventsDf[("ocel:timestamp", "ocel:timestamp")])
+
         newPath = os.path.join(self.folder, name)
         
         # remove if exists already
