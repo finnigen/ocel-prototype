@@ -217,7 +217,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         
         ocel_model.addToRelation(total_relation)
     
-    print("Making object relation reflexive...")    
+    print("Making object relation reflexive...")
     # make object relation reflexive
     reflexive = set()
     for tableName in ocel_model.getOcelNames():
@@ -252,6 +252,9 @@ data_model = "DemoModel"
 data_pool = "BigTest"
 data_model = "BigModel1"
 
+data_pool = "evalPool"
+data_model = "minimized"
+
 #data_pool = "OCELOrdersManagementPool"
 #data_model = "OCELOrdersManagementModel"
 
@@ -263,7 +266,7 @@ data_model = "BigModel1"
 # for development purposes
 def saveToPickle(url, api, data_pool, data_model):
     ocel_model = convertToOcelModel(url, api, data_pool, data_model)
-    with open('fileBig.pkl', 'wb') as file:
+    with open('fileEval.pkl', 'wb') as file:
         pickle.dump(ocel_model, file)
 
 # saveToPickle(url, api, data_pool, data_model)

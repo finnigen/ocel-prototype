@@ -17,6 +17,7 @@ class TableWindow(QtWidgets.QMainWindow):
         self.objectsDf.fillna('-', inplace=True)
 
         # reset index, add name for index, and flatten column from multicolumns 
+        self.eventsDf.index = range(1, self.eventsDf.shape[0] + 1)
         self.eventsDf.reset_index(inplace=True)
         self.eventsDf.columns = [("ID", "ID"), ("Object", "Object") , ("Activity", "Activity"), ("Timestamp", "Timestamp")] + list(self.eventsDf.columns[4:])
         self.eventsDf.columns = self.eventsDf.columns.map(lambda x : x[1])
@@ -24,6 +25,7 @@ class TableWindow(QtWidgets.QMainWindow):
         self.objectsDf.reset_index(inplace=True)
         self.objectsDf.columns = [("OBJECT", "OBJECT")] + list(self.objectsDf.columns[1:])
         # add index to objects table so that we can see number of objects
+        self.objectsDf.index = range(1, self.objectsDf.shape[0] + 1)
         self.objectsDf.reset_index(inplace=True)
         self.objectsDf.columns = [("", "")] + list(self.objectsDf.columns[1:])
 

@@ -149,7 +149,7 @@ class Ui_LoginWindow(object):
         self.celonisTokenLabel.setText("Enter your Celonis API token:")
         self.loginButton.setText("Login")
         self.loginLabel.setText("Login to Celonis")
-        self.errorLabel.setText("Connection failed: no data pools found. Please double check internet connection / login info.")
+        self.errorLabel.setText("Connection failed: no data pools found. Please double check internet connection / login info")
         self.dataPoolLabel.setText("Select a data pool:")
         self.dataModelLabel.setText("Select a data model:")
         self.conversionButton.setText("Start Conversion")
@@ -183,7 +183,7 @@ class Ui_LoginWindow(object):
             return
 
         if len(self.celonis.pools) == 0:
-            print("Connection failed: no data pools found. Please double check internet connection / login info.")
+            print("Connection failed: no data pools found. Please double check internet connection / login info")
             self.errorLabel.show()
             return
 
