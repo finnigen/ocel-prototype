@@ -453,7 +453,7 @@ class TransformationCenter(QtWidgets.QWidget):
     def saveFileDialog(self, name):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Choose location for OCEL file",str(name) + ".json","All Files (*)", options=options)
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"Choose location for OCEL file",str(name) + ".jsonocel","All Files (*)", options=options)
         return fileName
 
 
