@@ -170,7 +170,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Import OCEL", description, ImportOCELFrame)
         description = "Merge all events of two logs into one without merging any objects or events."
         self.initOperatorPage("Concatenate", description, ConcatFrame)
-        description = "Aggegrate the objects related to events with matching attribute values. Objects of the matching events are merged into its first occurence."
+        description = "Aggregate the objects related to events with matching attribute values. Objects of the matching events are merged into its first occurence."
         self.initOperatorPage("Aggregate", description, AggregateFrame)
         description = "Merge objects across logs based on matching attributes, activities, timestamps, and object relationships."
         self.initOperatorPage("Union", description, UnionFrame)
@@ -184,7 +184,7 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Interleaved Timestamps", description, ClosestTimestampsFrame)
         description = "Filter event log based on activities, attributes, objects, object types, or timestamps."
         self.initOperatorPage("Filter", description, FilterFrame)
-        description = "Specify sequence of low-level events and turn them into one high-level event. Besides sequence of activity, specify sequence based on objects, types, attribute values, object relations, and more. Specify sequence of length 1 to simply rename activities."
+        description = "Specify sequence of low-level events and turn them into one high-level event. Besides sequence of activity, specify sequence based on objects, types, attribute values, object relations, and more. Event attributes such as timestamp will be taken from last event in sequence. Specify sequence of length 1 to simply rename activities."
         self.initOperatorPage("Event Recipe", description, EventRecipeFrame)
         description = "For each event, replace objects with related objects of the desired object type."
         self.initOperatorPage("Flatten", description, FlattenFrame)

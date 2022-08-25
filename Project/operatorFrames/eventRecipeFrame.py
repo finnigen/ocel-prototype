@@ -203,7 +203,7 @@ class EventRecipeFrame(OperatorFrame):
             seqFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
             seqFrame.setFrameShadow(QtWidgets.QFrame.Raised)
             seqFrameLayout = QtWidgets.QGridLayout(seqFrame)
-            seqFrameLayout.setSpacing(20)
+            seqFrameLayout.setSpacing(5)
             self.scrollGridLayout.addWidget(seqFrame, i, 1)
 
             label = QtWidgets.QLabel(seqFrame)
