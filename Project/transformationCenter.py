@@ -170,21 +170,21 @@ class TransformationCenter(QtWidgets.QWidget):
         self.initOperatorPage("Import OCEL", description, ImportOCELFrame)
         description = "Merge all events of two logs into one without merging any objects or events."
         self.initOperatorPage("Concatenate", description, ConcatFrame)
-        description = "Aggregate the objects related to events with matching attribute values. Objects of the matching events are merged into its first occurence."
+        description = "Aggregate the objects related to events with matching activity names, timestamps, and attribute values. Objects of the matching events are merged into its first occurence."
         self.initOperatorPage("Aggregate", description, AggregateFrame)
-        description = "Merge objects across logs based on matching attributes, activities, timestamps, and object relationships."
+        description = "Merge objects across logs based on matching activity names, timestamps, attribute values, and object relationships."
         self.initOperatorPage("Union", description, UnionFrame)
-        description = "Intersect set of objects for events with matching activity names, timestamps, and other attributes."
+        description = "Intersect set of objects for events with matching activity names, timestamps, and attribute values."
         self.initOperatorPage("Intersection", description, IntersectionFrame)
-        description = "Remove objects from events of 1st log based on matching activity names, timestamps, and other attributes."
+        description = "Remove objects from events of 1st log based on matching activity names, timestamps, and attribute values."
         self.initOperatorPage("Difference", description, DifferenceFrame)
         description = "Merge objects across logs based on object relationships and manual matchings of activity names of the logs."
         self.initOperatorPage("Manual Miner", description, ManualMinerFrame)
         description = "Merge objects across logs based on interleaving timestamps of events in the two logs as well as object relationships."
         self.initOperatorPage("Interleaved Timestamps", description, ClosestTimestampsFrame)
-        description = "Filter event log based on activities, attributes, objects, object types, or timestamps."
+        description = "Filter event log based on activity names, attribute values, object names, object types, or timestamps."
         self.initOperatorPage("Filter", description, FilterFrame)
-        description = "Specify sequence of low-level events and turn them into one high-level event. Besides sequence of activity, specify sequence based on objects, types, attribute values, object relations, and more. Event attributes such as timestamp will be taken from last event in sequence. Specify sequence of length 1 to simply rename activities."
+        description = "Specify sequence of low-level events and turn them into one high-level event. Besides activity names, specify objects, object types, attribute values, etc. of the sequence. Event attributes of the new event such as timestamp will be taken from last event in sequence. Specify sequence of length 1 to simply rename activities."
         self.initOperatorPage("Event Recipe", description, EventRecipeFrame)
         description = "For each event, replace objects with related objects of the desired object type."
         self.initOperatorPage("Flatten", description, FlattenFrame)
@@ -589,6 +589,8 @@ class OperatorWorkerThread(QThread):
 
 
 
+
+# for testing purposes
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -612,9 +614,6 @@ if __name__ == "__main__":
     with open('fileEval.pkl', 'rb') as file:
         # Call load method to deserialze
         ocel_model = pickle.load(file)
-
-    url = "https://louis-herrmann-rwth-aachen-de.training.celonis.cloud"
-    token = "NWE2NjdjOGEtYTkyMS00NDYyLTk0M2EtZjFiYjdhZDA5MTYzOmZJSDIydFd3TEwrQkUwV2tBVkhtN0N5VFI1aHdWYVJ2TDJVUWpoL2U5cUE4"
 
     url = "https://students-pads.eu-1.celonis.cloud"
     token = "MmRlZTU4M2MtNjg5NS00YTU4LTlhOWEtODQ1ZDAxYTUzNTcxOmNaUjhMUllkSUQ4Y0E2cG9uRERkSWJSY2FtdVp0NkxLTVhuTm92TGk0Q0Fi"

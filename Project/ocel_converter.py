@@ -86,7 +86,7 @@ def convertToOcelModel(url, api_token, data_pool, data_model, skipConnection=Fal
         objectsDf = convertCelonisCaseDfToObjectDf(case_table, case_table_case_column[table_name], tables[table_name].case_table.name)
 
         # prepend object identifiers with object type to ensure uniquness across tables
-        prepend = False in list(objectsDf.index.map(lambda x : x.split(":")[0]) == objectsDf[("ocel:type", "ocel:type")])
+        prepend = False in list(objectsDf.index.map(lambda x : str(x).split(":")[0]) == objectsDf[("ocel:type", "ocel:type")])
         if prepend:
             objType = objectsDf[("ocel:type", "ocel:type")].iloc[0]
             objectsDf.set_index(objType + ":" + objectsDf.index.astype(str), inplace=True)

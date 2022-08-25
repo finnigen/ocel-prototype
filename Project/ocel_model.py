@@ -372,7 +372,7 @@ class OCEL_Model:
 
         # prepend objects with object types to avoid same object identifiers referring to different objects (with different type)
         # only do so if objects aren't prefixed with type already:
-        if False in list(objectsDf.index.map(lambda x : x.split(":")[0]) == objectsDf[("ocel:type", "ocel:type")]):
+        if False in list(objectsDf.index.map(lambda x : str(x).split(":")[0]) == objectsDf[("ocel:type", "ocel:type")]):
             eventsDf[("ocel:omap", "ocel:omap")] = eventsDf[("ocel:omap", "ocel:omap")].apply(lambda x : [objectsDf.loc[obj][("ocel:type", "ocel:type")] + ":" + obj for obj in x])
             objectsDf.index = objectsDf.index.map(lambda x : objectsDf.loc[x][("ocel:type", "ocel:type")] + ":" + x)
 
